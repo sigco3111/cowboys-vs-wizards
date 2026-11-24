@@ -21,7 +21,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&l
 const isText = (s, max) => typeof s === "string" && s.trim().length > 0 && s.length <= max;
 const isStat = (n) => Number.isInteger(n) && n >= 0 && n <= STAT_MAX;
 const isRecord = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
-const gamesWord = (n) => `${n.toLocaleString("en-US")} 게임${n === 1 ? "" : "s"}`;
+const gamesWord = (n) => `${n.toLocaleString("en-US")}판`;
 
 // Pure: the showcase record as the shelf shows it. {status: "none"} when no run is recorded,
 // {status: "invalid"} when any field is missing, mistyped or out of bounds, else {status: "ok", ...}.
@@ -47,7 +47,7 @@ export function forgeView(raw, types = TYPES) {
 // Pure: the verifier outcome in words, straight from the record.
 export function verdictText(view) {
   return view.verified
-    ? `검증기가 이 초안을 통과시켰습니다. 시간: ${gamesWord(view.games)}.`
+    ? `검증기가 이 초안을 통과시켰습니다. 실행: ${gamesWord(view.games)}.`
     : `검증기가 이 초안을 통과시키지 않았습니다. 기록: ${gamesWord(view.games)}.`;
 }
 
