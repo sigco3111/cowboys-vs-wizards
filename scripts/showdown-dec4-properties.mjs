@@ -847,7 +847,7 @@ export const PROPERTIES = Object.freeze([
   { id: "rb10-spells", name: "spells reach only legal targets: Ghostly cannot be chosen, no second stun, Hellfire hits every enemy troop", arbitrary: gameArb, check: checkSpells,
     clauses: [rb("10. Rulings", "stops spells that choose a target. Hellfire chooses none, so it still burns a Ghostly troop."),
       rb("10. Rulings", "Stunning a troop that is already stunned is not allowed."), rb("2. The cards", "The graveyard, once it resolves"),
-      { source: CARDS, quote: "Remove 1 orb from every enemy troop." }, { source: CARDS, quote: "Stun an enemy troop: it cannot attack on its next turn." }] },
+      { source: CARDS, quote: "모든 적 부대에서 오브 1개씩 제거합니다." }, { source: CARDS, quote: "적 부대 하나를 기절시킵니다. 다음 턴에 공격할 수 없습니다." }] },
   { id: "rb1-game-end", name: "the game ends exactly when a Base reaches 0 or after turn 80, and nothing is legal afterwards", arbitrary: gameArb, check: checkGameEnd,
     clauses: [rb("1. What you need to win", "A Base with no orbs loses."), rb("10. Rulings", "A game still going after turn 80 goes to the side whose Base has more orbs.")] },
   { id: "rules-fatigue-clock", name: "an empty deck ends every game by turn 2 x (deck + Base) + 1 for either side, within the turn cap", arbitrary: gameArb, check: checkFatigueClock, observe: observeClock,

@@ -12,8 +12,8 @@ const duelFor = (seed, variant = "even") => ({...seededDeal(seed, DECK_LISTS[var
 
 test("instance IDs decode by catalog type and numeric copy suffix", () => {
   assert.deepEqual(decodeInstance("cowboy-sheriff-2"),
-    {id: "cowboy-sheriff-2", type: "cowboy-sheriff", copy: 2, side: "cowboy", name: "Sheriff", kind: "troop"});
-  assert.equal(decodeInstance("wizard-jack-o-lantern-1").name, "Jack-o'-Lantern");
+    {id: "cowboy-sheriff-2", type: "cowboy-sheriff", copy: 2, side: "cowboy", name: "보안관", kind: "troop"});
+  assert.equal(decodeInstance("wizard-jack-o-lantern-1").name, "잭오랜턴");
   for (const bad of ["cowboy-sheriff", "Cowboy-Sheriff-1", "cowboy-sheriff-01", "cowboy-nobody-1", 7, null]) {
     assert.throws(() => decodeInstance(bad), undefined, String(bad));
   }
@@ -21,9 +21,9 @@ test("instance IDs decode by catalog type and numeric copy suffix", () => {
 
 test("duel inputs are checked at the boundary", () => {
   const duel = duelFor(3);
-  const named = {...duel, cardNames: {"cowboy-sheriff": "Sheriff"}};
+  const named = {...duel, cardNames: {"cowboy-sheriff": "보안관"}};
   assert.equal(validateDuel(named), named);
-  assert.throws(() => validateDuel({...duel, cardNames: {"cowboy-sheriff": "Marshal"}}), /catalog prints "Sheriff"/);
+  assert.throws(() => validateDuel({...duel, cardNames: {"cowboy-sheriff": "Marshal"}}), /catalog prints "보안관"/);
   assert.throws(() => validateDuel({...duel, state: {}}), /unexpected duel field state/);
   assert.throws(() => validateDuel({...duel, seed: 2 ** 32}), /uint32/);
   assert.throws(() => validateDuel({...duel, decks: {...duel.decks, cowboy: [...duel.decks.cowboy, duel.decks.wizard[0]]}}), /wizard card in the cowboy deck/);
