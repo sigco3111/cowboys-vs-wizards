@@ -64,4 +64,5 @@ MIT 라이선스. 원작자 **alejandro-publius** 의 저작물을 기반으로 
 - 규칙 데스크 인덱스는 `scripts/rules-desk.ko.json` 오버레이를 합쳐 생성하며 `--check`가 통과합니다. 영문 규칙서 인용문은 원문 그대로 둡니다.
 - 엔진 동일성 검사(야간 감시 영수증)는 `card-specs.generated.js`, `showdown/cards.js`가 과거 커밋과 바이트가 다르다고 표시합니다. 두 파일(및 `rules.js`)의 코드 골격은 원본과 동일하고 문자열·주석만 다릅니다.
 - 포커(`/poker/`)는 엔진(`engine.js`, 증명·테스트가 의존)을 영문으로 두고, 표시 계층 `ko.js`가 엔진 문구를 한글로 바꿔 보여 줍니다. 전각 폭을 고려해 상자 테두리를 맞췄습니다.
+- 쇼다운 레퍼런스 페이지(`/showdown/`, `prototypes/showdown`)도 한글화했고, 그 테스트(`prototypes/showdown/*.test.js`)의 영어 문구 기대값을 한글로 맞췄습니다. 브라우저용 점검 스크립트(`*-browser-check.mjs`)는 영문 문구를 기다리므로 한글 문구 기준으로 갱신이 필요합니다(Chrome 필요, 테스트 모음에는 포함되지 않음).
 - 원본에서도 실패하는 테스트: `tests/experiments/trap-placeholder-scenarios.test.js`("no command for ride-out"). 한글화와 무관합니다.
