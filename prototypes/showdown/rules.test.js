@@ -129,9 +129,9 @@ test("Raise returns the last Undead troop from the graveyard with one orb, and o
   state.sides.wizard.discard = ["wizard-headless-horseman-1"];
   state.sides.cowboy.board[0] = troop("cowboy-sheriff");
   const raised = act(state, {type: "summon", cardId: "wizard-wizard-1", tributes: [0]});
-  assert.deepEqual(raised.sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, canAttack(raised, t)]), [["Wizard", true], ["Skeleton", false], null]);
+  assert.deepEqual(raised.sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, canAttack(raised, t)]), [["마법사", true], ["해골", false], null]);
   state.sides.wizard.board[0] = troop("wizard-imp");
-  assert.deepEqual(act(state, {type: "summon", cardId: "wizard-wizard-1", tributes: [0]}).sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, canAttack(raised, t)])[1], ["Headless Horseman", false]);
+  assert.deepEqual(act(state, {type: "summon", cardId: "wizard-wizard-1", tributes: [0]}).sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, canAttack(raised, t)])[1], ["목 없는 기수", false]);
   state.sides.wizard.board[0] = troop("wizard-imp");
   state.sides.wizard.discard = ["wizard-imp-2", "wizard-hex-1"];
   assert.equal(act(state, {type: "summon", cardId: "wizard-wizard-1", tributes: [0]}).sides.wizard.board.filter(Boolean).length, 1);
@@ -306,7 +306,7 @@ test("the hit back an attack reports is the defender's attack, and the bot leave
 
 test("a bounty's boss opens on the board with the orbs the hunt gives it", () => {
   const state = createShowdown(4, {first: "cowboy", opening: {wizard: [{type: "wizard-lantern-wraith", health: 6}]}});
-  assert.deepEqual(state.sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, t.health]), [["Lantern Wraith", 6], null, null]);
+  assert.deepEqual(state.sides.wizard.board.map((t) => t && [cardOf(t.cardId).name, t.health]), [["랜턴 망령", 6], null, null]);
   let after = act(state, {type: "end"});
   assert.ok(legalActions(after).some((a) => a.type === "end"));
   // It was there before turn 1, so it attacks on the Wizards' first turn if a troop stands in front of it.

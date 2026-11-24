@@ -15,7 +15,7 @@ import {mirrorDuel, pickMove} from "./campaign-driver.mjs";
 // loses one fails here, so choose a new seed only after checking the loss is intended.
 const SEEDS = [0, 0, 0, 0, 0, 0];
 const MAX_ACTIONS = 400;
-const APPROVED = ["Boot Hill", "Raven Roost", "The Bone Fence", "Imp Hollow", "The Hexed Mile", "Dragon's Roost"];
+const APPROVED = ["부트 힐", "까마귀 둥지", "뼈 울타리", "임프 골짜기", "저주받은 길", "용의 둥지"];
 
 function play(save, seed) {
   const mirror = mirrorDuel(save, "trail", seed);
@@ -84,7 +84,7 @@ test("newSave to the first rival: all six Trail duels played to a win, rewards t
   assert.deepEqual(states, {"rival:stargazer": "open", "rival:imp": "locked", "rival:bonewright": "locked", "rival:coven": "locked",
     "hunt:lantern-wraith": "open", "hunt:graveyard-dragon": "open", open: "open"});
   const reloaded = migrate(JSON.parse(JSON.stringify(save)));
-  assert.equal(duelFor(reloaded, "rival:stargazer").name, "The Stargazer", "the first rival is playable after a reload");
+  assert.equal(duelFor(reloaded, "rival:stargazer").name, "별 관측자", "the first rival is playable after a reload");
   assert.equal(duelFor(reloaded, "rival:imp"), null);
   assert.deepEqual(mirrorDuel(reloaded, "rival:stargazer", 1).state, mirrorDuel(save, "rival:stargazer", 1).state, "the first rival deals the same after a reload");
 });

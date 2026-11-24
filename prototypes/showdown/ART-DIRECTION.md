@@ -49,9 +49,9 @@ Each entry gives what the card does, then its visual direction as a block to pas
 
 ### Cowboys
 
-#### Sheriff
+#### 보안관
 
-Cowboy · Troop, Lawman · Basic. 1 attack, 3 orbs. No keyword.
+Cowboy · Troop, Lawman · 기본. 1 attack, 3 orbs. No keyword.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -60,9 +60,9 @@ Scene: He stands on the saloon porch with his other hand on a swinging door. A g
 The picture must show: Plain and dependable: feet planted, nothing fancy. He is the card every other Cowboy is measured against.
 ```
 
-#### Billy
+#### 빌리
 
-Cowboy · Troop, Outlaw · Basic. 2 attack, 4 orbs. No keyword.
+Cowboy · Troop, Outlaw · 기본. 2 attack, 4 orbs. No keyword.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -71,9 +71,9 @@ Scene: The middle of the main street at sunset, the saloon front soft in the dis
 The picture must show: Young, quick and sure of himself: weight on one hip, mid-stride, the opposite of the Sheriff's planted stance.
 ```
 
-#### Mounted Billy
+#### 말 탄 빌리
 
-Cowboy · Troop, Outlaw · Rare. 3 attack, 5 orbs. Ride: Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard.
+Cowboy · Troop, Outlaw · 희귀. 3 attack, 5 orbs. 돌파: 수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -82,9 +82,9 @@ Scene: Open ground at the edge of town, a sunset sky behind, a long cloud of kic
 The picture must show: Ride: horse and rider are one diagonal streak of motion, hooves off the ground, dust stretched into speed lines.
 ```
 
-#### Deadeye
+#### 명사수
 
-Cowboy · Spell · Common. Remove 1 orb from an enemy troop.
+Cowboy · Spell · 일반. 적 부대 하나에서 오브 1개를 제거합니다.
 
 ```text
 Card illustration, portrait 5:7. A spell is a moment, not a person: show the effect itself in motion as the subject, with at most a hand or a weapon entering from the edge of the picture. No faces. Keep the top sixth and bottom third calm, because the game lays the name and the rules text there.
@@ -93,9 +93,9 @@ Scene: The empty main street at sunset, seen straight down its length, timber fr
 The picture must show: One shot, one orb: a single clean gold line through an otherwise still picture.
 ```
 
-#### Captured Dragon
+#### 생포한 용
 
-Cowboy · Troop, Beast · Legendary. 4 attack, 2 orbs. Sweep: When it attacks a troop, every other enemy troop loses 1 orb.
+Cowboy · Troop, Beast · 전설. 4 attack, 2 orbs. 휩쓸기: 부대를 공격하면 나머지 적 부대가 모두 오브 1개를 잃습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -104,9 +104,9 @@ Scene: A timber corral at the edge of town at sunset, split rails splintered whe
 The picture must show: Sweep: its head swings across the picture with a wide fan of gold fire that covers the whole width of the frame.
 ```
 
-#### Captured Wraith
+#### 생포한 망령
 
-Cowboy · Troop, Undead · Legendary. 2 attack, 2 orbs. Ghostly: Spells cannot target it.
+Cowboy · Troop, Undead · 전설. 2 attack, 2 orbs. 유령화: 주문의 대상이 될 수 없습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -115,9 +115,9 @@ Scene: A hitching rail on the main street at dusk, the brass lantern hanging fro
 The picture must show: Ghostly: from the waist down it thins to mist and the street shows through it, so a bullet-shaped spell would pass straight through.
 ```
 
-#### Covered Wagon
+#### 포장마차
 
-Cowboy · Troop, Rig · Common. 1 attack, 4 orbs. Guard: Enemies must attack this troop before any other troop or the Base.
+Cowboy · Troop, Rig · 일반. 1 attack, 4 orbs. 수호: 적은 다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -126,9 +126,9 @@ Scene: Parked broadside across the main street at sunset so nothing can pass, la
 The picture must show: Guard: it fills the picture from edge to edge like a wall. Wide, low and heavy, the opposite of a rider.
 ```
 
-#### Outrider
+#### 아웃라이더
 
-Cowboy · Troop, Lawman · Common. 1 attack, 3 orbs. Ride: Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard.
+Cowboy · Troop, Lawman · 일반. 1 attack, 3 orbs. 돌파: 수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -137,9 +137,9 @@ Scene: The dry flat outside town at sunset, fence posts blurring past, the horse
 The picture must show: Ride: everything leans forward. A lighter, faster shape than Mounted Billy: thin horse, long coat, one clean line of speed.
 ```
 
-#### Dynamiter
+#### 다이너마이터
 
-Cowboy · Troop, Outlaw · Uncommon. 3 attack, 1 orb. Last Stand: When it is defeated in a fight, the troop that fought it loses 1 orb.
+Cowboy · Troop, Outlaw · 고급. 3 attack, 1 orb. 최후의 저항: 전투에서 쓰러지면 싸운 부대가 오브 1개를 잃습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -148,9 +148,9 @@ Scene: The mouth of a timber-framed mine cut at dusk, the lit fuse the brightest
 The picture must show: Last Stand: the burning fuse is the whole story. Whoever takes him down is standing too close.
 ```
 
-#### Ranger
+#### 레인저
 
-Cowboy · Troop, Lawman · Uncommon. 2 attack, 4 orbs. Scout: When it arrives, draw a card.
+Cowboy · Troop, Lawman · 고급. 2 attack, 4 orbs. 정찰: 등장하면 카드를 한 장 뽑습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -159,9 +159,9 @@ Scene: A rock outcrop above the town at sunset, wind pulling the duster sideways
 The picture must show: Scout: the spyglass and the high vantage. This is the Cowboy who sees what is coming and draws a card for it.
 ```
 
-#### Gatling Crew
+#### 개틀링 포대
 
-Cowboy · Troop, Rig · Rare. 4 attack, 4 orbs. Sweep: When it attacks a troop, every other enemy troop loses 1 orb.
+Cowboy · Troop, Rig · 희귀. 4 attack, 4 orbs. 휩쓸기: 부대를 공격하면 나머지 적 부대가 모두 오브 1개를 잃습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -170,9 +170,9 @@ Scene: Dug in behind a low barricade of sandbags and barrels on the main street 
 The picture must show: Sweep: a fan of gold tracer lines spreads from the muzzle across the whole width of the picture, hitting everything in front of it at once.
 ```
 
-#### Lasso
+#### 올가미
 
-Cowboy · Spell · Uncommon. Stun an enemy troop: it cannot attack on its next turn.
+Cowboy · Spell · 고급. 적 부대 하나를 기절시킵니다. 다음 턴에 공격할 수 없습니다.
 
 ```text
 Card illustration, portrait 5:7. A spell is a moment, not a person: show the effect itself in motion as the subject, with at most a hand or a weapon entering from the edge of the picture. No faces. Keep the top sixth and bottom third calm, because the game lays the name and the rules text there.
@@ -181,9 +181,9 @@ Scene: Dusty open ground at sunset, seen from low down so the loop is ringed by 
 The picture must show: Stun: the loop has already closed around the violet shape and stopped it mid-motion. Nothing is hurt; it is held.
 ```
 
-#### Bear Trap
+#### 곰 덫
 
-Cowboy · Trap · Uncommon. Trap. When an enemy troop attacks, it loses 2 orbs first. If that defeats it, the attack never lands.
+Cowboy · Trap · 고급. 함정. 적 부대가 공격하면 먼저 오브 2개를 잃습니다. 그로 인해 쓰러지면 공격은 이루어지지 않습니다.
 
 ```text
 Card illustration, portrait 5:7. A trap is an object lying in wait: show it from a low angle close to the ground, half hidden, with the feeling that something is about to step on it. No characters. Keep the top sixth and bottom third calm.
@@ -192,9 +192,9 @@ Scene: The dirt of the main street at dusk, seen from ground level. In the soft 
 The picture must show: It bites first: the open jaws wait in the foreground between the viewer and whatever is coming.
 ```
 
-#### Six-Shooter
+#### 6연발 권총
 
-Cowboy · Gear · Uncommon. Gear. The troop that carries it has +1 attack.
+Cowboy · Gear · 고급. 장비. 장착한 부대의 공격력이 +1 됩니다.
 
 ```text
 Card illustration, portrait 5:7. Gear is a single object: show it alone as a hero prop, resting or displayed, lit like a treasure, large in the picture. No characters. Keep the top sixth and bottom third calm.
@@ -203,9 +203,9 @@ Scene: A scarred timber table by a window at sunset, an oil lantern just out of 
 The picture must show: Gear: a treasure handed to one troop. Lit like a prize, alone, nothing else on the table.
 ```
 
-#### Sheriff's Office
+#### 보안관 사무소
 
-Cowboy · Location · Rare. Location. Lawman troops have +1 attack.
+Cowboy · Location · 희귀. 장소. 보안관(Lawman) 부대의 공격력이 +1 됩니다.
 
 ```text
 Card illustration, portrait 5:7. A location is a place: a wide establishing view with depth, no characters, the main building or landmark in the middle distance and a clear path leading to it. Keep the top sixth and bottom third calm.
@@ -216,9 +216,9 @@ The picture must show: A place that makes every Lawman stronger: the star above 
 
 ### Wizards
 
-#### Skeleton
+#### 해골
 
-Wizard · Troop, Undead · Basic. 1 attack, 3 orbs. No keyword.
+Wizard · Troop, Undead · 기본. 1 attack, 3 orbs. No keyword.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -227,9 +227,9 @@ Scene: Climbing over a broken tomb wall in the graveyard at night, the full moon
 The picture must show: Plain and endless: the Wizards' basic troop, the one their other cards raise, pay and replace.
 ```
 
-#### Wizard
+#### 마법사
 
-Wizard · Troop, Mage · Uncommon. 2 attack, 4 orbs. Raise: When it arrives, the last Undead troop in your graveyard returns with 1 orb.
+Wizard · Troop, Mage · 고급. 2 attack, 4 orbs. 소생: 등장하면 묘지에 있는 마지막 언데드 부대가 오브 1개로 돌아옵니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -238,9 +238,9 @@ Scene: The graveyard path before the rune gateway at night, green lanterns on th
 The picture must show: Raise: threads of green light run from the staff down into the earth at his feet, where a bony hand is pushing up out of the soil.
 ```
 
-#### Dragon
+#### 용
 
-Wizard · Troop, Beast · Legendary. 3 attack, 5 orbs. Sweep: When it attacks a troop, every other enemy troop loses 1 orb.
+Wizard · Troop, Beast · 전설. 3 attack, 5 orbs. 휩쓸기: 부대를 공격하면 나머지 적 부대가 모두 오브 1개를 잃습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -249,9 +249,9 @@ Scene: Coiled across jagged purple crags above the graveyard at night, the full 
 The picture must show: Sweep: the fire leaves its mouth as a wide curving arc that crosses the whole picture, not a single jet.
 ```
 
-#### Singularity
+#### 특이점
 
-Wizard · Spell · Common. Remove 1 orb from an enemy troop.
+Wizard · Spell · 일반. 적 부대 하나에서 오브 1개를 제거합니다.
 
 ```text
 Card illustration, portrait 5:7. A spell is a moment, not a person: show the effect itself in motion as the subject, with at most a hand or a weapon entering from the edge of the picture. No faces. Keep the top sixth and bottom third calm, because the game lays the name and the rules text there.
@@ -260,9 +260,9 @@ Scene: The graveyard at night, headstones leaning toward the pull, the moon and 
 The picture must show: One orb gone: everything in the picture leans inward to one point.
 ```
 
-#### Lantern Wraith
+#### 랜턴 망령
 
-Wizard · Troop, Undead · Legendary. 2 attack, 4 orbs. Ghostly: Spells cannot target it.
+Wizard · Troop, Undead · 전설. 2 attack, 4 orbs. 유령화: 주문의 대상이 될 수 없습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -271,9 +271,9 @@ Scene: A crossroads on a bare hill outside the graveyard at night, a crooked sig
 The picture must show: Ghostly: the fence and the hill show through its body. A Wanted boss: it stands dead centre and looks straight at the viewer.
 ```
 
-#### Imp
+#### 임프
 
-Wizard · Troop, Fiend · Uncommon. 3 attack, 1 orb. Quickdraw: Can attack on the turn it arrives, even when it was free.
+Wizard · Troop, Fiend · 고급. 3 attack, 1 orb. 속사: 제물 없이 소환해도 등장한 턴에 공격할 수 있습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -282,9 +282,9 @@ Scene: Bursting out of a crack in a tomb lid at night, splinters of stone still 
 The picture must show: Quickdraw: it is already in the air and coming at the viewer. No wind-up, no waiting a turn.
 ```
 
-#### Bone Wall
+#### 뼈 방벽
 
-Wizard · Troop, Undead · Common. 0 attack, 4 orbs. Guard: Enemies must attack this troop before any other troop or the Base.
+Wizard · Troop, Undead · 일반. 0 attack, 4 orbs. 수호: 적은 다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -293,9 +293,9 @@ Scene: Risen straight out of the graveyard earth at night, soil still falling fr
 The picture must show: Guard: a wall, wide and flat, filling the picture side to side. It has no weapon of its own.
 ```
 
-#### Raven Familiar
+#### 까마귀 사역마
 
-Wizard · Troop, Beast · Common. 1 attack, 1 orb. Scout: When it arrives, draw a card.
+Wizard · Troop, Beast · 일반. 1 attack, 1 orb. 정찰: 등장하면 카드를 한 장 뽑습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -304,9 +304,9 @@ Scene: Perched on a tilted headstone at night, wings half open as if it has just
 The picture must show: Scout: it has come back with something. The scroll in its beak is the card it draws.
 ```
 
-#### Headless Horseman
+#### 목 없는 기수
 
-Wizard · Troop, Undead · Rare. 2 attack, 3 orbs. Ride: Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard.
+Wizard · Troop, Undead · 희귀. 2 attack, 3 orbs. 돌파: 수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -315,9 +315,9 @@ Scene: Galloping along the graveyard wall at night, mist torn apart by its passi
 The picture must show: Ride: the Wizards' rider. The same forward-leaning streak as the Cowboy riders, in night colours, hooves off the ground.
 ```
 
-#### Jack-o'-Lantern
+#### 잭오랜턴
 
-Wizard · Troop, Fiend · Common. 1 attack, 1 orb. Last Stand: When it is defeated in a fight, the troop that fought it loses 1 orb.
+Wizard · Troop, Fiend · 일반. 1 attack, 1 orb. 최후의 저항: 전투에서 쓰러지면 싸운 부대가 오브 1개를 잃습니다.
 
 ```text
 Card illustration, portrait 5:7. One character, three-quarter view from slightly below eye level, shown from about the knees up, filling the middle of the picture. Keep the top sixth and bottom fifth free of anything important, because the game lays the name and the numbers there.
@@ -326,9 +326,9 @@ Scene: Standing on a mound of fresh grave earth at night, its own green light th
 The picture must show: Last Stand: the burning stem is a fuse, the mirror of the Dynamiter's. It is small, it will fall, and it will take an orb with it.
 ```
 
-#### Hellfire
+#### 지옥불
 
-Wizard · Spell · Uncommon. Remove 1 orb from every enemy troop.
+Wizard · Spell · 고급. 모든 적 부대에서 오브 1개씩 제거합니다.
 
 ```text
 Card illustration, portrait 5:7. A spell is a moment, not a person: show the effect itself in motion as the subject, with at most a hand or a weapon entering from the edge of the picture. No faces. Keep the top sixth and bottom third calm, because the game lays the name and the rules text there.
@@ -337,9 +337,9 @@ Scene: The main street seen from the Wizard end at night, fence posts and a wago
 The picture must show: Every troop at once: the fire is spread evenly from edge to edge, with no single target.
 ```
 
-#### Hex
+#### 저주
 
-Wizard · Trap · Uncommon. Trap. When an enemy troop attacks, the attack is cancelled.
+Wizard · Trap · 고급. 함정. 적 부대가 공격하면 그 공격이 취소됩니다.
 
 ```text
 Card illustration, portrait 5:7. A trap is an object lying in wait: show it from a low angle close to the ground, half hidden, with the feeling that something is about to step on it. No characters. Keep the top sixth and bottom third calm.
@@ -348,9 +348,9 @@ Scene: A patch of bare earth between headstones at night, seen from ground level
 The picture must show: The attack never lands: the trap is quiet, patient and nearly hidden, the opposite of the Bear Trap's teeth.
 ```
 
-#### Bone Armor
+#### 뼈 갑옷
 
-Wizard · Gear · Uncommon. Gear. The troop that carries it gains 2 orbs.
+Wizard · Gear · 고급. 장비. 장착한 부대가 오브 2개를 얻습니다.
 
 ```text
 Card illustration, portrait 5:7. Gear is a single object: show it alone as a hero prop, resting or displayed, lit like a treasure, large in the picture. No characters. Keep the top sixth and bottom third calm.
@@ -359,9 +359,9 @@ Scene: A stone alcove in a crypt, green candles on the ledge beside it, cobwebs 
 The picture must show: Gear: two more orbs for whoever wears it. Displayed like a relic, alone.
 ```
 
-#### Boneyard
+#### 뼈 묘지터
 
-Wizard · Location · Rare. Location. Undead troops have +1 attack.
+Wizard · Location · 희귀. 장소. 언데드(Undead) 부대의 공격력이 +1 됩니다.
 
 ```text
 Card illustration, portrait 5:7. A location is a place: a wide establishing view with depth, no characters, the main building or landmark in the middle distance and a clear path leading to it. Keep the top sixth and bottom third calm.
@@ -506,91 +506,91 @@ A model generator needs the whole figure, a plain background and flat light, so 
 
 Subjects that are see-through or made of light on their card (the two Wraiths, the witch-fire on the Headless Horseman) are drawn solid and pale here. The glow and the mist are added in the game.
 
-**1. Covered Wagon**
+**1. 포장마차**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A prairie schooner turned into a barricade: a patched cream canvas bonnet over curved hoops, heavy timber sides reinforced with riveted iron plates and a row of plank shields, tall iron-rimmed wheels chocked with stones. A driver in a slouch hat crouches behind the seat with a shotgun, only his hat and the barrels showing.
 ```
 
-**2. Raven Familiar**
+**2. 까마귀 사역마**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A large raven with glossy black feathers that shine violet at the edges, one eye glowing green. A thin silver ring etched with a rune circles one leg, and a small rolled scroll tied with violet thread is held in its beak.
 ```
 
-**3. Jack-o'-Lantern**
+**3. 잭오랜턴**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A knee-high scarecrow creature with a carved pumpkin for a head, lit from inside by green fire through a jagged grin and triangle eyes. A ragged burlap body stuffed with straw, twig arms and legs, and a curling stem on top that burns like a fuse.
 ```
 
-**4. Outrider**
+**4. 아웃라이더**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A lean deputy scout riding low over the neck of a slim grey pinto horse at a flat gallop. A long tan duster streams behind; a rust-red bandana is pulled up over the nose; a small brass deputy star is pinned to the duster; a carbine sits in a saddle scabbard. Light tack, no baggage.
 ```
 
-**5. Bone Wall**
+**5. 뼈 방벽**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A wall built of stacked skulls, ribs and thigh bones, bound with rusted iron bands and lit from within by a faint violet glow in the gaps. Skeletal arms reach out of it holding broken tomb slabs as shields.
 ```
 
-**6. Ranger**
+**6. 레인저**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A tall, weathered tracker with a long dark braid and a calm, narrowed gaze. A wide flat-brimmed hat with a small brass star on the band; a long olive-brown duster; a rifle slung across the back; a brass spyglass raised to one eye; a coiled rope and a canteen at the hip.
 ```
 
-**7. Imp**
+**7. 임프**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A small wiry imp with magenta-violet skin, bat ears, two stubby horns, a barbed tail and a grin full of needle teeth. Ember-green eyes. It is caught mid-leap with both clawed hands stretched forward, trailing green sparks.
 ```
 
-**8. Dynamiter**
+**8. 다이너마이터**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A wiry, grinning miner turned outlaw with a soot-smudged face, a singed ginger beard and a dented bowler hat. A bandolier of red dynamite sticks crosses his chest; more are tucked in his belt. He holds one stick high with its fuse spitting sparks, and shields his eyes from it with a scorched leather glove.
 ```
 
-**9. Headless Horseman**
+**9. 목 없는 기수**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A rider in a high-collared black-violet greatcoat with tarnished silver buttons and no head: green witch-fire flares up out of the empty collar. One gauntlet holds a curved cavalry sabre. The horse is black and skeletal at the ribs, with green flame for eyes and green fire around its hooves.
 ```
 
-**10. Gatling Crew**
+**10. 개틀링 포대**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A brass multi-barrelled Gatling gun on a two-wheeled timber carriage, crewed by two Cowboys: a broad gunner in a leather apron cranking the handle with his teeth bared, and a wiry loader feeding a tall brass magazine. Barrels blurred with spin, brass casings tumbling out.
 ```
 
-**11. Lantern Wraith**
+**11. 랜턴 망령**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: A tall, thin phantom in a long tattered shroud of grey-violet, its hood holding only darkness and two green points of light. One skeletal hand lifts a wrought-iron lantern on a chain, and the green flame inside is the brightest thing in the picture. It has no legs: the shroud frays into mist.
 ```
 
-**12. Captured Wraith**
+**12. 생포한 망령**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.
 Subject: The Lantern Wraith, bound: a tall hooded phantom in a tattered grey-violet shroud with no face, only two points of light in the dark of the hood. It rises out of a brass railroad lantern like smoke from a bottle, and loops of pale rope hold its wrists. Its light has turned from green to warm amber.
 ```
 
-**13. Captured Dragon**
+**13. 생포한 용**
 
 ```text
 Model sheet for 3D modelling. The same subject and the same colours and materials, but: the whole figure in frame from head to feet including any weapon or mount, standing in a neutral relaxed pose with arms slightly away from the body, three-quarter front view, alone and centred on a plain flat mid-grey background, soft even lighting from all sides, no cast shadow, no scenery, no smoke, glow, sparks, mist or motion effects, nothing transparent.

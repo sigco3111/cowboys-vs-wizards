@@ -1,104 +1,104 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Showdown | Cowboys vs. Wizards prototype</title>
+  <title>쇼다운 | 카우보이 vs 마법사 프로토타입</title>
   <link rel="icon" href="data:,">
   <style>@@STYLE@@</style>
 </head>
 <body>
   <main>
-    <h1>Showdown <small>prototype</small></h1>
+    <h1>쇼다운 <small>프로토타입</small></h1>
 
-    <section id="camp" aria-label="Camp">
+    <section id="camp" aria-label="캠프">
       <div id="claim" aria-live="polite"></div>
-      <h2>The Trail</h2>
+      <h2>트레일</h2>
       <ol id="trail" class="ladder"></ol>
-      <h2>Rivals</h2>
+      <h2>라이벌</h2>
       <ol id="rivals" class="ladder"></ol>
-      <h2>Wanted</h2>
+      <h2>현상수배</h2>
       <ol id="bounties" class="ladder"></ol>
-      <h2>Open range</h2>
+      <h2>열린 평원</h2>
       <div class="row" id="open"></div>
-      <h2>Your cards</h2>
+      <h2>내 카드</h2>
       <p id="collection" class="note"></p>
-      <div class="row"><button type="button" id="build">Build deck</button></div>
+      <div class="row"><button type="button" id="build">덱 구성</button></div>
       <details>
-        <summary>Save code</summary>
-        <p class="note">Progress is saved in this browser. Copy this code to move it, or paste one and press Load.</p>
-        <textarea id="code" rows="3" aria-label="Save code" spellcheck="false"></textarea>
+        <summary>저장 코드</summary>
+        <p class="note">진행 상황은 이 브라우저에 저장됩니다. 옮기려면 이 코드를 복사하고, 불러오려면 코드를 붙여넣고 불러오기를 누르세요.</p>
+        <textarea id="code" rows="3" aria-label="저장 코드" spellcheck="false"></textarea>
         <div class="row">
-          <button type="button" id="load">Load</button>
-          <button type="button" id="reset">Start over</button>
+          <button type="button" id="load">불러오기</button>
+          <button type="button" id="reset">처음부터</button>
           <span id="code-note" class="note" role="status"></span>
         </div>
         <div id="code-preview" data-testid="save-import-preview" role="group" aria-labelledby="code-preview-text" hidden>
           <p id="code-preview-text" class="note"></p>
           <div class="row">
-            <button type="button" id="code-replace" data-testid="save-import-replace">Replace my progress</button>
-            <button type="button" id="code-cancel" data-testid="save-import-cancel">Cancel</button>
+            <button type="button" id="code-replace" data-testid="save-import-replace">내 진행 상황 교체</button>
+            <button type="button" id="code-cancel" data-testid="save-import-cancel">취소</button>
           </div>
         </div>
       </details>
       <details>
-        <summary>Playtest report</summary>
-        <p class="note">What you played and how it went. Select all of it, copy it and send it to whoever asked you to play.</p>
-        <textarea id="report" rows="10" readonly aria-label="Playtest report"></textarea>
+        <summary>플레이테스트 보고서</summary>
+        <p class="note">플레이한 내용과 결과입니다. 전체를 선택해 복사한 뒤 플레이를 요청한 사람에게 보내 주세요.</p>
+        <textarea id="report" rows="10" readonly aria-label="플레이테스트 보고서"></textarea>
       </details>
     </section>
 
-    <section id="builder" aria-label="Deck builder" hidden>
-      <h2 id="builder-title">Build deck</h2>
+    <section id="builder" aria-label="덱 구성" hidden>
+      <h2 id="builder-title">덱 구성</h2>
       <p id="builder-note" class="note"></p>
       <div id="builder-rows"></div>
       <p id="builder-problems" role="status"></p>
       <div class="row">
-        <button type="button" id="builder-save">Save deck</button>
-        <button type="button" id="builder-cancel">Cancel</button>
+        <button type="button" id="builder-save">덱 저장</button>
+        <button type="button" id="builder-cancel">취소</button>
       </div>
     </section>
 
-    <section id="duel" aria-label="Duel" hidden>
+    <section id="duel" aria-label="대결" hidden>
       <p id="lesson"></p>
       <details id="rules">
-        <summary>All the rules</summary>
+        <summary>전체 규칙</summary>
         <ol class="rules">
-          <li>You choose every attack: pick your troop, then the enemy troop it hits.</li>
-          <li>Damage beyond a troop's last orb hits its owner's Base. A troop that survives hits back.</li>
-          <li>A Base can be struck directly only when its side has no troops.</li>
-          <li>Play first, then act: one troop, one other card (spell, gear or location) and one trap a turn. A free troop rests on the turn it arrives; a tribute troop strikes at once.</li>
-          <li>Instead of attacking, a troop can take cover: damage past its last orb stays off your Base, but it does not hit back.</li>
-          <li>A trap waits face down and springs on the next enemy attack.</li>
-          <li>Gear stays on one troop. One location is in play for the whole table; a new one replaces it.</li>
-          <li>An empty deck costs your Base an orb each turn.</li>
+          <li>모든 공격은 직접 고릅니다. 내 부대를 고른 다음 공격할 적 부대를 고르세요.</li>
+          <li>부대의 마지막 구슬을 넘는 피해는 그 주인의 기지에 들어갑니다. 살아남은 부대는 반격합니다.</li>
+          <li>기지는 그 편에 부대가 없을 때만 직접 공격할 수 있습니다.</li>
+          <li>먼저 카드를 내고 그다음 행동합니다. 한 턴에 부대 1장, 그 밖의 카드(주문·장비·장소) 1장, 함정 1장입니다. 공짜 부대는 도착한 턴에 쉬고, 제물 부대는 바로 공격합니다.</li>
+          <li>공격하는 대신 부대는 엄폐할 수 있습니다. 마지막 구슬을 넘는 피해가 기지에 들어가지 않지만 반격도 하지 않습니다.</li>
+          <li>함정은 뒤집힌 채 기다리다 다음 적의 공격에 발동합니다.</li>
+          <li>장비는 한 부대에 붙어 있습니다. 장소는 판 전체에 하나만 있으며 새 장소가 이전 것을 대체합니다.</li>
+          <li>덱이 비면 매 턴 기지의 구슬 하나를 잃습니다.</li>
         </ol>
       </details>
       <p id="status" role="status"></p>
       <div id="reward" aria-live="polite"></div>
       <p id="location" class="note"></p>
-      <section id="board" aria-label="Board"></section>
+      <section id="board" aria-label="판"></section>
       <p id="prompt" aria-live="polite"></p>
       <!-- The hand sits under the prompt that asks for it, before the turn's buttons. -->
-      <section id="hand" aria-label="Hand"></section>
+      <section id="hand" aria-label="손패"></section>
       <div class="row" id="actions">
-        <button type="button" id="end">End turn</button>
-        <button type="button" id="cover">Take cover</button>
-        <button type="button" id="cancel">Cancel</button>
-        <button type="button" id="again">Restart this duel</button>
-        <button type="button" id="leave">Back to camp</button>
+        <button type="button" id="end">턴 종료</button>
+        <button type="button" id="cover">엄폐</button>
+        <button type="button" id="cancel">취소</button>
+        <button type="button" id="again">이 대결 다시 시작</button>
+        <button type="button" id="leave">캠프로 돌아가기</button>
       </div>
-      <section aria-label="What happened"><h2>What happened</h2><ol id="log"></ol></section>
-      <section aria-label="Graveyards"><h2>Graveyards</h2>
-        <p class="note">Cowboys: <span id="cowboy-graveyard"></span></p>
-        <p class="note">Wizards: <span id="wizard-graveyard"></span></p>
+      <section aria-label="진행 기록"><h2>진행 기록</h2><ol id="log"></ol></section>
+      <section aria-label="묘지"><h2>묘지</h2>
+        <p class="note">카우보이: <span id="cowboy-graveyard"></span></p>
+        <p class="note">마법사: <span id="wizard-graveyard"></span></p>
       </section>
-      <section aria-label="Keywords"><h2>Keywords</h2><ul id="keywords" class="rules"></ul></section>
+      <section aria-label="키워드"><h2>키워드</h2><ul id="keywords" class="rules"></ul></section>
     </section>
 
-    <section id="curtain" aria-label="Pass the screen" hidden>
+    <section id="curtain" aria-label="화면 넘기기" hidden>
       <p id="curtain-text"></p>
-      <button type="button" id="ready">I'm ready</button>
+      <button type="button" id="ready">준비됐어요</button>
     </section>
   </main>
   <script>@@SCRIPT@@</script>

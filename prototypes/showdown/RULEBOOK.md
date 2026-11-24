@@ -22,7 +22,7 @@ Each side has a **Base** with 5 orbs. A Base with no orbs loses. You bring a dec
 
 **Type.** Every troop has one type: Lawman, Outlaw, Rig, Beast, Undead, Mage or Fiend. Some cards read it.
 
-**Rarity** limits copies in a deck and its side deck together: Basic any number, Common 4, Uncommon 3, Rare 2, Legendary 1.
+**Rarity** limits copies in a deck and its side deck together: 기본 any number, 일반 4, 고급 3, 희귀 2, 전설 1.
 
 ## 3. Setting up
 
@@ -79,14 +79,14 @@ Instead of attacking, a troop may take cover, even on the turn it arrives. Until
 
 | Keyword | Rule |
 | --- | --- |
-| Guard | Enemies must attack this troop before any other troop or the Base. |
-| Quickdraw | Can attack on the turn it arrives, even when it was free. |
-| Ride | Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard. |
-| Scout | When it arrives, draw a card. |
-| Raise | When it arrives, the last Undead troop in your graveyard returns with 1 orb. |
-| Sweep | When it attacks a troop, every other enemy troop loses 1 orb. |
-| Last Stand | When it is defeated in a fight, the troop that fought it loses 1 orb. |
-| Ghostly | Spells cannot target it. |
+| 수호 | 적은 다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다. |
+| 속사 | 제물 없이 소환해도 등장한 턴에 공격할 수 있습니다. |
+| 돌파 | 수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다. |
+| 정찰 | 등장하면 카드를 한 장 뽑습니다. |
+| 소생 | 등장하면 묘지에 있는 마지막 언데드 부대가 오브 1개로 돌아옵니다. |
+| 휩쓸기 | 부대를 공격하면 나머지 적 부대가 모두 오브 1개를 잃습니다. |
+| 최후의 저항 | 전투에서 쓰러지면 싸운 부대가 오브 1개를 잃습니다. |
+| 유령화 | 주문의 대상이 될 수 없습니다. |
 
 **Stunned** is a status, not a keyword: a stunned troop cannot attack on its owner's next turn. It can still take cover.
 

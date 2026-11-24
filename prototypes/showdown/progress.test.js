@@ -54,7 +54,7 @@ test("a Trail win pays its card into the deck and offers a choice of two cards t
   assert.equal(owned(chosen, "cowboy-deadeye"), 4);
   assert.equal(chosen.offer, null);
   assert.equal(duelFor(save, "trail"), null, "no duel starts while a card is on offer");
-  assert.equal(duelFor(chosen, "trail").name, "Raven Roost");
+  assert.equal(duelFor(chosen, "trail").name, "까마귀 둥지");
   assert.throws(() => choose(save, "cowboy-gatling-crew"), /not on offer/);
   assert.throws(() => choose(chosen, "cowboy-deadeye"), /not on offer/);
   // A player who rebuilt the deck keeps it: the new card replaces only the plain cards still there.
@@ -104,9 +104,9 @@ test("a bounty: five hunts, each harder, and the fifth win captures the boss's c
   const orbs = [];
   for (let hunt = 1; hunt <= HUNTS; hunt++) {
     const duel = duelFor(save, "hunt:lantern-wraith");
-    assert.equal(duel.name, `The Lantern Wraith, hunt ${hunt} of ${HUNTS}`);
+    assert.equal(duel.name, `랜턴 망령, 사냥 ${hunt}/${HUNTS}`);
     const state = createShowdown(1, duel.options);
-    assert.equal(TYPES["wizard-lantern-wraith"].name, "Lantern Wraith");
+    assert.equal(TYPES["wizard-lantern-wraith"].name, "랜턴 망령");
     orbs.push(state.sides.wizard.board[0].health);
     const done = win(save, "hunt:lantern-wraith");
     assert.equal(done.earned.captured, hunt === HUNTS ? "cowboy-captured-wraith" : null);
@@ -200,16 +200,16 @@ test("deck rules: sixteen cards, only what you own, rarity limits across deck an
   assert.deepEqual(deckProblems(save, ok, {"cowboy-lasso": 3, "cowboy-covered-wagon": 1}), []);
   assert.deepEqual(withDeck(save, {...ok, "cowboy-lasso": 0}).deck, ok, "zero counts are dropped");
   const problem = (deck, side) => deckProblems(save, deck, side).join(" ");
-  assert.match(problem({...ok, "cowboy-sheriff": 8}), /exactly 16/);
-  assert.match(problem({...ok, "cowboy-sheriff": 6, "cowboy-covered-wagon": 3}), /You own 2 Covered Wagon/);
-  assert.match(problem(ok, {"cowboy-deadeye": 1}), /You own 4 Deadeye/);
-  assert.match(problem(ok, {"cowboy-lasso": 3, "cowboy-covered-wagon": 2}), /at most 4 cards/);
-  assert.match(problem({...ok, "cowboy-sheriff": 8, "wizard-imp": 1}), /not a Cowboy card/);
+  assert.match(problem({...ok, "cowboy-sheriff": 8}), /정확히 16/);
+  assert.match(problem({...ok, "cowboy-sheriff": 6, "cowboy-covered-wagon": 3}), /포장마차 보유 수량은 2장/);
+  assert.match(problem(ok, {"cowboy-deadeye": 1}), /명사수 보유 수량은 4장/);
+  assert.match(problem(ok, {"cowboy-lasso": 3, "cowboy-covered-wagon": 2}), /최대 4장/);
+  assert.match(problem({...ok, "cowboy-sheriff": 8, "wizard-imp": 1}), /카우보이 카드가 아닙니다/);
   const rich = {...save, collection: {...save.collection, "cowboy-mounted-billy": 3}};
-  assert.match(deckProblems(rich, {...ok, "cowboy-sheriff": 8, "cowboy-mounted-billy": 3}).join(" "), /Mounted Billy is Rare: at most 2/);
-  assert.throws(() => withDeck(save, {...ok, "cowboy-sheriff": 8}), /exactly 16/);
-  assert.match(problem({...ok, "cowboy-sheriff": 13, "cowboy-deadeye": -4}), /whole cards/);
-  assert.match(problem({...ok, "cowboy-sheriff": 8.5, "cowboy-billy": .5}), /whole cards/);
+  assert.match(deckProblems(rich, {...ok, "cowboy-sheriff": 8, "cowboy-mounted-billy": 3}).join(" "), /희귀 등급입니다: 덱과 사이드 덱을 합쳐 최대 2장/);
+  assert.throws(() => withDeck(save, {...ok, "cowboy-sheriff": 8}), /정확히 16/);
+  assert.match(problem({...ok, "cowboy-sheriff": 13, "cowboy-deadeye": -4}), /온전한 카드 장수/);
+  assert.match(problem({...ok, "cowboy-sheriff": 8.5, "cowboy-billy": .5}), /온전한 카드 장수/);
 });
 
 test("saves: the first version is carried over, a round trip is exact, and anything untrustworthy starts fresh", () => {
