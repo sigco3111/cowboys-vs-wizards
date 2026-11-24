@@ -88,6 +88,19 @@ Instead of attacking, a troop may take cover, even on the turn it arrives. Until
 | 최후의 저항 | 전투에서 쓰러지면 싸운 부대가 오브 1개를 잃습니다. |
 | 유령화 | 주문의 대상이 될 수 없습니다. |
 
+영문 규칙서 원문(인용 검증용으로 그대로 보존):
+
+| Keyword | Rule |
+| --- | --- |
+| Guard | Enemies must attack this troop before any other troop or the Base. |
+| Quickdraw | Can attack on the turn it arrives, even when it was free. |
+| Ride | Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard. |
+| Scout | When it arrives, draw a card. |
+| Raise | When it arrives, the last Undead troop in your graveyard returns with 1 orb. |
+| Sweep | When it attacks a troop, every other enemy troop loses 1 orb. |
+| Last Stand | When it is defeated in a fight, the troop that fought it loses 1 orb. |
+| Ghostly | Spells cannot target it. |
+
 **Stunned** is a status, not a keyword: a stunned troop cannot attack on its owner's next turn. It can still take cover.
 
 ## 10. Rulings
