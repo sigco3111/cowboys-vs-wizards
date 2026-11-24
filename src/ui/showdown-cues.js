@@ -8,16 +8,16 @@ import {opponent} from "../game/showdown/rules.js";
 
 // The ten cue kinds, keyed by the EVENTS type that drives each.
 export const CUES = Object.freeze({
-  cover: "Take cover",
-  trap: "Trap revealed",
-  gear: "Gear attached",
-  location: "Location changed",
-  raise: "Troop raised",
-  sweep: "Sweep",
-  laststand: "Last Stand",
-  set: "Set face down",
-  burn: "Burned draw",
-  fatigue: "Fatigue",
+  cover: "엄폐",
+  trap: "함정 발동",
+  gear: "장비 장착",
+  location: "장소 변경",
+  raise: "부대 소생",
+  sweep: "휩쓸기",
+  laststand: "최후의 저항",
+  set: "뒷면으로 놓기",
+  burn: "소각된 드로우",
+  fatigue: "탈진",
 });
 
 // Each step of a sequence stays this long; a new batch of events cuts the old sequence short.

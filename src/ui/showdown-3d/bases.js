@@ -82,7 +82,7 @@ function saloon(group) {
   ctx.strokeStyle = "#643d32";
   ctx.strokeRect(2, 2, 172, 38);
   ctx.fillStyle = "#643d32";
-  ctx.font = "bold 27px Georgia";
+  ctx.font = "bold 27px Georgia, 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic'";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText("SALOON", 88, 22);

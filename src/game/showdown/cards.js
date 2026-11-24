@@ -5,33 +5,33 @@ import {SHOWDOWN_SPECS} from "../card-specs.generated.js";
 
 // Every keyword has one fixed meaning, printed on the screen and in cards.csv.
 export const KEYWORDS = Object.freeze({
-  guard: ["Guard", "Enemies must attack this troop before any other troop or the Base."],
-  quickdraw: ["Quickdraw", "Can attack on the turn it arrives, even when it was free."],
-  ride: ["Ride", "Can ride past enemy troops to strike the Base for 1 orb, unless one of them has Guard."],
-  scout: ["Scout", "When it arrives, draw a card."],
-  raise: ["Raise", "When it arrives, the last Undead troop in your graveyard returns with 1 orb."],
-  sweep: ["Sweep", "When it attacks a troop, every other enemy troop loses 1 orb."],
-  laststand: ["Last Stand", "When it is defeated in a fight, the troop that fought it loses 1 orb."],
-  ghostly: ["Ghostly", "Spells cannot target it."],
+  guard: ["수호", "적은 다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다."],
+  quickdraw: ["속사", "자유롭게 낸 경우에도 등장한 턴에 공격할 수 있습니다."],
+  ride: ["돌파", "수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다."],
+  scout: ["정찰", "등장하면 카드를 한 장 뽑습니다."],
+  raise: ["소생", "등장하면 묘지에 있는 마지막 언데드 부대가 오브 1개로 돌아옵니다."],
+  sweep: ["휩쓸기", "부대를 공격하면 나머지 적 부대가 모두 오브 1개를 잃습니다."],
+  laststand: ["최후의 저항", "전투에서 쓰러지면 싸운 부대가 오브 1개를 잃습니다."],
+  ghostly: ["유령화", "주문의 대상이 될 수 없습니다."],
 });
 
 // How rare a card is, and how many copies one deck may hold. Basic cards have no limit and are never earned.
 export const RARITY = Object.freeze({
-  basic: ["Basic", Infinity], common: ["Common", 4], uncommon: ["Uncommon", 3], rare: ["Rare", 2], legendary: ["Legendary", 1],
+  basic: ["기본", Infinity], common: ["일반", 4], uncommon: ["고급", 3], rare: ["희귀", 2], legendary: ["전설", 1],
 });
 
 // What a spell, trap, gear or location does. `target` says whether the player picks an enemy troop.
 // Gear adds to the troop that carries it. A location adds attack to every troop with its tag, on both sides.
 export const EFFECTS = Object.freeze({
-  shot: {target: true, text: "Remove 1 orb from an enemy troop."},
-  tie: {target: true, text: "Stun an enemy troop: it cannot attack on its next turn."},
-  hellfire: {target: false, text: "Remove 1 orb from every enemy troop."},
-  snare: {target: false, text: "Trap. When an enemy troop attacks, it loses 2 orbs first. If that defeats it, the attack never lands."},
-  hex: {target: false, text: "Trap. When an enemy troop attacks, the attack is cancelled."},
-  sixshooter: {attack: 1, orbs: 0, text: "Gear. The troop that carries it has +1 attack."},
-  bonearmor: {attack: 0, orbs: 2, text: "Gear. The troop that carries it gains 2 orbs."},
-  office: {tag: "Lawman", text: "Location. Lawman troops have +1 attack."},
-  boneyard: {tag: "Undead", text: "Location. Undead troops have +1 attack."},
+  shot: {target: true, text: "적 부대 하나에서 오브 1개를 제거합니다."},
+  tie: {target: true, text: "적 부대 하나를 기절시킵니다. 다음 턴에 공격할 수 없습니다."},
+  hellfire: {target: false, text: "모든 적 부대에서 오브 1개씩 제거합니다."},
+  snare: {target: false, text: "함정. 적 부대가 공격하면 먼저 오브 2개를 잃습니다. 그로 인해 쓰러지면 공격은 이루어지지 않습니다."},
+  hex: {target: false, text: "함정. 적 부대가 공격하면 그 공격이 취소됩니다."},
+  sixshooter: {attack: 1, orbs: 0, text: "장비. 장착한 부대의 공격력이 +1 됩니다."},
+  bonearmor: {attack: 0, orbs: 2, text: "장비. 장착한 부대가 오브 2개를 얻습니다."},
+  office: {tag: "Lawman", text: "장소. 보안관(Lawman) 부대의 공격력이 +1 됩니다."},
+  boneyard: {tag: "Undead", text: "장소. 언데드(Undead) 부대의 공격력이 +1 됩니다."},
 });
 
 // One entry per card in the catalog, in catalog order. Lane cards keep the shape they had

@@ -8,8 +8,8 @@ import { attackExample, attackPreviews } from "./attack-preview.js";
 export const ROSTER = Object.keys(TYPES);
 const order = new Map(ROSTER.map((id, i) => [id, i]));
 const troopRoster = ROSTER.filter((id) => TYPES[id].kind === "troop");
-const sideName = { cowboy: "Cowboys", wizard: "Wizards" };
-const kinds = { troop: "Troop", spell: "Spell", trap: "Trap", gear: "Gear", location: "Location" };
+const sideName = { cowboy: "카우보이", wizard: "마법사" };
+const kinds = { troop: "부대", spell: "주문", trap: "함정", gear: "장비", location: "장소" };
 const atlas = typeof __CVW_DIORAMA_ATLAS__ === "undefined" ? "" : __CVW_DIORAMA_ATLAS__;
 
 export function portrait(id) {
@@ -90,7 +90,7 @@ export function mountGallery(title, duel, makeAttackStage) {
   dialog.className = "sd-gallery";
   dialog.setAttribute("aria-labelledby", "sd-gallery-heading");
   dialog.innerHTML = `
-    <header class="sd-gallery-head"><h2 id="sd-gallery-heading">Card gallery</h2><button type="button" class="sd-gallery-close">Close</button></header>
+    <header class="sd-gallery-head"><h2 id="sd-gallery-heading">카드 갤러리</h2><button type="button" class="sd-gallery-close">닫기</button></header>
     <div class="sd-gallery-grid">
       <div class="sd-gallery-menu"></div>
       <section class="sd-gallery-main">
@@ -148,7 +148,7 @@ export function mountGallery(title, duel, makeAttackStage) {
   function stopReel() {
     window.clearTimeout(reelTimer);
     playingAll = false;
-    reel.textContent = "Watch all troops";
+    reel.textContent = "모든 부대 보기";
   }
   function restoreModel() {
     battle?.clear();
@@ -202,7 +202,7 @@ export function mountGallery(title, duel, makeAttackStage) {
     dialog.querySelector(".sd-gallery-info h3").textContent = card.name;
     dialog.querySelector(".sd-gallery-type").textContent = sideName[card.side] + " · " + kinds[card.kind];
     dialog.querySelector(".sd-gallery-rule").textContent =
-      card.kind === "troop" ? card.attack + " attack · " + card.health + " orbs" : EFFECTS[card.effect].text;
+      card.kind === "troop" ? card.attack + " 공격 · " + card.health + " 오브" : EFFECTS[card.effect].text;
     dialog.querySelector(".sd-gallery-subject").textContent = LOOK[id].subject;
     dialog.querySelector(".sd-gallery-story").textContent = LOOK[id].scene;
     dialog.querySelector(".sd-gallery-cue").textContent = LOOK[id].cue;
@@ -239,7 +239,7 @@ export function mountGallery(title, duel, makeAttackStage) {
       return;
     }
     playingAll = true;
-    reel.textContent = "Stop reel";
+    reel.textContent = "보기 중단";
     playReel(0);
   };
   dialog.addEventListener("close", () => {
@@ -261,7 +261,7 @@ export function mountGallery(title, duel, makeAttackStage) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "sd-open-gallery";
-    button.textContent = "Card gallery";
+    button.textContent = "카드 갤러리";
     button.onclick = open;
     if (anchor.parentElement === duel) anchor.insertBefore(button, anchor.querySelector("#sd-home"));
     else anchor.append(button);

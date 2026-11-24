@@ -37,13 +37,13 @@ export function readInherited(storage) {
 export function joinInherited(storage, laneCards) {
   const stored = readInherited(storage);
   const cards = [...new Set([...stored.cards, ...laneCards])];
-  if (stored.damaged) return {cards, saved: false, reason: "The stored lane-game cards could not be read, so they were left as they are."};
+  if (stored.damaged) return {cards, saved: false, reason: "저장된 레인 게임 카드를 읽을 수 없어 그대로 두었습니다."};
   if (cards.length === stored.cards.length) return {cards, saved: true};
   try {
     storage.setItem(INHERITED_KEY, JSON.stringify({v: 1, source: INHERITED_SOURCE, cards}));
     return {cards, saved: true};
   } catch {
-    return {cards, saved: false, reason: "Saving is blocked or full."};
+    return {cards, saved: false, reason: "저장이 차단되었거나 공간이 가득 찼습니다."};
   }
 }
 

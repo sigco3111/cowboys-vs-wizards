@@ -72,9 +72,9 @@ function faceTexture(key) {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#fff0cf";
-    ctx.font = "bold 17px Georgia";
+    ctx.font = "bold 17px Georgia, 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic'";
     ctx.fillText(data.name, 90, 25, 154);
-    ctx.font = "bold 13px Georgia";
+    ctx.font = "bold 13px Georgia, 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic'";
     ctx.fillText(data.kind[0].toUpperCase() + data.kind.slice(1), 90, 216);
     texture.needsUpdate = true;
   }

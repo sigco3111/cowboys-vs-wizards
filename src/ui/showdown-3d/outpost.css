@@ -840,7 +840,7 @@ body:has(.camp-outpost[open], .builder-inspect[open]) {
   background: #f3e3c6;
 }
 .saloon-repair-move.is-chosen strong::after {
-  content: " (your replay)";
+  content: " (내 리플레이)";
   font-weight: 400;
 }
 .saloon-repair-finish strong {

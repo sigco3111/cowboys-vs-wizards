@@ -292,7 +292,7 @@ function build(host, canvas, screen, closeup = false) {
       const [bx, , bz] = zone(side, "base");
       placeControl(`[data-base="${side}"]`, bx, 0.76, bz + 0.61, 3.04);
       bases[side].update(s.base, s.baseMax);
-      label(side + "base", [bx, 0.37, bz + 1.63], s.base === 0 ? "Base fallen" : s.base + " ●");
+      label(side + "base", [bx, 0.37, bz + 1.63], s.base === 0 ? "기지 함락" : s.base + " ●");
       for (let slot = 0; slot < BOARD_SIZE; slot++) {
         const [x, , z] = zone(side, "troop", slot);
         const selector = `[data-slot="${side}-${slot}"]`;
@@ -322,8 +322,8 @@ function build(host, canvas, screen, closeup = false) {
         );
       }
       for (const [at, count, title] of [
-        ["deck", s.deckCount, "Deck"],
-        ["discard", s.discard.length, "Graveyard"],
+        ["deck", s.deckCount, "덱"],
+        ["discard", s.discard.length, "묘지"],
       ]) {
         const [x, , z] = zone(side, at);
         const stack = pieceAt(side, at);
@@ -338,7 +338,7 @@ function build(host, canvas, screen, closeup = false) {
       label(
         side + "traps",
         [x + (side === "wizard" ? 1.04 : -0.28), 0.066, z + 0.81],
-        "Traps " + s.trapCount + "/" + TRAP_SLOTS,
+        "함정 " + s.trapCount + "/" + TRAP_SLOTS,
         s.trapCount > 0,
       );
     }
@@ -353,7 +353,7 @@ function build(host, canvas, screen, closeup = false) {
         locationGroup.add(prop);
       }
     }
-    label("location", [0, 0.08, 1.5], location ? cardOf(location).name : "Location", Boolean(location));
+    label("location", [0, 0.08, 1.5], location ? cardOf(location).name : "장소", Boolean(location));
   }
 
   function draw(flare) {
@@ -580,7 +580,7 @@ export function mountDiorama(root) {
   canvas.className = "sd-world";
   canvas.setAttribute(
     "aria-label",
-    "Three-dimensional board. Drag to rotate, scroll to zoom, zero to reset the view.",
+    "3차원 보드입니다. 드래그하면 회전, 스크롤하면 확대, 0 키는 시점 초기화입니다.",
   );
   canvas.tabIndex = 0;
   canvas.hidden = true;
@@ -609,7 +609,7 @@ export function mountDiorama(root) {
         game ??= build(field, canvas, root);
         game.setBattlefield(venue);
       } catch (error) {
-        console.warn("Showdown 3D unavailable.", error);
+        console.warn("쇼다운 3D를 사용할 수 없습니다.", error);
         fallback();
         return;
       }

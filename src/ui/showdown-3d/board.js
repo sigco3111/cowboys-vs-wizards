@@ -46,7 +46,7 @@ class SetBuilder {
     ink.lineWidth = 2;
     ink.strokeRect(4, 4, 184, 40);
     ink.fillStyle = inkColor;
-    ink.font = "bold 30px Georgia";
+    ink.font = "bold 30px Georgia, 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic'";
     ink.textAlign = "center";
     ink.textBaseline = "middle";
     ink.fillText(text, 96, 25, 174);

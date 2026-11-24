@@ -98,7 +98,7 @@ Promise.all([import("./ui/showdown-screen.js"), import("./ui/showdown-camp.js"),
   function showChangedCamp(message) {
     last = back = null;
     outpost?.close();
-    toCamp(`${message} Your action was skipped.`);
+    toCamp(`${message} 이번 행동은 건너뛰었습니다.`);
   }
   function writeCamp(change, onChanged = showChangedCamp) {
     const apply = () => {
@@ -160,10 +160,10 @@ Promise.all([import("./ui/showdown-screen.js"), import("./ui/showdown-camp.js"),
   // Experiment for review (K-095, K-008): two recorded Dragon turns, opened from these optional Camp controls or
   // ?turn=dragon-c5 and ?turn=dragon-c5-70. Only ids allowlisted in showdown-turn.js open; it saves nothing.
   const TURN_CONTROLS = {"dragon-c5": "camp-turn-dragon", "dragon-c5-70": "camp-turn-dragon-70"};
-  campRoot.insertAdjacentHTML("beforeend", `<section id="camp-experiment" aria-labelledby="camp-experiment-title"><h2 id="camp-experiment-title">Experiment</h2>
-    <p class="sd-note">For review, not a bounty. Nothing here is saved.</p>
-    <div class="sd-row"><button type="button" id="camp-turn-dragon" data-turn="dragon-c5">Try one Dragon turn</button>
-    <button type="button" id="camp-turn-dragon-70" data-turn="dragon-c5-70">Try another Dragon turn</button></div></section>`);
+  campRoot.insertAdjacentHTML("beforeend", `<section id="camp-experiment" aria-labelledby="camp-experiment-title"><h2 id="camp-experiment-title">실험</h2>
+    <p class="sd-note">검토용이며 현상금이 아닙니다. 여기서는 아무것도 저장되지 않습니다.</p>
+    <div class="sd-row"><button type="button" id="camp-turn-dragon" data-turn="dragon-c5">용 턴 한 번 해보기</button>
+    <button type="button" id="camp-turn-dragon-70" data-turn="dragon-c5-70">다른 용 턴 해보기</button></div></section>`);
   const openTurn = (id) => {
     const turn = turnDuel(id);
     if (!turn) return false;
@@ -174,8 +174,8 @@ Promise.all([import("./ui/showdown-screen.js"), import("./ui/showdown-camp.js"),
   };
   campRoot.addEventListener("click", (event) => { const b = event.target.closest("button[data-turn]"); if (b) openTurn(b.dataset.turn); });
   // Wizard lesson saved in this browser: reopened from this control or ?lesson=saved. A stale save is cleared there.
-  node("camp-experiment").insertAdjacentHTML("beforeend", `<div class="sd-row"><button type="button" id="camp-wizard-lesson">Open saved Wizard lesson</button></div>
-    <p class="sd-note">Unlike the rest of this section, a Wizard lesson keeps one marked episode in this browser.</p>`);
+  node("camp-experiment").insertAdjacentHTML("beforeend", `<div class="sd-row"><button type="button" id="camp-wizard-lesson">저장된 마법사 강의 열기</button></div>
+    <p class="sd-note">이 섹션의 다른 항목과 달리, 마법사 강의는 표시된 에피소드 하나를 이 브라우저에 보관합니다.</p>`);
   const openSavedLesson = (from = null) => {
     last = from ? "#camp-wizard-lesson" : null;
     showLesson();
@@ -192,7 +192,7 @@ Promise.all([import("./ui/showdown-screen.js"), import("./ui/showdown-camp.js"),
     last = from?.closest("#ledger-outrider") ? `#ledger-outrider [data-outrider="${id}"]` : "#camp-outrider-turn";
     showOnly(screen);
     if (contest) screen.dataset.contestChallenge = "";
-    const duel = contest ? {...turn.duel, name: "Ride or Fight?", lesson: "Choose the Outrider. Attack a troop, or ride past it to the Wizard Base."} : turn.duel;
+    const duel = contest ? {...turn.duel, name: "갈 것인가, 싸울 것인가?", lesson: "아웃라이더를 고르세요. 부대를 공격하거나, 부대를 지나쳐 마법사 기지로 달려가세요."} : turn.duel;
     showdown.start(duel, turn.seed);
     return true;
   };
@@ -202,18 +202,18 @@ Promise.all([import("./ui/showdown-screen.js"), import("./ui/showdown-camp.js"),
     challenge.id = "menu-challenge";
     challenge.type = "button";
     challenge.className = "frontier-plaque";
-    challenge.textContent = "Ride or Fight?";
+    challenge.textContent = "갈 것인가, 싸울 것인가?";
     challenge.addEventListener("click", () => openOutrider("case-e"));
     play.before(challenge);
-    play.textContent = "Camp";
+    play.textContent = "캠프";
     play.classList.add("menu-camp");
   }
   // K-096: Boot Hill practice, collapsed at the end of the Camp. Each deal is a native link (?practice=<seed>) that can
   // be copied or opened in a new tab; a plain click or Enter opens the same duel here through openPractice.
   // Only the seeds in showdown-practice.js open; nothing is saved (see that file).
-  campRoot.insertAdjacentHTML("beforeend", `<details id="camp-practice"${PAGE_BUILD ? ` data-build="${PAGE_BUILD}"` : ""}><summary>Practice Boot Hill</summary>
-    <p class="sd-note">The first Trail duel with the starter deck. Nothing here is saved. Each link opens one fixed deal.</p>
-    <div class="sd-row">${PRACTICE_SEEDS.map((s) => `<a id="camp-practice-${s}" data-practice="${s}" href="?practice=${s}">Deal ${s}</a>`).join(" ")}</div></details>`);
+  campRoot.insertAdjacentHTML("beforeend", `<details id="camp-practice"${PAGE_BUILD ? ` data-build="${PAGE_BUILD}"` : ""}><summary>부트 힐 연습</summary>
+    <p class="sd-note">스타터 덱으로 치르는 첫 트레일 대결입니다. 여기서는 아무것도 저장되지 않습니다. 링크마다 정해진 패 하나가 열립니다.</p>
+    <div class="sd-row">${PRACTICE_SEEDS.map((s) => `<a id="camp-practice-${s}" data-practice="${s}" href="?practice=${s}">패 ${s}</a>`).join(" ")}</div></details>`);
   const openPractice = (seed) => {
     const practice = practiceDuel(seed);
     if (!practice) return false;

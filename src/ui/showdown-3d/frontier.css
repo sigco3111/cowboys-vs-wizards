@@ -6,7 +6,7 @@
   --frontier-muted: #cbbaaa;
   --frontier-brass: #e9b775;
   --frontier-violet: #cebbef;
-  --frontier-display: Georgia, "Times New Roman", serif;
+  --frontier-display: Georgia, "Times New Roman", "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic", serif;
   --panel: #253041;
   --line: #586277;
   --muted: var(--frontier-muted);
@@ -465,7 +465,7 @@
 
 #showdown-camp .camp-stop-list .sd-note {
   margin-top: 0.18em;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic", sans-serif;
 }
 #showdown-camp details {
   margin-top: 0.55rem;

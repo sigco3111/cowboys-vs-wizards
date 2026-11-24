@@ -2,11 +2,11 @@
 // type line, so a card reads without its art and without colour (docs/card-types.csv).
 // Pure data. graybox.css draws the borders from the `data-frame` attribute.
 export const FRAMES = Object.freeze({
-  troop: Object.freeze({category: "Troop", mark: "●", line: "Troop"}),
-  spell: Object.freeze({category: "Spell", mark: "✦", line: "Spell"}),
-  trap: Object.freeze({category: "Trap", mark: "▲", line: "Trap"}),
-  wanted: Object.freeze({category: "Boss (Wanted)", mark: "★", line: "Boss · Wanted"}),
-  captured: Object.freeze({category: "Boss (Captured)", mark: "★", line: "Boss · Captured"}),
+  troop: Object.freeze({category: "부대", mark: "●", line: "부대"}),
+  spell: Object.freeze({category: "주문", mark: "✦", line: "주문"}),
+  trap: Object.freeze({category: "함정", mark: "▲", line: "함정"}),
+  wanted: Object.freeze({category: "보스 (현상 수배)", mark: "★", line: "보스 · 현상 수배"}),
+  captured: Object.freeze({category: "보스 (생포)", mark: "★", line: "보스 · 생포"}),
 });
 
 // A bounty card is a boss: Wanted on the Wizard side, Captured once it is a Cowboy card.

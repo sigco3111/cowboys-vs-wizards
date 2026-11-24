@@ -6,42 +6,42 @@ import {cardOf} from "./cards.js";
 import {EVENTS} from "./contract.js";
 import {HAND_CAP, opponent} from "./rules.js";
 
-const FACTION = Object.freeze({cowboy: "Cowboys", wizard: "Wizards"});
+const FACTION = Object.freeze({cowboy: "카우보이", wizard: "마법사"});
 const side = (name) => FACTION[name] ?? name;
 const name = (cardId) => cardOf(cardId)?.name ?? cardId;
-const owned = (owner, cardId) => `The ${side(owner)}' ${name(cardId)}`;
-const base = (owner) => `the ${side(owner)}' Base`;
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-const targetName = (target) => (target === "base" ? "the Base" : name(target));
+const owned = (owner, cardId) => `${side(owner)} ${name(cardId)}`;
+const base = (owner) => `${side(owner)} 기지`;
+const plural = (n, word) => `${word} ${n}개`;
+const targetName = (target) => (target === "base" ? "기지" : name(target));
 
 function attackText(e) {
   const defender = base(opponent(e.side));
-  if (e.target === "base") return `${owned(e.side, e.cardId)} struck ${defender} for ${e.baseDamage}.`;
+  if (e.target === "base") return `${owned(e.side, e.cardId)} → ${defender} 공격: 오브 ${e.baseDamage}개 피해.`;
   const result = e.targetLeft === 0
-    ? `defeated it${e.baseDamage ? `, and ${e.baseDamage} went through to ${defender}` : e.covered ? "; it was in cover, so nothing reached the Base" : ""}`
-    : e.covered ? `left it on ${e.targetLeft}; it was in cover and did not hit back`
-    : !e.hitBack ? `left it on ${e.targetLeft}; it has no attack, so it did not hit back`
-    : `left it on ${e.targetLeft}, and it hit back for ${e.hitBack}${e.attackerLeft === 0 ? `, defeating ${name(e.cardId)}` : ""}`;
-  return `${owned(e.side, e.cardId)} attacked ${name(e.target)} and ${result}.`;
+    ? `쓰러뜨림${e.baseDamage ? `, ${defender}에 오브 ${e.baseDamage}개 피해` : e.covered ? "; 엄폐 중이라 기지에는 피해가 없음" : ""}`
+    : e.covered ? `오브 ${e.targetLeft}개 남김; 엄폐 중이라 반격하지 못함`
+    : !e.hitBack ? `오브 ${e.targetLeft}개 남김; 공격력이 없어 반격하지 못함`
+    : `오브 ${e.targetLeft}개 남김, 반격으로 ${e.hitBack} 피해${e.attackerLeft === 0 ? `, ${name(e.cardId)} 쓰러짐` : ""}`;
+  return `${owned(e.side, e.cardId)} → ${name(e.target)} 공격: ${result}.`;
 }
 
 export const PRESENTERS = Object.freeze({
-  turn: (e) => `Turn ${e.turn}: the ${side(e.side)}.`,
-  draw: (e) => `The ${side(e.side)} drew a card.`,
-  burn: (e) => `The ${side(e.side)}' hand was full (${HAND_CAP} cards is the limit): ${name(e.cardId)} was discarded.`,
-  fatigue: (e) => `The ${side(e.side)}' deck is empty: ${base(e.side)} lost 1 orb.`,
-  tribute: (e) => `${owned(e.side, e.cardId)} was paid as tribute.`,
-  summon: (e) => `${owned(e.side, e.cardId)} arrived.`,
-  raise: (e) => `Raise: ${owned(e.side, e.cardId)} returned from the graveyard with 1 orb.`,
-  spell: (e) => `${owned(e.side, e.cardId)} hit ${targetName(e.target)}: ${e.stunned ? "stunned for its next turn" : e.left === 0 ? "defeated" : `${plural(e.left, "orb")} left`}.`,
-  gear: (e) => `${owned(e.side, e.target)} now carries ${name(e.cardId)}.`,
-  location: (e) => `${owned(e.side, e.cardId)} is now the location.`,
-  set: (e) => `The ${side(e.side)} set a card face down.`,
-  cover: (e) => `${owned(e.side, e.cardId)} took cover.`,
-  trap: (e) => `Trap! ${owned(e.side, e.cardId)} caught ${name(e.target)}: ${e.left === 0 ? "defeated before it struck" : e.stopped ? "its attack was cancelled" : `it dropped to ${e.left} and attacked anyway`}.`,
+  turn: (e) => `${e.turn}턴: ${side(e.side)} 차례.`,
+  draw: (e) => `${side(e.side)}: 카드를 한 장 뽑음.`,
+  burn: (e) => `${side(e.side)}: 패가 가득 참 (최대 ${HAND_CAP}장). ${name(e.cardId)} 버려짐.`,
+  fatigue: (e) => `${side(e.side)}: 덱이 비어 ${base(e.side)}가 오브 1개를 잃음.`,
+  tribute: (e) => `${owned(e.side, e.cardId)} 제물로 바쳐짐.`,
+  summon: (e) => `${owned(e.side, e.cardId)} 등장.`,
+  raise: (e) => `소생: ${owned(e.side, e.cardId)} 오브 1개로 묘지에서 돌아옴.`,
+  spell: (e) => `${owned(e.side, e.cardId)} → ${targetName(e.target)}: ${e.stunned ? "다음 턴 기절" : e.left === 0 ? "쓰러짐" : `오브 ${e.left}개 남음`}.`,
+  gear: (e) => `${owned(e.side, e.target)} 장비 장착: ${name(e.cardId)}.`,
+  location: (e) => `${owned(e.side, e.cardId)} 장소로 설정됨.`,
+  set: (e) => `${side(e.side)}: 카드를 뒷면으로 놓음.`,
+  cover: (e) => `${owned(e.side, e.cardId)} 엄폐.`,
+  trap: (e) => `함정! ${owned(e.side, e.cardId)} → ${name(e.target)}: ${e.left === 0 ? "공격 전에 쓰러짐" : e.stopped ? "공격이 취소됨" : `오브 ${e.left}개로 줄었지만 그래도 공격함`}.`,
   attack: attackText,
-  laststand: (e) => `Last Stand: ${name(e.cardId)} took an orb off ${name(e.target)}${e.left === 0 ? ", defeating it" : ""}.`,
-  sweep: (e) => `Sweep: ${name(e.cardId)} also hit ${plural(e.count, "other troop")} for 1.`,
+  laststand: (e) => `최후의 저항: ${name(e.cardId)} → ${name(e.target)} 오브 1개 깎음${e.left === 0 ? ", 쓰러뜨림" : ""}.`,
+  sweep: (e) => `휩쓸기: ${name(e.cardId)} → 다른 부대 ${e.count}개에도 1 피해.`,
 });
 
 // The text a player sees for one engine event. Throws for a type EVENTS does not list or this

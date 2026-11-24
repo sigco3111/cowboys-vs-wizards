@@ -22,29 +22,29 @@ import {FRAMES} from "./card-frames.js";
 import {lessonSetup} from "./wizard-lesson.js";
 
 const name = (cardId) => cardOf(cardId).name;
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-const orbs = (now, max) => `<span class="sd-orbs" role="img" aria-label="${now} of ${Math.max(now, max)} orbs">${"●".repeat(now)}<span class="sd-lost">${"○".repeat(Math.max(0, max - now))}</span></span>`;
+const plural = (n, word) => `${({orb: "오브", troop: "부대", card: "카드", pack: "팩"})[word] ?? word} ${n}`;
+const orbs = (now, max) => `<span class="sd-orbs" role="img" aria-label="오브 ${Math.max(now, max)}개 중 ${now}개">${"●".repeat(now)}<span class="sd-lost">${"○".repeat(Math.max(0, max - now))}</span></span>`;
 // Troop, spell and trap use the pull request 139 frames; gear and location add the reference screen's marks.
-const FRAME = {...FRAMES, gear: {mark: "◆", line: "Gear"}, location: {mark: "■", line: "Location"}};
-const typeLine = (card) => `<span class="sd-type">${FRAME[card.kind].mark} ${card.kind === "troop" ? `Troop · ${card.tag}` : FRAME[card.kind].line} · ${RARITY[card.rarity][0]}</span>`;
+const FRAME = {...FRAMES, gear: {mark: "◆", line: "장비"}, location: {mark: "■", line: "장소"}};
+const typeLine = (card) => `<span class="sd-type">${FRAME[card.kind].mark} ${card.kind === "troop" ? `부대 · ${({Lawman: "법 집행관", Outlaw: "무법자", Beast: "야수", Undead: "언데드", Rig: "탈것", Mage: "마법사", Fiend: "마귀"})[card.tag] ?? card.tag}` : FRAME[card.kind].line} · ${RARITY[card.rarity][0]}</span>`;
 const keywords = (card) => (card.keys ?? []).map((key) => `<span class="sd-key" title="${KEYWORDS[key][1]}">${KEYWORDS[key][0]}</span>`).join(" ");
 function costLine(type) {
   const cost = tributes(`${type}-1`);
-  if (cost) return `Cost: ${cost} of your troops, sent to the graveyard. Attacks the turn it arrives.`;
-  return TYPES[type].keys.includes("quickdraw") ? "Cost: none." : "Cost: none. Rests the turn it arrives.";
+  if (cost) return `비용: 내 부대 ${cost}개를 묘지로 보냅니다. 등장한 턴에 공격합니다.`;
+  return TYPES[type].keys.includes("quickdraw") ? "비용: 없음." : "비용: 없음. 등장한 턴에는 쉽니다.";
 }
 export function face(type, extra = "") {
   const card = TYPES[type];
   const rules = card.kind !== "troop" ? EFFECTS[card.effect].text : "";
-  return `<strong>${card.name}</strong>${typeLine(card)}${card.kind === "troop" ? `${card.attack} attack · ${plural(card.health, "orb")} ${keywords(card)}` : ""}
+  return `<strong>${card.name}</strong>${typeLine(card)}${card.kind === "troop" ? `공격 ${card.attack} · ${plural(card.health, "orb")} ${keywords(card)}` : ""}
     ${rules ? `<span class="sd-note">${rules}</span>` : ""}${card.kind === "troop" ? `<span class="sd-note">${costLine(type)}</span>` : ""}${extra}`;
 }
 
 const TEMPLATE = `
-  <header><h1>Showdown</h1><button id="sd-home" type="button">Back to camp</button></header>
-  <section id="sd-curtain" aria-label="Pass the screen" hidden>
+  <header><h1>쇼다운</h1><button id="sd-home" type="button">캠프로 돌아가기</button></header>
+  <section id="sd-curtain" aria-label="화면 넘기기" hidden>
     <p id="sd-curtain-text"></p>
-    <button type="button" id="sd-ready">I'm ready</button>
+    <button type="button" id="sd-ready">준비됐어요</button>
   </section>
   <div id="sd-table">
   <p id="sd-lesson"></p>
@@ -53,30 +53,30 @@ const TEMPLATE = `
   <p id="sd-cue" aria-hidden="true"></p>
   <div id="sd-result"></div>
   <p id="sd-location" class="sd-note"></p>
-  <div id="sd-field"><section id="sd-board" aria-label="Board"></section></div>
+  <div id="sd-field"><section id="sd-board" aria-label="보드"></section></div>
   <p id="sd-prompt"></p>
   <div class="sd-row" id="sd-actions">
-    <button type="button" id="sd-end">End turn</button>
-    <button type="button" id="sd-boot-hill" hidden>Continue to Boot Hill</button>
-    <button type="button" id="sd-cover" hidden>Take cover</button>
-    <button type="button" id="sd-cancel" hidden>Cancel</button>
-    <button type="button" id="sd-restart">Restart this duel</button>
+    <button type="button" id="sd-end">턴 종료</button>
+    <button type="button" id="sd-boot-hill" hidden>부트 힐로 계속</button>
+    <button type="button" id="sd-cover" hidden>엄폐</button>
+    <button type="button" id="sd-cancel" hidden>취소</button>
+    <button type="button" id="sd-restart">이 대결 다시 시작</button>
   </div>
-  <section id="sd-hand" aria-label="Your hand"></section>
-  <section aria-label="What happened"><h2>What happened</h2><ol id="sd-log"></ol></section>
-  <section aria-label="Graveyards"><h2>Graveyards</h2>
-    <p class="sd-note">Cowboys: <span id="sd-cowboy-graveyard"></span></p>
-    <p class="sd-note">Wizards: <span id="sd-wizard-graveyard"></span></p>
+  <section id="sd-hand" aria-label="내 패"></section>
+  <section aria-label="진행 기록"><h2>진행 기록</h2><ol id="sd-log"></ol></section>
+  <section aria-label="묘지"><h2>묘지</h2>
+    <p class="sd-note">카우보이: <span id="sd-cowboy-graveyard"></span></p>
+    <p class="sd-note">마법사: <span id="sd-wizard-graveyard"></span></p>
   </section>
-  <section aria-label="Keywords"><h2>Keywords</h2><ul id="sd-keywords"></ul></section>
+  <section aria-label="키워드"><h2>키워드</h2><ul id="sd-keywords"></ul></section>
   </div>`;
 
-export const OFFER_HEADING = "Bonus: pick 1 more card to keep";
+export const OFFER_HEADING = "보너스: 보관할 카드를 한 장 더 고르세요";
 export const offerRow = (offer, owned) => `<div class="sd-row">${offer.map((type) => `<button type="button" class="sd-card ${TYPES[type].side} ${TYPES[type].rarity} sd-can" data-frame="${TYPES[type].kind}" data-choose="${type}">
-  ${face(type, `<span class="sd-note">You own ${owned(type)}.</span>`)}</button>`).join("")}</div>`;
+  ${face(type, `<span class="sd-note">보유: ${owned(type)}장.</span>`)}</button>`).join("")}</div>`;
 export const pays = (cards) => cards.map(([type, copies]) => `${TYPES[type].name}${copies > 1 ? ` ×${copies}` : ""}`).join(", ");
 
-const FACTION = {cowboy: "Cowboy", wizard: "Wizard"};
+const FACTION = {cowboy: "카우보이", wizard: "마법사"};
 
 // campaign: the Cowboy seat's campaign. settle(duel, won) once per decided solo duel, choose(type), progress(), owned(type), trailDuel(),
 // duel(id, deck) for any Camp duel. playtest (optional): add(entry) once per finished solo game.
@@ -103,8 +103,8 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
   const reviewable = (current) => Boolean(onReview) && solo() && seat === "cowboy" && !match && !lesson && current.kind !== "lesson";
   const viewer = () => session.viewer();
   // Solo wording speaks to the player; two players are named by faction.
-  const whoseBase = (side) => (solo() && side === viewer() ? "Your" : FACTION[side]);
-  const sides = (side) => `${FACTION[side]}s`;
+  const whoseBase = (side) => (solo() && side === viewer() ? "내" : FACTION[side]);
+  const sides = (side) => FACTION[side];
 
   // Logs a batch of events and returns its placeholder cues, each tied to its log line.
   function record(events, before) {
@@ -136,7 +136,7 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     cowboyActions = [...(current.prefix ?? [])];
     session = lesson ? lesson.createSession() : createShowdownSession({seed, duel: current, players, seat, ...(match?.first ? {first: match.first} : {})});
     curtain = !solo();
-    lines = [{turn: true, text: `Turn 1: the ${session.view().first === "cowboy" ? "Cowboys" : "Wizards"}.`}];
+    lines = [{turn: true, text: `1턴: ${session.view().first === "cowboy" ? "카우보이" : "마법사"} 차례.`}];
     latest = [];
     pick = null;
     outcome = null;
@@ -207,7 +207,7 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     // so no reward is announced or made claimable before the career has accepted it.
     settling = true;
     $("sd-end").disabled = true;
-    $("sd-status").textContent = "Saving duel result…";
+    $("sd-status").textContent = "대결 결과 저장 중…";
     const complete = (payment) => {
       settling = false;
       Object.assign(outcome, payment);
@@ -222,12 +222,12 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
   }
   // After a result: the next game of the match, a rematch, a repeat, or nothing (back to camp).
   function againLabel() {
-    if (!outcome.matchOver) return `Game ${match.game + 1}`;
-    if (duel.kind === "turn") return "Retry";
-    if (duel.kind === "lesson") return "Same deal again";
-    if (!solo()) return duel.kind === "earned" ? "Rematch: earned decks, not an even match" : "Play again";
-    if (!outcome.won) return repeat() ? "Rematch" : null;
-    return duel.kind === "trail" || !repeat() ? null : "Play it again";
+    if (!outcome.matchOver) return `${match.game + 1}번째 게임`;
+    if (duel.kind === "turn") return "재도전";
+    if (duel.kind === "lesson") return "같은 패로 다시";
+    if (!solo()) return duel.kind === "earned" ? "재대결: 얻은 덱으로, 동등한 대결 아님" : "다시 플레이";
+    if (!outcome.won) return repeat() ? "재대결" : null;
+    return duel.kind === "trail" || !repeat() ? null : "한 번 더";
   }
   // The same Camp duel again, as progress now has it (the next hunt, grit after a loss), or null.
   const repeat = () => (!camp ? null : duel.kind === "trail" ? camp.trailDuel() : duel.id ? camp.duel(duel.id) : null);
@@ -281,15 +281,15 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
   function blocked(view, cardId) {
     const card = cardOf(cardId);
     const mine = view.sides[viewer()];
-    if (view.attacking) return "No more cards this turn: a troop has acted.";
+    if (view.attacking) return "이번 턴에는 더 낼 수 없습니다. 부대가 행동했습니다.";
     if (card.kind === "troop") {
-      if (view.summonUsed) return "One troop a turn.";
+      if (view.summonUsed) return "부대는 한 턴에 하나만 낼 수 있습니다.";
       const cost = tributes(cardId);
-      return mine.board.filter(Boolean).length < cost ? `Needs ${plural(cost, "troop")} of yours to pay with.` : "Your board is full.";
+      return mine.board.filter(Boolean).length < cost ? `지불할 내 부대가 ${cost}개 필요합니다.` : "내 보드가 가득 찼습니다.";
     }
-    if (card.kind === "trap") return view.setUsed ? "One trap a turn." : mine.traps.length >= TRAP_SLOTS ? "Both trap slots are full." : "Not now.";
-    if (view.castUsed) return "One spell, gear or location a turn.";
-    return card.kind === "location" ? "Already the location." : card.kind === "gear" ? "No troop to carry it." : "No target.";
+    if (card.kind === "trap") return view.setUsed ? "함정은 한 턴에 하나만 놓을 수 있습니다." : mine.traps.length >= TRAP_SLOTS ? "함정 칸 두 개가 모두 찼습니다." : "지금은 낼 수 없습니다.";
+    if (view.castUsed) return "주문, 장비, 장소는 한 턴에 하나만 낼 수 있습니다.";
+    return card.kind === "location" ? "이미 이 장소입니다." : card.kind === "gear" ? "장비를 들 부대가 없습니다." : "대상이 없습니다.";
   }
 
   const previewId = (target) => `sd-preview-${target}`;
@@ -299,44 +299,44 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     const o = attackOutcome(view, pick.troop, target);
     const foe = view.sides[opponent(viewer())];
     const id = `id="${previewId(target)}" aria-hidden="true"`;
-    if (target === "base") return `<span ${id} class="sd-note sd-good">${foe.board.some(Boolean) ? "Ride past: " : ""}Hit the Base for ${o.baseDamage}</span>`;
-    const lastStand = o.targetLeft === 0 && has(foe.board[target].cardId, "laststand") ? ". Its Last Stand costs yours 1 orb" : "";
-    if (o.targetLeft === 0) return `<span ${id} class="sd-note sd-good">Defeated${o.baseDamage ? `, ${o.baseDamage} through to the Base` : foe.board[target].cover ? ", nothing reaches the Base" : ""}${lastStand}</span>`;
-    if (foe.board[target].cover) return `<span ${id} class="sd-note">Survives on ${o.targetLeft}. It is in cover and does not hit back.</span>`;
-    if (attackOf(view, foe.board[target]) === 0) return `<span ${id} class="sd-note">Survives on ${o.targetLeft}. It has no attack, so yours is unharmed.</span>`;
-    return `<span ${id} class="sd-note ${o.attackerLeft === 0 ? "sd-warn" : ""}">Survives on ${o.targetLeft} and hits back: yours ${o.attackerLeft === 0 ? "is defeated" : `drops to ${o.attackerLeft}`}</span>`;
+    if (target === "base") return `<span ${id} class="sd-note sd-good">${foe.board.some(Boolean) ? "돌파: " : ""}기지에 ${o.baseDamage} 피해</span>`;
+    const lastStand = o.targetLeft === 0 && has(foe.board[target].cardId, "laststand") ? ". 최후의 저항으로 내 부대가 오브 1개를 잃음" : "";
+    if (o.targetLeft === 0) return `<span ${id} class="sd-note sd-good">쓰러뜨림${o.baseDamage ? `, 기지에 ${o.baseDamage} 피해` : foe.board[target].cover ? ", 기지에는 피해 없음" : ""}${lastStand}</span>`;
+    if (foe.board[target].cover) return `<span ${id} class="sd-note">오브 ${o.targetLeft}개 남음. 엄폐 중이라 반격하지 않습니다.</span>`;
+    if (attackOf(view, foe.board[target]) === 0) return `<span ${id} class="sd-note">오브 ${o.targetLeft}개 남음. 공격력이 없어 내 부대는 무사합니다.</span>`;
+    return `<span ${id} class="sd-note ${o.attackerLeft === 0 ? "sd-warn" : ""}">오브 ${o.targetLeft}개 남고 반격: 내 부대 ${o.attackerLeft === 0 ? "쓰러짐" : `오브 ${o.attackerLeft}개로 감소`}</span>`;
   }
 
   // After a win: what it paid and the two cards to choose from. After a loss: the rematch's grit.
   // A game inside a match and a two-player game pay nothing, but they still need the button that moves on.
   function rewardPanel() {
     const label = outcome.conflict ? null : againLabel();
-    const review = setup && onReview ? `<button type="button" id="sd-review">Review a Wizard move</button>`
-      : duel.kind === "lesson" && onLessonBack ? `<button type="button" id="sd-lesson-back">Back to the lesson</button>` : "";
+    const review = setup && onReview ? `<button type="button" id="sd-review">마법사의 수 복기</button>`
+      : duel.kind === "lesson" && onLessonBack ? `<button type="button" id="sd-lesson-back">강의로 돌아가기</button>` : "";
     const again = (label ? `<button type="button" id="sd-again">${label}</button>` : "") + review;
     if (!outcome.earned) {
-      const notice = outcome.conflict ? `<p role="status">${outcome.conflict} This duel did not change your career.</p>` : "";
-      return `${notice}<div class="sd-row">${again}<button type="button" id="sd-camp">Back to camp</button></div>`;
+      const notice = outcome.conflict ? `<p role="status">${outcome.conflict} 이 대결은 내 진행 상황에 반영되지 않았습니다.</p>` : "";
+      return `${notice}<div class="sd-row">${again}<button type="button" id="sd-camp">캠프로 돌아가기</button></div>`;
     }
     const {won, earned, intoDeck, grit} = outcome;
     const offer = camp.progress().offer;
     return [
-      earned.captured ? `<h2>Captured</h2><div class="sd-row"><div class="sd-card ${TYPES[earned.captured].side} ${TYPES[earned.captured].rarity}" data-frame="${TYPES[earned.captured].kind}">${face(earned.captured)}</div></div>` : "",
-      earned.cards.length ? `<h2>New in your collection</h2><p class="sd-good">You earned ${pays(earned.cards)}.</p>` : "",
-      intoDeck.length ? `<p class="sd-note">In your deck now: ${intoDeck.map(([type, copies, replaced]) => `${TYPES[type].name} ×${copies} in place of ${TYPES[replaced].name} ×${copies}`).join(", ")}.</p>` : "",
-      earned.packs ? `<p class="sd-good">You earned ${plural(earned.packs, "pack")}. Open ${earned.packs > 1 ? "them" : "it"} in camp.</p>` : "",
-      earned.cards.length && !intoDeck.length ? `<p class="sd-note">${earned.cards.length > 1 ? "They are" : "It is"} in your collection, not your deck yet: use Build deck in camp.</p>` : "",
+      earned.captured ? `<h2>생포</h2><div class="sd-row"><div class="sd-card ${TYPES[earned.captured].side} ${TYPES[earned.captured].rarity}" data-frame="${TYPES[earned.captured].kind}">${face(earned.captured)}</div></div>` : "",
+      earned.cards.length ? `<h2>컬렉션에 새로 추가</h2><p class="sd-good">획득: ${pays(earned.cards)}.</p>` : "",
+      intoDeck.length ? `<p class="sd-note">현재 덱: ${intoDeck.map(([type, copies, replaced]) => `${TYPES[replaced].name} ×${copies}을(를) ${TYPES[type].name} ×${copies}(으)로 교체`).join(", ")}.</p>` : "",
+      earned.packs ? `<p class="sd-good">획득: ${plural(earned.packs, "pack")}. 캠프에서 열어 보세요.</p>` : "",
+      earned.cards.length && !intoDeck.length ? `<p class="sd-note">컬렉션에 있지만 아직 덱에는 없습니다. 캠프의 덱 구성을 사용하세요.</p>` : "",
       won && offer ? `<h2>${OFFER_HEADING}</h2>${offerRow(offer, camp.owned)}`
-        : picked ? `<p class="sd-good">Added ${TYPES[picked].name}: you now own ${camp.owned(picked)}. The new copy is not in your deck yet: use Build deck in camp.</p>` : "",
-      !won && grit ? `<p class="sd-note">Grit: your Base starts the rematch with ${5 + grit} orbs.</p>` : "",
-      `<div class="sd-row">${again}<button type="button" id="sd-camp">Back to camp</button></div>`,
+        : picked ? `<p class="sd-good">추가됨 ${TYPES[picked].name}: 이제 ${camp.owned(picked)}장 보유 중입니다. 새 카드는 아직 덱에 없습니다. 캠프의 덱 구성을 사용하세요.</p>` : "",
+      !won && grit ? `<p class="sd-note">근성: 재대결에서 내 기지가 오브 ${5 + grit}개로 시작합니다.</p>` : "",
+      `<div class="sd-row">${again}<button type="button" id="sd-camp">캠프로 돌아가기</button></div>`,
     ].join("");
   }
 
   function render(presentationStart) {
     // The curtain: nothing of either seat's hand or traps stays in the page while the screen is passed.
-    // Focus moves only when the curtain goes up or down: onto "I'm ready" when it rises, and off the hidden curtain
-    // onto the table when it clears (a mouse click on "I'm ready" would otherwise leave focus on a hidden button).
+    // Focus moves only when the curtain goes up or down: onto "준비됐어요" when it rises, and off the hidden curtain
+    // onto the table when it clears (a mouse click on "준비됐어요" would otherwise leave focus on a hidden button).
     const [rises, clears] = [curtain && $("sd-curtain").hidden, !curtain && !$("sd-curtain").hidden];
     const lost = clears && (!document.activeElement || document.activeElement === document.body || $("sd-curtain").contains(document.activeElement));
     $("sd-curtain").hidden = !curtain;
@@ -344,7 +344,7 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     if (curtain) {
       boardPresentation?.clear();
       for (const id of ["sd-board", "sd-hand", "sd-result", "sd-prompt", "sd-feedback", "sd-status", "sd-location"]) $(id).innerHTML = "";
-      $("sd-curtain-text").textContent = `Pass the screen to the ${FACTION[session.view().active]} player.`;
+      $("sd-curtain-text").textContent = `화면을 ${FACTION[session.view().active]} 플레이어에게 넘기세요.`;
       if (rises && !root.hidden) $("sd-ready").focus();
       return;
     }
@@ -368,41 +368,41 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
       const s = view.sides[side];
       const isOwn = side === own;
       const baseOpen = !isOwn && aims.has("base");
-      const traps = isOwn && !shared ? (s.traps.length ? `Set: ${s.traps.map(name).join(", ")}` : "No trap set") : s.trapCount ? `${plural(s.trapCount, "card")} face down` : "Nothing face down";
+      const traps = isOwn && !shared ? (s.traps.length ? `놓은 함정: ${s.traps.map(name).join(", ")}` : "놓은 함정 없음") : s.trapCount ? `뒷면 ${plural(s.trapCount, "card")}` : "뒷면 카드 없음";
       // The other seat's hand is card backs (the deck back's .card-back element) and a count, never faces.
-      const backs = isOwn ? "" : `<span class="sd-backs" role="img" aria-label="${FACTION[side]} hand: ${plural(s.handCount, "card")}, face down">${'<span class="card-back" aria-hidden="true"></span>'.repeat(s.handCount)}</span>`;
+      const backs = isOwn ? "" : `<span class="sd-backs" role="img" aria-label="${FACTION[side]} 패: ${plural(s.handCount, "card")}, 뒷면">${'<span class="card-back" aria-hidden="true"></span>'.repeat(s.handCount)}</span>`;
       const base = `<button type="button" class="sd-base ${side}${baseOpen ? " sd-can" : ""}" ${baseOpen ? 'data-enemy="base"' : "disabled"}${isOwn ? "" : targetDescription("base")} data-base="${side}">
-        <strong>${whoseBase(side)} Base</strong>${orbs(s.base, s.baseMax)}
-        <span class="sd-note">Hand ${s.handCount} · Deck ${s.deckCount} · Graveyard ${s.discard.length}</span>${backs}
+        <strong>${whoseBase(side)} 기지</strong>${orbs(s.base, s.baseMax)}
+        <span class="sd-note">패 ${s.handCount} · 덱 ${s.deckCount} · 묘지 ${s.discard.length}</span>${backs}
         <span class="sd-note">▲ ${traps}</span>${baseOpen ? preview(view, "base") : ""}</button>`;
       const slots = s.board.map((troop, slot) => {
-        if (!troop) return `<button type="button" class="sd-slot ${side}" data-slot="${side}-${slot}" disabled><span class="sd-note">empty</span></button>`;
+        if (!troop) return `<button type="button" class="sd-slot ${side}" data-slot="${side}-${slot}" disabled><span class="sd-note">비어 있음</span></button>`;
         const card = cardOf(troop.cardId);
-        let cls = "", data = "disabled", note = troop.cover ? "In cover" : troop.stunned ? "Stunned" : "";
+        let cls = "", data = "disabled", note = troop.cover ? "엄폐 중" : troop.stunned ? "기절" : "";
         if (isOwn && mine) {
           const tribute = pick?.tributes && playsOf(pick.card).some((a) => a.tributes.includes(slot));
           const ready = canAttack(view, troop);
           const actable = options.some((a) => (a.type === "attack" || a.type === "cover") && a.slot === slot);
-          if (tribute) { cls = pick.tributes.includes(slot) ? " sd-chosen" : " sd-can"; data = `data-own="${slot}"`; note = "Tribute"; }
-          else if (carriers.has(slot)) { cls = " sd-can"; data = `data-own="${slot}"`; note = "Give it the gear"; }
-          else if (pick?.troop === slot) { cls = " sd-pick"; note = ready ? "Choose a target, or take cover" : "It can take cover"; }
-          else if (!pick && actable) { cls = " sd-can"; data = `data-own="${slot}"`; note = ready ? "Can attack" : "Can take cover"; }
-          else if (troop.arrived === view.turn && !ready && !troop.attacked) note = note || "Rests the turn it arrives";
-          else if (troop.attacked && !troop.cover) note = "Has attacked";
+          if (tribute) { cls = pick.tributes.includes(slot) ? " sd-chosen" : " sd-can"; data = `data-own="${slot}"`; note = "제물"; }
+          else if (carriers.has(slot)) { cls = " sd-can"; data = `data-own="${slot}"`; note = "장비 장착"; }
+          else if (pick?.troop === slot) { cls = " sd-pick"; note = ready ? "대상을 고르거나 엄폐하세요" : "엄폐할 수 있습니다"; }
+          else if (!pick && actable) { cls = " sd-can"; data = `data-own="${slot}"`; note = ready ? "공격 가능" : "엄폐 가능"; }
+          else if (troop.arrived === view.turn && !ready && !troop.attacked) note = note || "등장한 턴에는 쉼";
+          else if (troop.attacked && !troop.cover) note = "공격함";
         } else if (!isOwn && aims.has(slot)) {
           cls = " sd-can"; data = `data-enemy="${slot}"`;
-          if (kind === "spell") note = cardOf(pick.card).effect === "tie" ? "Would be stunned" : troop.health === 1 ? "Would be defeated" : `Would drop to ${troop.health - 1}`;
+          if (kind === "spell") note = cardOf(pick.card).effect === "tie" ? "기절하게 됨" : troop.health === 1 ? "쓰러지게 됨" : `오브 ${troop.health - 1}개로 감소`;
         }
         const attack = attackOf(view, troop);
-        return `<button type="button" class="sd-slot ${side}${cls}" data-frame="troop" data-slot="${side}-${slot}" ${data}${isOwn ? "" : targetDescription(slot)}><strong>${card.name}</strong><span class="sd-type">${FRAME.troop.mark} Troop · ${card.tag}</span>
-          ${attack} attack${attack !== card.attack ? ` (+${attack - card.attack})` : ""} ${orbs(troop.health, card.health)} ${keywords(card)}
+        return `<button type="button" class="sd-slot ${side}${cls}" data-frame="troop" data-slot="${side}-${slot}" ${data}${isOwn ? "" : targetDescription(slot)}><strong>${card.name}</strong><span class="sd-type">${FRAME.troop.mark} 부대 · ${({Lawman: "법 집행관", Outlaw: "무법자", Beast: "야수", Undead: "언데드", Rig: "탈것", Mage: "마법사", Fiend: "마귀"})[card.tag] ?? card.tag}</span>
+          공격 ${attack}${attack !== card.attack ? ` (+${attack - card.attack})` : ""} ${orbs(troop.health, card.health)} ${keywords(card)}
           ${troop.gear.length ? `<span class="sd-note">◆ ${troop.gear.map(name).join(", ")}</span>` : ""}${note ? `<span class="sd-note">${note}</span>` : ""}${!isOwn && attacking && aims.has(slot) ? preview(view, slot) : ""}</button>`;
       }).join("");
       return `<div class="sd-side" data-side="${side}">${base}${slots}</div>`;
     };
     $("sd-board").innerHTML = row(foe) + row(own);
-    const landing = view.arrivals.map((due) => `${TYPES[due.type].name} lands at the start of turn ${Math.max(due.turn, view.turn + (view.active === due.side ? 2 : 1))}.`).join(" ");
-    $("sd-location").textContent = landing + (landing && view.location ? " " : "") + (view.location ? `■ Location: ${name(view.location.cardId)}. ${EFFECTS[cardOf(view.location.cardId).effect].text.replace("Location. ", "")}` : "");
+    const landing = view.arrivals.map((due) => `${TYPES[due.type].name} ${Math.max(due.turn, view.turn + (view.active === due.side ? 2 : 1))}턴 시작에 내려앉습니다.`).join(" ");
+    $("sd-location").textContent = landing + (landing && view.location ? " " : "") + (view.location ? `■ 장소: ${name(view.location.cardId)}. ${EFFECTS[cardOf(view.location.cardId).effect].text.replace("장소. ", "")}` : "");
 
     const playable = new Set(options.filter((a) => a.cardId).map((a) => name(a.cardId)));
     $("sd-hand").innerHTML = (shared ? [] : view.sides[own].hand).map((cardId) => {
@@ -413,25 +413,25 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     }).join("");
 
     const r = view.result;
-    const score = match ? ` · game ${match.game} of 3 · ${solo() ? `you ${match.wins[own]}, ${sides(foe)} ${match.wins[foe]}` : `Cowboys ${match.wins.cowboy}, Wizards ${match.wins.wizard}`}` : "";
-    const verdict = !r ? "" : r.winner === null ? "Draw." : !solo() ? `The ${sides(r.winner)} win: the ${FACTION[opponent(r.winner)]} Base fell.`
-      : r.winner === own ? `You win: the ${FACTION[foe]} Base fell.` : "You lose: your Base fell.";
+    const score = match ? ` · 3판 중 ${match.game}번째 · ${solo() ? `나 ${match.wins[own]}, ${sides(foe)} ${match.wins[foe]}` : `카우보이 ${match.wins.cowboy}, 마법사 ${match.wins.wizard}`}` : "";
+    const verdict = !r ? "" : r.winner === null ? "무승부." : !solo() ? `${sides(r.winner)} 승리: ${FACTION[opponent(r.winner)]} 기지가 무너졌습니다.`
+      : r.winner === own ? `승리: ${FACTION[foe]} 기지가 무너졌습니다.` : "패배: 내 기지가 무너졌습니다.";
     $("sd-status").innerHTML = r ? `<span class="sd-result ${!solo() || r.winner === own ? "sd-good" : "sd-warn"}">${verdict}</span>${score}`
-      : `${duel.name}${score} · turn ${view.turn} · ${solo() ? (view.active === own ? "your turn" : `the ${sides(foe)}' turn`) : `the ${sides(view.active)}' turn`}`;
-    $("sd-feedback").textContent = session.failure?.() ? `The lesson Wizard stopped: ${session.failure()} Use Back to camp or Restart this duel.`
-      : latest.length ? `Last: ${latest.join(" ")}` : "";
+      : `${duel.name}${score} · ${view.turn}턴 · ${solo() ? (view.active === own ? "내 차례" : `${sides(foe)} 차례`) : `${sides(view.active)} 차례`}`;
+    $("sd-feedback").textContent = session.failure?.() ? `강의 마법사가 멈췄습니다: ${session.failure()} 캠프로 돌아가기 또는 이 대결 다시 시작을 사용하세요.`
+      : latest.length ? `방금: ${latest.join(" ")}` : "";
     $("sd-result").innerHTML = r ? rewardPanel() : "";
 
     const canCover = attacking && options.some((a) => a.type === "cover" && a.slot === pick.troop);
     const guarded = view.sides[foe].board.some((troop) => troop && has(troop.cardId, "guard"));
-    $("sd-prompt").textContent = r ? "" : pick?.tributes ? `Choose ${tributes(pick.card)} of your troops to send to the graveyard as payment for ${name(pick.card)}.`
-      : kind === "gear" ? `Choose one of your troops to carry ${name(pick.card)}.`
-      : kind === "spell" ? `Choose an enemy troop for ${name(pick.card)}.`
-      : attacking ? `${aims.size === 0 ? "This troop cannot attack now." : guarded ? "A Guard stands in the way: attack it first." : aims.has("base") && aims.size === 1 ? "No enemy troops: strike the Base." : "Choose what to attack."}${
-        canCover ? " Or take cover: until your next turn it keeps extra damage off your Base, but it will not hit back." : ""}`
-      : view.attacking ? "No more cards this turn. Act with your other troops, or end the turn."
-      : view.turn === 1 ? "Play your cards: one troop a turn. Nobody attacks on the opening turn."
-      : "First play cards (one troop, one other card). Then act with your troops. Once a troop acts, no more cards this turn.";
+    $("sd-prompt").textContent = r ? "" : pick?.tributes ? `선택: ${name(pick.card)}의 대가로 묘지에 보낼 내 부대 ${tributes(pick.card)}개를 고르세요.`
+      : kind === "gear" ? `선택: ${name(pick.card)}을(를) 들 내 부대 하나를 고르세요.`
+      : kind === "spell" ? `선택: ${name(pick.card)}의 대상이 될 적 부대를 고르세요.`
+      : attacking ? `${aims.size === 0 ? "이 부대는 지금 공격할 수 없습니다." : guarded ? "수호 부대가 가로막고 있습니다. 먼저 공격하세요." : aims.has("base") && aims.size === 1 ? "적 부대가 없습니다. 기지를 공격하세요." : "선택: 공격할 대상을 고르세요."}${
+        canCover ? " 아니면 엄폐하세요. 다음 턴까지 기지가 받는 추가 피해를 막아 주지만 반격하지는 못합니다." : ""}`
+      : view.attacking ? "이번 턴에는 더 낼 수 없습니다. 다른 부대로 행동하거나 턴을 끝내세요."
+      : view.turn === 1 ? "카드를 내세요. 부대는 한 턴에 하나입니다. 첫 턴에는 아무도 공격하지 않습니다."
+      : "먼저 카드를 내세요(부대 하나, 다른 카드 하나). 그다음 부대로 행동합니다. 부대가 행동하면 이번 턴에는 더 낼 수 없습니다.";
     $("sd-end").hidden = Boolean(r);
     $("sd-end").disabled = !options.some((a) => a.type === "end");
     $("sd-boot-hill").hidden = !("contestChallenge" in root.dataset && onBootHill && campaign?.trailDuel?.()?.battlefield === "boot-hill" && challengeAttacked && playbackIdle);
@@ -441,11 +441,11 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     $("sd-lesson").textContent = duel.lesson;
     $("sd-log").innerHTML = lines.map((l, i) => `<li data-line="${i}"${l.cue ? ` data-cue-kind="${l.cue}"` : ""}${l.turn ? ' class="sd-turn"' : ""}>${l.text}</li>`).join("");
     $("sd-log").scrollTop = $("sd-log").scrollHeight;
-    for (const side of ["cowboy", "wizard"]) $(`sd-${side}-graveyard`).textContent = view.sides[side].discard.map(name).join(", ") || "empty";
+    for (const side of ["cowboy", "wizard"]) $(`sd-${side}-graveyard`).textContent = view.sides[side].discard.map(name).join(", ") || "없음";
     // Keywords from the duel's two public deck lists, so the list never depends on a hidden card.
     const inPlay = new Set(Object.values(duel.options.decks).flatMap((counts) => Object.keys(counts)).flatMap((type) => TYPES[type].keys ?? []));
     $("sd-keywords").innerHTML = Object.entries(KEYWORDS).filter(([key]) => inPlay.has(key)).map(([, [word, rule]]) => `<li><strong>${word}.</strong> ${rule}</li>`).join("")
-      || "<li>No keywords in this duel.</li>";
+      || "<li>이 대결에는 키워드가 없습니다.</li>";
     cues.paint();
     boardPresentation?.paint(view,presentationStart);
     if (lost && !root.hidden) usable("#sd-hand button", "#sd-board [data-own]", "#sd-end", "#sd-result button")?.focus();

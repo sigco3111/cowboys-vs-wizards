@@ -12,8 +12,8 @@
 .wizard-lesson .wl-status[data-lesson-state="rejected"] { color: #f0a08a; }
 .wizard-lesson .wl-status[data-lesson-state="accepted"] { color: #9fd99a; }
 .wizard-lesson .wl-status[data-lesson-source="cached"]::before,
-.wizard-lesson .wl-status[data-lesson-source="imported-precomputed"]::before { content: "CACHED"; font-size: .7rem; letter-spacing: .08em; }
-.wizard-lesson .wl-status[data-lesson-source="imported"]::before { content: "TRAINED LOCALLY"; font-size: .7rem; letter-spacing: .08em; }
+.wizard-lesson .wl-status[data-lesson-source="imported-precomputed"]::before { content: "캐시됨"; font-size: .7rem; letter-spacing: .08em; }
+.wizard-lesson .wl-status[data-lesson-source="imported"]::before { content: "로컬 학습"; font-size: .7rem; letter-spacing: .08em; }
 .wizard-lesson .wl-reasons, .wizard-lesson .wl-runs { margin: .35rem 0 0 1.25rem; color: inherit; }
 .wizard-lesson .wl-hash { word-break: break-all; }
 .wizard-lesson .wl-import { display: inline-flex; gap: .5rem; align-items: center; }

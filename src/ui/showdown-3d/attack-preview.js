@@ -4,21 +4,21 @@ import { viewFor } from "../../game/showdown/contract.js";
 import { presentEvent } from "../../game/showdown/presenter.js";
 
 export function attackPreviews(id) {
-  if (id === "wizard-hellfire") return [["cast", "Watch Hellfire"]];
-  if (id === "cowboy-lasso") return [["cast", "Watch Lasso"]];
+  if (id === "wizard-hellfire") return [["cast", "지옥불 보기"]];
+  if (id === "cowboy-lasso") return [["cast", "올가미 보기"]];
   if (id === "wizard-singularity") {
-    return [["sheriffs", "Against three Sheriffs"], ["graveyard", "Against Skeleton and Dragon"]];
+    return [["sheriffs", "보안관 셋을 상대로"], ["graveyard", "해골과 용을 상대로"]];
   }
   const card = TYPES[id];
   if (card?.kind !== "troop") return [];
-  if (card.attack === 0) return [["guard", "Watch Guard"]];
+  if (card.attack === 0) return [["guard", "수호 보기"]];
   const label = {
-    "cowboy-dynamiter": "Watch Dynamite",
-    "cowboy-gatling-crew": "Watch Sweep",
-  }[id] ?? "Watch attack";
+    "cowboy-dynamiter": "다이너마이트 보기",
+    "cowboy-gatling-crew": "휩쓸기 보기",
+  }[id] ?? "공격 보기";
   const options = [["attack", label]];
-  if (card.keys.includes("ride")) options.push(["ride", "Watch Ride"]);
-  if (card.keys.includes("laststand")) options.push(["laststand", "Watch Last Stand"]);
+  if (card.keys.includes("ride")) options.push(["ride", "돌파 보기"]);
+  if (card.keys.includes("laststand")) options.push(["laststand", "최후의 저항 보기"]);
   return options;
 }
 
@@ -50,7 +50,7 @@ export function attackExample(id, mode) {
   const before = viewFor(state, side),
     end = viewFor(after, side);
   const summary =
-    (mode === "guard" ? "Guard makes enemies attack Bone Wall first. " : "") +
+    (mode === "guard" ? "수호 때문에 적은 뼈 방벽을 먼저 공격해야 합니다. " : "") +
     events.map((event) => presentEvent(event)).join(" ");
   return { before, end, trace: [{ before, after: end, events }], summary };
 }
@@ -104,7 +104,7 @@ function singularityExample(mode) {
   return {
     before, end,
     trace: [{before, after: end, events: events.map((event) => ({...event, cardId: spell, caster, areaVortex: true}))}],
-    summary: sheriffs ? "Each Sheriff loses one orb."
-      : "Skeleton is defeated. The Graveyard Dragon loses one orb and holds its ground.",
+    summary: sheriffs ? "보안관마다 오브 하나를 잃습니다."
+      : "해골이 쓰러집니다. 묘지의 용은 오브 하나를 잃지만 버팁니다.",
   };
 }

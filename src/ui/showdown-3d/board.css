@@ -305,7 +305,7 @@
 }
 .sd-gallery-actions {
   justify-content: space-between;
-  font-family: Georgia, serif;
+  font-family: Georgia, "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic", serif;
 }
 .sd-gallery-actions button {
   min-height: 42px;

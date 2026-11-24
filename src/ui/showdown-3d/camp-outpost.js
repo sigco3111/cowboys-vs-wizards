@@ -22,10 +22,10 @@ export function pokerHref(base) {
 // Drawers behind the bar for modules other workers own. Each mounts on its first opening;
 // a mount that throws leaves a plain note and the rest of the saloon working.
 const BAR_DRAWERS = [
-  ["ruling", "Balance ruling", mountScoutRuling],
-  ["forge", "Forge shelf", mountForgeShelf],
-  ["rules", "Rules desk", mountRulesDesk],
-  ["arena", "Agent arena", mountArenaTable],
+  ["ruling", "균형 판정", mountScoutRuling],
+  ["forge", "대장간 선반", mountForgeShelf],
+  ["rules", "규칙 데스크", mountRulesDesk],
+  ["arena", "에이전트 경기장", mountArenaTable],
 ];
 
 const RIVAL_ART = {
@@ -35,12 +35,12 @@ const RIVAL_ART = {
   coven: "wizard-singularity",
 };
 const ROOMS = [
-  ["camp-rivals-title", "rivals", "Rivals", "stone"],
-  ["camp-bounties-title", "wanted", "Wanted", "stone"],
-  ["camp-open-title", "range", "Open range", "wood"],
-  ["camp-practice", "practice", "Practice", "wood"],
-  ["camp-save", "save", "Save code", "wood"],
-  ["camp-collection-room", "ledger", "Camp ledger", "wood"],
+  ["camp-rivals-title", "rivals", "라이벌", "stone"],
+  ["camp-bounties-title", "wanted", "현상 수배", "stone"],
+  ["camp-open-title", "range", "열린 벌판", "wood"],
+  ["camp-practice", "practice", "연습", "wood"],
+  ["camp-save", "save", "저장 코드", "wood"],
+  ["camp-collection-room", "ledger", "캠프 장부", "wood"],
 ];
 
 // Move the existing controls into their rooms so their rules and event handlers stay in Camp.
@@ -54,7 +54,7 @@ export function mountCampOutpost(root) {
     const room = document.createElement("dialog");
     room.className = `camp-outpost outpost-${key} outpost-${material}`;
     room.setAttribute("aria-labelledby", `outpost-${key}-title`);
-    room.innerHTML = `<header><h2 id="outpost-${key}-title">${title}</h2><button type="button" autofocus>Back to map</button></header>
+    room.innerHTML = `<header><h2 id="outpost-${key}-title">${title}</h2><button type="button" autofocus>지도로 돌아가기</button></header>
       <div class="outpost-room"></div>`;
     room.querySelector("header button").addEventListener("click", () => room.close());
     const content = room.querySelector(".outpost-room");
@@ -78,13 +78,13 @@ export function mountCampOutpost(root) {
     if (art) slot.append(art);
   }
   root.querySelector(".camp-rail-utility").insertAdjacentHTML("beforeend",
-    '<button type="button" data-camp-destination="camp-collection-room">Camp ledger</button>');
+    '<button type="button" data-camp-destination="camp-collection-room">캠프 장부</button>');
 
   // The Night Shift saloon: same dialog, focus and back pattern as the other rooms.
   const saloonRoom = document.createElement("dialog");
   saloonRoom.className = "camp-outpost outpost-saloon outpost-wood";
   saloonRoom.setAttribute("aria-labelledby", "outpost-saloon-title");
-  saloonRoom.innerHTML = `<header><h2 id="outpost-saloon-title">Night Shift saloon</h2><button type="button" autofocus>Back to map</button></header>
+  saloonRoom.innerHTML = `<header><h2 id="outpost-saloon-title">야간 근무 살롱</h2><button type="button" autofocus>지도로 돌아가기</button></header>
       <div class="outpost-room"></div>`;
   saloonRoom.querySelector("header button").addEventListener("click", () => saloonRoom.close());
   root.append(saloonRoom);
@@ -101,9 +101,9 @@ export function mountCampOutpost(root) {
   const bar = document.createElement("footer");
   bar.className = "outpost-saloon-bar";
   bar.innerHTML = `<p class="outpost-side-game"><a class="outpost-poker-link"></a>
-      <span class="sd-note">Experimental second game. Opens its own page.</span></p>`;
+      <span class="sd-note">실험적인 두 번째 게임입니다. 별도 페이지가 열립니다.</span></p>`;
   const poker = bar.querySelector(".outpost-poker-link");
-  poker.textContent = "Boot Hill Poker";
+  poker.textContent = "부트 힐 포커";
   poker.href = pokerHref(document.baseURI);
   for (const [key, label, mount] of BAR_DRAWERS) {
     const drawer = document.createElement("details");
@@ -120,7 +120,7 @@ export function mountCampOutpost(root) {
       try {
         mount(host);
       } catch {
-        host.textContent = `The ${label.toLowerCase()} could not open.`;
+        host.textContent = `${label.toLowerCase()} 항목을 열 수 없습니다.`;
       }
     });
     bar.append(drawer);
@@ -131,16 +131,16 @@ export function mountCampOutpost(root) {
     if (current === saloonRoom) current = null;
   });
   root.querySelector('[data-camp-destination="camp-collection-room"]').insertAdjacentHTML("afterend",
-    '<button type="button" data-camp-destination="night-shift-saloon">Night Shift saloon</button>');
+    '<button type="button" data-camp-destination="night-shift-saloon">야간 근무 살롱</button>');
 
   const practice = rooms.get("camp-practice").content;
   const replays = document.createElement("details");
-  replays.innerHTML = "<summary>Challenge replays</summary>";
+  replays.innerHTML = "<summary>도전 리플레이</summary>";
   replays.append(byId("camp-experiment"));
   practice.append(replays, wizard);
 
   for (const key of ["camp-rivals-title", "camp-bounties-title"]) {
-    rooms.get(key).content.insertAdjacentHTML("afterbegin", '<p class="outpost-trail-lock">Finish the Trail to unlock these duels.</p>');
+    rooms.get(key).content.insertAdjacentHTML("afterbegin", '<p class="outpost-trail-lock">트레일을 끝내면 이 대결이 열립니다.</p>');
   }
   for (const [target, {room}] of rooms) {
     const control = root.querySelector(`[data-camp-destination="${target}"]`);

@@ -40,5 +40,5 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 [data-frame=trap] { border-style: dashed; border-width: 2px; }
 [data-frame=wanted], [data-frame=captured] { border-style: solid; border-width: 3px; }
 [data-frame=wanted]::before, [data-frame=captured]::before { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .14em; border-bottom: 1px solid currentColor; margin-bottom: .15rem; }
-[data-frame=wanted]::before { content: "WANTED"; }
-[data-frame=captured]::before { content: "CAPTURED"; }
+[data-frame=wanted]::before { content: "현상 수배"; }
+[data-frame=captured]::before { content: "생포"; }

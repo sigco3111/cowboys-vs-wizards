@@ -15,13 +15,13 @@ export const NAME_MAX = 80;
 export const LINE_MAX = 300;
 export const STAT_MAX = 99;
 export const CHECKS_MAX = 24;
-export const PENDING_NOTE = `Download started for ${REQUEST_FILE}. Your request is pending verification. This page cannot check a card; run the steps below.`;
+export const PENDING_NOTE = `다운로드를 시작했습니다: ${REQUEST_FILE}. 요청은 검증 대기 중입니다. 이 페이지는 카드를 검사할 수 없으니 아래 단계를 실행하세요.`;
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
 const isText = (s, max) => typeof s === "string" && s.trim().length > 0 && s.length <= max;
 const isStat = (n) => Number.isInteger(n) && n >= 0 && n <= STAT_MAX;
 const isRecord = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
-const gamesWord = (n) => `${n.toLocaleString("en-US")} game${n === 1 ? "" : "s"}`;
+const gamesWord = (n) => `${n.toLocaleString("en-US")} 게임${n === 1 ? "" : "s"}`;
 
 // Pure: the showcase record as the shelf shows it. {status: "none"} when no run is recorded,
 // {status: "invalid"} when any field is missing, mistyped or out of bounds, else {status: "ok", ...}.
@@ -47,17 +47,17 @@ export function forgeView(raw, types = TYPES) {
 // Pure: the verifier outcome in words, straight from the record.
 export function verdictText(view) {
   return view.verified
-    ? `Verifier passed this draft after ${gamesWord(view.games)}.`
-    : `Verifier did not pass this draft. It recorded ${gamesWord(view.games)}.`;
+    ? `검증기가 이 초안을 통과시켰습니다. 시간: ${gamesWord(view.games)}.`
+    : `검증기가 이 초안을 통과시키지 않았습니다. 기록: ${gamesWord(view.games)}.`;
 }
 
 // Pure: the showcase card, or an honest note when there is nothing valid to show. All text is escaped.
 export function showcaseHtml(view) {
   if (view.status === "none") {
-    return `<p class="forge-empty">No Card Forge run is recorded yet, so there is no showcase card. You can still write your own idea below.</p>`;
+    return `<p class="forge-empty">기록된 카드 포지 실행이 아직 없어 소개할 카드가 없습니다. 아래에 직접 아이디어를 적어볼 수 있습니다.</p>`;
   }
   if (view.status !== "ok") {
-    return `<p class="forge-empty">The recorded Card Forge result is missing fields or has values out of range, so nothing from it is shown.</p>`;
+    return `<p class="forge-empty">기록된 카드 포지 결과에 빠진 항목이 있거나 값이 범위를 벗어나 표시할 내용이 없습니다.</p>`;
   }
   const base = view.baseName ?? view.baseCard;
   const portrait = view.baseName
@@ -66,21 +66,21 @@ export function showcaseHtml(view) {
   const stat = (label, n) => `<div><dt>${label}</dt><dd>${n}</dd></div>`;
   const checks = view.checks.length
     ? `<ul class="forge-checks">${view.checks.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`
-    : `<p class="sd-note">No checks are listed in the record.</p>`;
+    : `<p class="sd-note">기록에 나열된 검사가 없습니다.</p>`;
   return `<figure class="forge-card" data-verified="${view.verified}">
     <figcaption>
-      <span class="forge-label">The player asked for</span>
+      <span class="forge-label">플레이어의 요청</span>
       <blockquote class="forge-request" style="white-space: pre-wrap">${esc(view.request)}</blockquote>
     </figcaption>
     <div class="forge-face">
       ${portrait}
       <strong class="forge-name">${esc(view.name)}</strong>
-      <span class="forge-base">Built on ${esc(base)}</span>
-      <dl class="forge-stats">${stat("Attack", view.attack)}${stat("Health", view.health)}${stat("Stars", view.stars)}</dl>
+      <span class="forge-base">기반 카드: ${esc(base)}</span>
+      <dl class="forge-stats">${stat("공격력", view.attack)}${stat("체력", view.health)}${stat("별", view.stars)}</dl>
     </div>
     <p class="forge-verdict">${esc(verdictText(view))}</p>
     ${checks}
-    <p class="sd-note">Source <code>${esc(view.source)}</code></p>
+    <p class="sd-note">출처 <code>${esc(view.source)}</code></p>
   </figure>`;
 }
 
@@ -88,40 +88,40 @@ export function showcaseHtml(view) {
 // than tab and newline are dropped, and the ends are trimmed. Empty or too long is refused.
 export function cleanRequest(input) {
   const text = String(input ?? "").replace(/\r\n?/g, "\n").replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, "").trim();
-  if (!text) return {ok: false, text: "", error: "Write your card idea first."};
-  if (text.length > REQUEST_MAX) return {ok: false, text, error: `Keep your idea to ${REQUEST_MAX} characters or fewer.`};
+  if (!text) return {ok: false, text: "", error: "먼저 카드 아이디어를 적어주세요."};
+  if (text.length > REQUEST_MAX) return {ok: false, text, error: `아이디어는 ${REQUEST_MAX}자 이하로 적어주세요.`};
   return {ok: true, text};
 }
 
 export const requestFileText = (text) => `${text}\n`;
-export const counterText = (value) => `${String(value ?? "").length} of ${REQUEST_MAX} characters`;
+export const counterText = (value) => `${String(value ?? "").length} of ${REQUEST_MAX}자`;
 
 // Pure: the whole shelf. One form, one button, no stored state.
 export function shelfHtml(view) {
   return `<section class="forge-shelf-showcase" aria-labelledby="forge-showcase-title">
-    <h3 id="forge-showcase-title">Card Forge</h3>
+    <h3 id="forge-showcase-title">카드 포지</h3>
     ${showcaseHtml(view)}
   </section>
   <section class="forge-shelf-own" aria-labelledby="forge-own-title">
-    <h4 id="forge-own-title">Forge your own card</h4>
+    <h4 id="forge-own-title">나만의 카드 만들기</h4>
     <form class="forge-form" novalidate>
-      <label for="forge-request">Describe your card in plain English</label>
+      <label for="forge-request">카드를 영어 문장으로 설명해 주세요</label>
       <textarea id="forge-request" name="request" rows="4" maxlength="${REQUEST_MAX}" spellcheck="true"
         aria-describedby="forge-request-count forge-request-help"></textarea>
       <p id="forge-request-count" class="sd-note">${counterText("")}</p>
-      <p id="forge-request-help" class="sd-note">Nothing is sent or stored. The button saves your words as ${REQUEST_FILE}.</p>
-      <button type="submit">Download ${REQUEST_FILE}</button>
+      <p id="forge-request-help" class="sd-note">아무것도 전송되거나 저장되지 않습니다. 버튼은 입력한 내용을 다음 파일로 저장합니다: ${REQUEST_FILE}.</p>
+      <button type="submit">다운로드 ${REQUEST_FILE}</button>
     </form>
     <p class="forge-status" role="status" aria-live="polite"></p>
     <div class="forge-pending" hidden>
-      <span class="forge-label">Pending verification</span>
+      <span class="forge-label">검증 대기 중</span>
       <blockquote class="forge-pending-request" style="white-space: pre-wrap"></blockquote>
     </div>
     <ol class="forge-steps">
-      <li>Put ${REQUEST_FILE} in the game's folder, next to <code>scripts/</code>.</li>
-      <li>Run <code>${esc(PREPARE_STEP)}</code> to stage your request.</li>
-      <li>In Kiro, choose the native Card Forge workflow. It keeps your staged request. With no staged request it uses the recorded example.</li>
-      <li>A draft counts as verified only when the verifier passes it. This page never marks one verified and gives no rewards.</li>
+      <li>${REQUEST_FILE} 파일을 게임 폴더의 <code>scripts/</code> 옆에 두세요.</li>
+      <li><code>${esc(PREPARE_STEP)}</code> 를 실행해 요청을 준비하세요.</li>
+      <li>Kiro에서 기본 카드 포지 워크플로를 고르세요. 준비한 요청이 유지되며, 준비한 요청이 없으면 기록된 예시를 사용합니다.</li>
+      <li>초안은 검증기가 통과시킨 경우에만 검증된 것으로 인정됩니다. 이 페이지는 검증 표시를 하지 않으며 보상도 주지 않습니다.</li>
     </ol>
   </section>`;
 }
@@ -177,7 +177,7 @@ export function mountForgeShelf(host, {showcase = SHOWCASE, portrait = null} = {
     }
     field.removeAttribute("aria-invalid");
     if (!saveRequest(host.ownerDocument ?? globalThis.document, result.text)) {
-      status.textContent = `This browser could not save the file. Copy your idea into ${REQUEST_FILE} by hand.`;
+      status.textContent = `이 브라우저가 파일을 저장하지 못했습니다. 아이디어를 다음 파일에 직접 복사하세요: ${REQUEST_FILE} `;
       return;
     }
     lastRequest = result.text;

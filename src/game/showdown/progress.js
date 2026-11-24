@@ -13,16 +13,16 @@ export const OPEN_WINS_PER_PACK = 3;
 // After the Trail: four rivals that bridge from the last Trail duel to the even match.
 // reward: cards paid on the first win. packs: packs paid on the first win.
 export const RIVALS = Object.freeze([
-  {id: "stargazer", name: "The Stargazer", lesson: "She fights with spells and face-down cards. Beat her for your first gear: a card one troop carries.",
+  {id: "stargazer", name: "별 관측자", lesson: "주문과 뒷면 카드로 싸웁니다. 이기면 첫 장비를 얻습니다. 부대 하나가 장착하는 카드입니다.",
     level: 1, base: 5, first: "cowboy", reward: ["cowboy-six-shooter"], packs: 1,
     deck: {"wizard-skeleton": 4, "wizard-raven-familiar": 2, "wizard-wizard": 3, "wizard-singularity": 3, "wizard-hellfire": 2, "wizard-hex": 2}},
-  {id: "imp", name: "The Imp", lesson: "Fast and reckless. A troop that takes cover keeps a big hit off your Base. Beat him for your first location.",
+  {id: "imp", name: "임프", lesson: "빠르고 무모합니다. 엄폐한 부대는 기지에 들어오는 큰 피해를 막아 줍니다. 이기면 첫 장소를 얻습니다.",
     level: 1, base: 5, reward: ["cowboy-sheriffs-office"], packs: 1,
     deck: {"wizard-imp": 3, "wizard-jack-o-lantern": 3, "wizard-skeleton": 4, "wizard-headless-horseman": 2, "wizard-singularity": 2, "wizard-bone-armor": 1, "wizard-hex": 1}},
-  {id: "bonewright", name: "The Bonewright", lesson: "His Boneyard makes every Undead hit harder. A location of your own replaces it.",
+  {id: "bonewright", name: "뼈 세공사", lesson: "그의 묘지터는 모든 언데드를 더 강하게 만듭니다. 직접 얻은 장소가 그것을 대체합니다.",
     level: 1.5, base: 4, first: "cowboy", reward: [], packs: 1,
     deck: {"wizard-skeleton": 5, "wizard-bone-wall": 3, "wizard-wizard": 3, "wizard-headless-horseman": 2, "wizard-boneyard": 2, "wizard-bone-armor": 1}},
-  {id: "coven", name: "The Graveyard Coven", lesson: "Everything the Wizards have, played as well as they can play it.",
+  {id: "coven", name: "묘지 마녀단", lesson: "마법사가 가진 모든 것을, 최대한 잘 운용합니다.",
     level: 2, base: 4, first: "cowboy", reward: [], packs: 2,
     deck: {...DECKS.wizard, "wizard-skeleton": 3, "wizard-boneyard": 1}},
 ]);
@@ -32,12 +32,12 @@ export const RIVALS = Object.freeze([
 // start of the Wizards' turn `lands`, so the player has a few turns to get ready and always meets it.
 // hunts: one entry per hunt, each a little harder.
 export const BOUNTIES = Object.freeze([
-  {id: "lantern-wraith", name: "The Lantern Wraith", boss: "wizard-lantern-wraith", reward: "cowboy-captured-wraith", entrance: "board",
-    lesson: "Wanted: the Lantern Wraith. It stands on the board from the start, and spells cannot touch it.",
+  {id: "lantern-wraith", name: "랜턴 망령", boss: "wizard-lantern-wraith", reward: "cowboy-captured-wraith", entrance: "board",
+    lesson: "현상 수배: 랜턴 망령. 처음부터 보드에 서 있으며 주문이 통하지 않습니다.",
     hunts: [{level: 1, base: 4, orbs: 4}, {level: 1, base: 4, orbs: 5}, {level: 1.5, base: 4, orbs: 6}, {level: 1.5, base: 4, orbs: 7}, {level: 2, base: 4, orbs: 8}],
     deck: {"wizard-skeleton": 6, "wizard-jack-o-lantern": 3, "wizard-raven-familiar": 2, "wizard-bone-wall": 2, "wizard-singularity": 2, "wizard-hex": 1}},
-  {id: "graveyard-dragon", name: "The Graveyard Dragon", boss: "wizard-dragon", reward: "cowboy-captured-dragon", entrance: "lands", lands: 4,
-    lesson: "Wanted: the Graveyard Dragon. It lands on the Wizards' second turn. Get troops out before it does: its fire sweeps your whole line.",
+  {id: "graveyard-dragon", name: "묘지의 용", boss: "wizard-dragon", reward: "cowboy-captured-dragon", entrance: "lands", lands: 4,
+    lesson: "현상 수배: 묘지의 용. 마법사의 두 번째 턴에 내려앉습니다. 그 전에 부대를 내보내세요. 용의 불길이 한 줄을 모두 휩쓸어 버립니다.",
     hunts: [{level: 1, base: 4, orbs: 2}, {level: 1, base: 4, orbs: 3}, {level: 1.5, base: 4, orbs: 3}, {level: 1.5, base: 4, orbs: 4}, {level: 2, base: 4, orbs: 4}],
     // No Guard troop in this escort: a Bone Wall in front of the Dragon made the hunt close to unwinnable.
     deck: {"wizard-skeleton": 9, "wizard-raven-familiar": 2, "wizard-jack-o-lantern": 2, "wizard-wizard": 2, "wizard-singularity": 1}},
@@ -58,15 +58,15 @@ export const trailDone = (save) => save.wins >= TRAIL.length;
 // Why this deck and side deck cannot be saved; an empty list means they can.
 export function deckProblems(save, deck, side = {}) {
   const problems = [];
-  if (total(deck) !== DECK_SIZE) problems.push(`A deck is exactly ${DECK_SIZE} cards; this one has ${total(deck)}.`);
-  if (total(side) > SIDE_SIZE) problems.push(`A side deck is at most ${SIDE_SIZE} cards; this one has ${total(side)}.`);
+  if (total(deck) !== DECK_SIZE) problems.push(`덱은 정확히 ${DECK_SIZE}장이어야 합니다. 현재 ${total(deck)}.`);
+  if (total(side) > SIDE_SIZE) problems.push(`사이드 덱은 최대 ${SIDE_SIZE}장이어야 합니다. 현재 ${total(side)}.`);
   for (const type of new Set([...Object.keys(deck), ...Object.keys(side)])) {
     const copies = (deck[type] ?? 0) + (side[type] ?? 0);
     const card = TYPES[type];
-    if (![deck[type] ?? 0, side[type] ?? 0].every((count) => Number.isInteger(count) && count >= 0)) problems.push(`${type}: a deck holds whole cards.`);
-    if (!card || card.side !== "cowboy") problems.push(`${type} is not a Cowboy card.`);
-    else if (copies > owned(save, type)) problems.push(`You own ${owned(save, type)} ${card.name}, not ${copies}.`);
-    else if (copies > cap(type)) problems.push(`${card.name} is ${RARITY[card.rarity][0]}: at most ${cap(type)} in a deck and its side deck.`);
+    if (![deck[type] ?? 0, side[type] ?? 0].every((count) => Number.isInteger(count) && count >= 0)) problems.push(`${type}: 덱에는 완전한 카드만 들어갑니다.`);
+    if (!card || card.side !== "cowboy") problems.push(`${type} 은(는) 카우보이 카드가 아닙니다.`);
+    else if (copies > owned(save, type)) problems.push(`보유 수량 ${owned(save, type)} ${card.name}장, 요청: ${copies}.`);
+    else if (copies > cap(type)) problems.push(`${card.name} is ${RARITY[card.rarity][0]}: 최대 ${cap(type)}장까지 덱과 사이드 덱에 넣을 수 있습니다.`);
   }
   return problems;
 }
@@ -88,7 +88,7 @@ export function duelList(save) {
     const cleared = save.hunts[bounty.id] ?? 0;
     list.push({id: `hunt:${bounty.id}`, kind: "hunt", name: bounty.name, cleared, state: cleared >= HUNTS ? "won" : trailDone(save) ? "open" : "locked"});
   }
-  list.push({id: "open", kind: "open", name: "Open range", state: trailDone(save) ? "open" : "locked"});
+  list.push({id: "open", kind: "open", name: "열린 벌판", state: trailDone(save) ? "open" : "locked"});
   return list;
 }
 
@@ -117,12 +117,12 @@ export function duelFor(save, id, deck = save.deck) {
     const cleared = save.hunts[key] ?? 0;
     if (!bounty || cleared >= HUNTS) return null;
     const hunt = bounty.hunts[cleared];
-    return {id, kind, name: `${bounty.name}, hunt ${cleared + 1} of ${HUNTS}`, lesson: bounty.lesson, level: hunt.level,
+    return {id, kind, name: `${bounty.name}, 사냥 ${cleared + 1} of ${HUNTS}`, lesson: bounty.lesson, level: hunt.level,
       options: {decks: {cowboy: deck, wizard: bounty.deck}, baseOrbs: {cowboy: 5 + grit, wizard: hunt.base}, first: "cowboy",
         ...(bounty.entrance === "board" ? {opening: {wizard: [{type: bounty.boss, health: hunt.orbs}]}}
           : {arrivals: {wizard: [{type: bounty.boss, turn: bounty.lands, health: hunt.orbs}]}})}};
   }
-  return kind === "open" ? {id, kind, name: "Open range", lesson: "An even match against the whole coven. The Wizards plan every turn.", level: 2,
+  return kind === "open" ? {id, kind, name: "열린 벌판", lesson: "마녀단 전체를 상대로 하는 동등한 대결입니다. 마법사는 매 턴을 계획합니다.", level: 2,
     options: {decks: {cowboy: deck, wizard: DECKS.wizard}}} : null;
 }
 

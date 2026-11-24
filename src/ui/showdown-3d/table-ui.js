@@ -18,11 +18,11 @@ function paintedFace(type) {
   const title = el("span", "table-card-title", card.name);
   const artwork = cardArtwork(type);
   const notes = el("span", "table-card-copy");
-  const kind = card.kind[0].toUpperCase() + card.kind.slice(1);
+  const kind = {troop: "부대", spell: "주문", trap: "함정", gear: "장비", location: "장소"}[card.kind] ?? card.kind;
   const category = el("span", "table-card-kind", icons[card.kind] + " " + kind);
   if (card.kind === "troop") {
     const stats = el("span", "table-card-stats");
-    stats.append(el("span", "", card.attack + " ATK"), el("span", "", card.health + " ●"));
+    stats.append(el("span", "", card.attack + " 공격력"), el("span", "", card.health + " ●"));
     const cost = tributes(type + "-1");
     notes.append(category, stats);
     if (cost || card.keys?.length)
@@ -30,7 +30,7 @@ function paintedFace(type) {
         el(
           "span",
           "table-card-rule",
-          [...(card.keys ?? []).map((key) => KEYWORDS[key][0]), ...(cost ? [cost + " tribute"] : [])].join(" · "),
+          [...(card.keys ?? []).map((key) => KEYWORDS[key][0]), ...(cost ? [cost + " 제물"] : [])].join(" · "),
         ),
       );
   } else {
@@ -88,16 +88,16 @@ export function bindTableUI(root) {
         button.style.setProperty("--lift", Math.abs(fan) * 3 + "px");
       });
       const added = [...result.querySelectorAll(".sd-good")].find((line) =>
-        line.textContent.startsWith("Added "),
+        line.textContent.startsWith("추가됨 "),
       );
       const location = field.dataset.battlefield !== "boot-hill" ? status.textContent.split(" · ")[0] : "";
-      turn.textContent = location ? `${location} · Turn ${view.turn}` : `Turn ${view.turn}`;
+      turn.textContent = location ? `${location} · ${view.turn}턴` : `${view.turn}턴`;
       turn.hidden = ended;
       headline.textContent = result.querySelector("[data-choose]")
-        ? "Choose a card"
+        ? "카드를 고르세요"
         : (added?.textContent.split(":")[0] ?? status.textContent.split(" · ")[0]);
-      goHome.textContent = "Camp";
-      if (!ended && /^(Choose|A Guard|No enemy)/.test(originalPrompt.textContent)) {
+      goHome.textContent = "캠프";
+      if (!ended && /^(선택|수호 부대|적 부대가 없습니다)/.test(originalPrompt.textContent)) {
         const text = originalPrompt.textContent.split(".")[0];
         prompt.textContent = text + (text.endsWith("?") ? "" : ".");
         prompt.hidden = false;
@@ -110,7 +110,7 @@ export function bindTableUI(root) {
       hand.inert = false;
       table.classList.remove("table-resolved");
       root.classList.remove("table-resolved");
-      goHome.textContent = "Back to camp";
+      goHome.textContent = "캠프로 돌아가기";
       prompt.hidden = turn.hidden = headline.hidden = true;
     },
   };
