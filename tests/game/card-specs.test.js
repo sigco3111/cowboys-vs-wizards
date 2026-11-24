@@ -103,18 +103,18 @@ test("every Showdown card has a rarity, and a tag and keywords or an effect, tha
 test("Showdown keeps the lane catalog's numbers for lane cards", () => {
   for (const spec of CARD_SPECS) {
     const { side, name, kind, stars, attack, health } = TYPES[spec.type];
-    assert.deepEqual({ side, name, kind, stars, attack, health }, { side: spec.side, name: spec.name, kind: spec.kind, stars: spec.stars, attack: spec.attack, health: spec.health });
+    assert.deepEqual({ side, name, kind, stars, attack, health }, { side: spec.side, name: SHOWDOWN_SPECS.find((card) => card.type === spec.type).name, kind: spec.kind, stars: spec.stars, attack: spec.attack, health: spec.health });
     assert.equal(TYPES[spec.type].bounty, Boolean(spec.bounty));
   }
 });
 
 test("canonical Showdown values for a sample of cards", () => {
-  assert.deepEqual(TYPES["cowboy-sheriff"], { side: "cowboy", name: "Sheriff", kind: "troop", stars: 2, attack: 1, health: 3, bounty: false, keys: [], rarity: "basic", tag: "Lawman" });
-  assert.deepEqual(TYPES["cowboy-deadeye"], { side: "cowboy", name: "Deadeye", kind: "spell", stars: undefined, attack: undefined, health: undefined, bounty: false, keys: [], rarity: "common", effect: "shot" });
-  assert.deepEqual(TYPES["wizard-lantern-wraith"], { side: "wizard", name: "Lantern Wraith", kind: "troop", stars: 6, attack: 2, health: 4, bounty: true, keys: ["ghostly"], rarity: "legendary", tag: "Undead" });
-  assert.deepEqual(TYPES["wizard-bone-wall"], { side: "wizard", name: "Bone Wall", rarity: "common", kind: "troop", stars: 3, attack: 0, health: 4, tag: "Undead", keys: ["guard"], fresh: true });
-  assert.deepEqual(TYPES["cowboy-sheriffs-office"], { side: "cowboy", name: "Sheriff's Office", rarity: "rare", kind: "location", effect: "office", fresh: true });
-  assert.deepEqual(TYPES["wizard-hex"], { side: "wizard", name: "Hex", rarity: "uncommon", kind: "trap", effect: "hex", fresh: true });
+  assert.deepEqual(TYPES["cowboy-sheriff"], { side: "cowboy", name: "보안관", kind: "troop", stars: 2, attack: 1, health: 3, bounty: false, keys: [], rarity: "basic", tag: "Lawman" });
+  assert.deepEqual(TYPES["cowboy-deadeye"], { side: "cowboy", name: "명사수", kind: "spell", stars: undefined, attack: undefined, health: undefined, bounty: false, keys: [], rarity: "common", effect: "shot" });
+  assert.deepEqual(TYPES["wizard-lantern-wraith"], { side: "wizard", name: "랜턴 망령", kind: "troop", stars: 6, attack: 2, health: 4, bounty: true, keys: ["ghostly"], rarity: "legendary", tag: "Undead" });
+  assert.deepEqual(TYPES["wizard-bone-wall"], { side: "wizard", name: "뼈 방벽", rarity: "common", kind: "troop", stars: 3, attack: 0, health: 4, tag: "Undead", keys: ["guard"], fresh: true });
+  assert.deepEqual(TYPES["cowboy-sheriffs-office"], { side: "cowboy", name: "보안관 사무소", rarity: "rare", kind: "location", effect: "office", fresh: true });
+  assert.deepEqual(TYPES["wizard-hex"], { side: "wizard", name: "저주", rarity: "uncommon", kind: "trap", effect: "hex", fresh: true });
   for (const side of SIDES) for (const type of Object.keys(SHOWDOWN_DECKS[side])) assert.equal(TYPES[type]?.side, side, type);
 });
 
@@ -171,7 +171,7 @@ test("CARD-COWBOY-LASSO-04 CARD-COWBOY-LASSO-05 CARD-COWBOY-LASSO-06 CARD-COWBOY
     assert.deepEqual(afterCast.events, [{
       type: "spell", side: "cowboy", cardId: lasso, target: target(state).cardId, left: health, stunned: true,
     }]);
-    assert.equal(presentEvent(afterCast.events[0]), "The Cowboys' Lasso hit Wizard: stunned for its next turn.");
+    assert.equal(presentEvent(afterCast.events[0]), "카우보이 올가미 → 마법사: 다음 턴 기절.");
 
     const wizardTurn = applyShowdown(afterCast.state, { type: "end" }).state;
     assert.equal(wizardTurn.active, "wizard");
@@ -192,8 +192,8 @@ test("CARD-COWBOY-LASSO-04 CARD-COWBOY-LASSO-05 CARD-COWBOY-LASSO-06 CARD-COWBOY
 
 test("CARD-COWBOY-BEAR-TRAP-05 CARD-COWBOY-BEAR-TRAP-06 CARD-WIZARD-HEX-05 CARD-WIZARD-HEX-06 CARD-WIZARD-HEX-07: setting a second trap hides both cards from the other seat", () => {
   const cases = [
-    { side: "cowboy", opponent: "wizard", type: "cowboy-bear-trap", log: "The Cowboys set a card face down." },
-    { side: "wizard", opponent: "cowboy", type: "wizard-hex", log: "The Wizards set a card face down." },
+    { side: "cowboy", opponent: "wizard", type: "cowboy-bear-trap", log: "카우보이: 카드를 뒷면으로 놓음." },
+    { side: "wizard", opponent: "cowboy", type: "wizard-hex", log: "마법사: 카드를 뒷면으로 놓음." },
   ];
   for (const { side, opponent, type, log } of cases) {
     const [oldest, newest] = [`${type}-1`, `${type}-2`];
@@ -213,9 +213,9 @@ test("CARD-COWBOY-BEAR-TRAP-05 CARD-COWBOY-BEAR-TRAP-06 CARD-WIZARD-HEX-05 CARD-
 
 test("CARD-WIZARD-HEX-08 CARD-WIZARD-HEX-10 CARD-WIZARD-HEX-12 CARD-WIZARD-HEX-14 CARD-WIZARD-HEX-15 CARD-WIZARD-HEX-16: only the oldest Hex springs and spends the attack, including against the Base", () => {
   const cases = [
-    { type: "cowboy-billy", health: 4, name: "Billy", target: 0, foe: [{ type: "wizard-wizard", health: 4 }] },
-    { type: "cowboy-billy", health: 4, name: "Billy", target: "base", foe: [] },
-    { type: "cowboy-mounted-billy", health: 5, name: "Mounted Billy", target: "base", foe: [{ type: "wizard-wizard", health: 4 }] },
+    { type: "cowboy-billy", health: 4, name: "빌리", target: 0, foe: [{ type: "wizard-wizard", health: 4 }] },
+    { type: "cowboy-billy", health: 4, name: "빌리", target: "base", foe: [] },
+    { type: "cowboy-mounted-billy", health: 5, name: "말 탄 빌리", target: "base", foe: [{ type: "wizard-wizard", health: 4 }] },
   ];
   const [oldest, newest] = ["wizard-hex-1", "wizard-hex-2"];
   for (const { type, health, name, target, foe } of cases) {
@@ -231,7 +231,7 @@ test("CARD-WIZARD-HEX-08 CARD-WIZARD-HEX-10 CARD-WIZARD-HEX-12 CARD-WIZARD-HEX-1
     assert.equal(out.state.sides.wizard.base, state.sides.wizard.base);
     assert.deepEqual(out.state.sides.cowboy.board[0], { ...before, attacked: true });
     assert.equal(kindsOf(out.state).has("attack"), false);
-    assert.equal(presentEvent(out.events[0]), `Trap! The Wizards' Hex caught ${name}: its attack was cancelled.`);
+    assert.equal(presentEvent(out.events[0]), `함정! 마법사 저주 → ${name}: 공격이 취소됨.`);
   }
 });
 
@@ -378,7 +378,7 @@ test("CARD-WIZARD-HELLFIRE-03 CARD-WIZARD-HELLFIRE-07 CARD-WIZARD-HELLFIRE-09 CA
       assert.deepEqual(after.sides.wizard.discard, [card]);
       assert.deepEqual(after.sides.wizard.hand, hand.filter((id) => id !== card));
       // 15: the log line for each event.
-      const line = (spec, slot) => `The Wizards' Hellfire hit ${TYPES[spec.type].name}: ${spec.health === 1 ? "defeated" : `${spec.health - 1} orb${spec.health === 2 ? "" : "s"} left`}.`;
+      const line = (spec, slot) => `마법사 지옥불 → ${TYPES[spec.type].name}: ${spec.health === 1 ? "쓰러짐" : `오브 ${spec.health - 1}개 남음`}.`;
       assert.deepEqual(events.map((event) => presentEvent(event)),hit.map(([spec, slot]) => line(spec, slot)));
     },
   ), FC);
@@ -463,7 +463,7 @@ test("CARD-COWBOY-OUTRIDER-06 CARD-COWBOY-OUTRIDER-07 CARD-COWBOY-OUTRIDER-08 CA
   assert.equal(rodePast.state.sides.wizard.base, 4);
   assert.equal(rodePast.state.sides.wizard.board[0].health, 3);
   assert.equal(rodePast.state.sides.cowboy.board[0].health, 3);
-  assert.equal(presentEvent(rodePast.events[0]), "The Cowboys' Outrider struck the Wizards' Base for 1.");
+  assert.equal(presentEvent(rodePast.events[0]), "카우보이 아웃라이더 → 마법사 기지 공격: 오브 1개 피해.");
 
   const emptyBoosted = applyShowdown(
     stage({ active: "cowboy", own: [{ type: "cowboy-outrider", health: 3 }], foe: [], hand: [officeId] }),
@@ -472,7 +472,7 @@ test("CARD-COWBOY-OUTRIDER-06 CARD-COWBOY-OUTRIDER-07 CARD-COWBOY-OUTRIDER-08 CA
   const fullStrike = applyShowdown(emptyBoosted, { type: "attack", slot: 0, target: "base" });
   assert.equal(fullStrike.state.sides.wizard.base, 3);
   assert.equal(fullStrike.events[0].baseDamage, 2);
-  assert.equal(presentEvent(fullStrike.events[0]), "The Cowboys' Outrider struck the Wizards' Base for 2.");
+  assert.equal(presentEvent(fullStrike.events[0]), "카우보이 아웃라이더 → 마법사 기지 공격: 오브 2개 피해.");
 
   const lethalRide = applyShowdown(
     stage({ active: "cowboy", own: [{ type: "cowboy-outrider", health: 2 }], foe: [skeleton], bases: { cowboy: 5, wizard: 1 } }),
@@ -509,7 +509,7 @@ test("CARD-COWBOY-OUTRIDER-06 CARD-COWBOY-OUTRIDER-07 CARD-COWBOY-OUTRIDER-08 CA
         type: "attack", side: "cowboy", cardId: riderId, target: "base",
         covered: false, hitBack: 0, baseDamage: 1, targetLeft: null, attackerLeft: health,
       }]);
-      assert.equal(presentEvent(ride.events[0]), "The Cowboys' Outrider struck the Wizards' Base for 1.");
+      assert.equal(presentEvent(ride.events[0]), "카우보이 아웃라이더 → 마법사 기지 공격: 오브 1개 피해.");
 
       const empty = withLocation(stage({ active: "cowboy", own: cowboy, foe: [], bases }));
       assert.deepEqual(
@@ -522,7 +522,7 @@ test("CARD-COWBOY-OUTRIDER-06 CARD-COWBOY-OUTRIDER-07 CARD-COWBOY-OUTRIDER-08 CA
         type: "attack", side: "cowboy", cardId: riderId, target: "base",
         covered: false, hitBack: 0, baseDamage: fullAttack, targetLeft: null, attackerLeft: health,
       }]);
-      assert.equal(presentEvent(strike.events[0]), `The Cowboys' Outrider struck the Wizards' Base for ${fullAttack}.`);
+      assert.equal(presentEvent(strike.events[0]), `카우보이 아웃라이더 → 마법사 기지 공격: 오브 ${fullAttack}개 피해.`);
     },
   ), FC);
 });
