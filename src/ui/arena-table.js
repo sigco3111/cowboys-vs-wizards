@@ -123,7 +123,8 @@ export function arenaView(raw, types = TYPES) {
 
 const cardName = (id, types) => {
   if (!isText(id, 80)) return null;
-  const known = Object.hasOwn(types, id) && isRecord(types[id]) && isText(types[id].name, 80) ? types[id].name : null;
+  const typeId = Object.hasOwn(types, id) ? id : id.replace(/-\d+$/, "");
+  const known = Object.hasOwn(types, typeId) && isRecord(types[typeId]) && isText(types[typeId].name, 80) ? types[typeId].name : null;
   return known ?? id;
 };
 const slotWord = (n) => (isInt(n) ? `슬롯 ${n + 1}` : null);
@@ -155,9 +156,12 @@ export function actionText(action, types = {}) {
 // Pure: the engine event kinds for one decision, as words. Payloads are never read.
 export function eventWords(events) {
   const kinds = [...new Set(events.map((e) => (isRecord(e) && typeof e.type === "string" && /^[a-z][a-z-]{0,30}$/i.test(e.type) ? e.type.replace(/-/g, " ") : null)).filter(Boolean))];
-  return kinds.slice(0, EVENT_WORDS_MAX);
+  return kinds.slice(0, EVENT_WORDS_MAX).map((k) => EVENT_KO[k.replace(/ /g, "-")] ?? k);
 }
 
+const EVENT_KO = {summon: "소환", spell: "주문", gear: "장비", location: "장소", set: "함정 설치", attack: "공격", cover: "엄폐", damage: "피해", defeat: "쓰러짐", "ride-out": "돌진", "end-turn": "턴 종료", trap: "함정 발동", draw: "카드 뽑기"};
+const REASON_KO = {base: "기지 파괴", turns: "턴 제한", draw: "무승부"};
+const WORD_KO = {guard: "수호", toughest: "가장 튼튼한 것", free: "제물 없이", cheapest: "가장 싼 것", strongest: "가장 강한 것", weakest: "가장 약한 것", base: "기지"};
 const list = (words) => words.join(", ");
 
 // Pure: how the recorded choice follows the recorded playbook. Each line follows from decide() in
@@ -195,13 +199,13 @@ export function personalityLines(policy, step) {
   const prefer = preferKey ? policy[preferKey].prefer : [];
   const kept = counts[step.type] - chosenRuledOut;
   if (FROM_HAND.has(step.type)) {
-    if (prefer.length) lines.push(`${josa(TYPE_WORD[step.type], "이")} 가능하면 ${josa(list(prefer), "을")} 선호합니다.`);
+    if (prefer.length) lines.push(`${josa(TYPE_WORD[step.type], "이")} 가능하면 ${josa(list(prefer.map((w) => WORD_KO[w] ?? w)), "을")} 선호합니다.`);
     if (step.type === "summon" && policy.summon.maxTributes < 2) {
       lines.push(`${policy.summon.maxTributes === 0 ? "제물 없는 소환만 합니다" : `제물은 최대 ${policy.summon.maxTributes}개까지만 씁니다`}.`);
     }
     if (step.type === "spell" && policy.spell.onlyToKill) lines.push("부대를 쓰러뜨리는 주문만 시전합니다.");
   } else if (step.type === "attack" && kept > 1) {
-    lines.push(prefer.length ? `허용된 공격 ${kept}개를 ${list(prefer)} 기준으로 순위를 매겨 1순위를 골랐습니다.` : "엔진이 나열한 첫 번째 허용 공격을 골랐습니다.");
+    lines.push(prefer.length ? `허용된 공격 ${kept}개를 ${list(prefer.map((w) => WORD_KO[w] ?? w))} 기준으로 순위를 매겨 1순위를 골랐습니다.` : "엔진이 나열한 첫 번째 허용 공격을 골랐습니다.");
   } else if (step.type !== "end" && kept === 1) {
     lines.push(`허용된 ${step.type === "attack" ? "공격" : "엄폐 방법"}은 이것 하나뿐이었습니다.`);
   }
@@ -242,7 +246,7 @@ function replayHeadHtml(view) {
   const bases = SEATS.map((side) => `${personaName(side)} 구슬 ${r.finalBases[side]}개`).join(", ");
   return `<p class="arena-seed">리플레이 시드 <strong>${r.seed}</strong>. ${personaName(r.first)} 선공.
       ${r.turns}턴 동안 결정 ${r.decisions}번.</p>
-    <p class="arena-result">${result} (${esc(r.result.reason)}). 최종 기지: ${bases}.</p>`;
+    <p class="arena-result">${result} (${esc(REASON_KO[r.result.reason] ?? r.result.reason)}). 최종 기지: ${bases}.</p>`;
 }
 
 // Pure: one decision of the replay.

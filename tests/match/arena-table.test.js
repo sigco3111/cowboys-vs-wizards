@@ -71,7 +71,7 @@ test("a real-shaped witness shows the exact score, seed and result", () => {
   const html = tableHtml(view);
   assert.match(html, /리플레이 시드 <strong>3<\/strong>\. 신중한 보안관 선공\./);
   assert.match(html, /4턴 동안 결정 4번/);
-  assert.match(html, /무모한 마법사 승리 \(base\)\. 최종 기지: 신중한 보안관 구슬 0개, 무모한 마법사 구슬 6개\./);
+  assert.match(html, /무모한 마법사 승리 \(기지 파괴\). 최종 기지: 신중한 보안관 구슬 0개, 무모한 마법사 구슬 6개\./);
   assert.match(html, /<code>wf-arena-20261121-a7<\/code>/);
   assert.match(html, /<code>aaaaaaaaaaaa<\/code>/);
 });

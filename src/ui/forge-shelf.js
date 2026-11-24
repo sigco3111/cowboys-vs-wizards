@@ -6,6 +6,23 @@
 import {TYPES} from "../game/showdown/cards.js";
 import SHOWCASE from "../../docs/evidence/player-card-forge/showcase.json" with {type: "json"};
 
+// 검증기가 남긴 영문 점검 문구(기록 원문)의 화면 표시용 번역. 모르는 문구는 원문 그대로 둔다.
+const CHECK_KO = {
+  "Base troop slot exists and the name is free": "기본 부대 칸이 있고 이름이 비어 있음",
+  "Draft fits the five-field schema and bounds": "초안이 다섯 필드 형식과 범위에 맞음",
+  "Engine reads the variant's name, numbers and deck copies": "엔진이 변형본의 이름, 수치, 덱 장수를 읽음",
+  "Every variant game ended legally from both seats": "변형본의 모든 대결이 양쪽 자리에서 규칙대로 끝남",
+  "Live cards and engine files unchanged": "실제 카드와 엔진 파일은 바뀌지 않음",
+  "Request and brief unchanged since prepare": "요청과 개요가 준비 이후 바뀌지 않음",
+  "Seeded replays matched on both builds": "시드 리플레이가 두 빌드에서 일치함",
+  "Unmodified snapshot compiled and its games ended legally": "수정하지 않은 스냅샷이 컴파일되고 대결이 규칙대로 끝남",
+  "Variant compiled in a disposable snapshot": "변형본이 임시 스냅샷에서 컴파일됨",
+};
+const checkKo = (c) => {
+  const m = /^Variant was summoned in (\d+) of (\d+) games$/.exec(c);
+  return m ? `변형본이 ${m[2]}판 중 ${m[1]}판에서 소환됨` : (CHECK_KO[c] ?? c);
+};
+
 export const REQUEST_MAX = 500;
 export const REQUEST_FILE = "request.txt";
 export const PREPARE_STEP = `node scripts/card-forge.mjs prepare ${REQUEST_FILE}`;
@@ -65,7 +82,7 @@ export function showcaseHtml(view) {
     : `<span class="forge-portrait forge-portrait-missing" aria-hidden="true">${esc(base.slice(0, 1).toUpperCase())}</span>`;
   const stat = (label, n) => `<div><dt>${label}</dt><dd>${n}</dd></div>`;
   const checks = view.checks.length
-    ? `<ul class="forge-checks">${view.checks.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`
+    ? `<ul class="forge-checks">${view.checks.map((c) => `<li>${esc(checkKo(c))}</li>`).join("")}</ul>`
     : `<p class="sd-note">기록에 나열된 검사가 없습니다.</p>`;
   return `<figure class="forge-card" data-verified="${view.verified}">
     <figcaption>
