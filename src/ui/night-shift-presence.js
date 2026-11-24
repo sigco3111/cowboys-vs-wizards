@@ -47,5 +47,5 @@ export function cleanActivityFields(input) {
 export function activityLabel(record) {
   const clean = cleanActivityFields(record);
   if (!clean) return null;
-  return `${ACTOR_NAME[clean.actor]}: ${SEEN[clean.phase]}을(를) 봄`;
+  return `${ACTOR_NAME[clean.actor]}: ${SEEN[clean.phase]}을 봄`;
 }

@@ -100,10 +100,10 @@ test("ambient notes follow the replay clock and use the shared label", () => {
     {sheriff: "a2", wizard: null, hunter: null, singularity: "a1"});
   assert.equal(latestActivity(ambient).sheriff.id, "a4");
   assert.deepEqual(ambient.map(ambientText), [
-    "Singularity sees a new request come in",
-    "Sheriff sees a tool being reached for",
-    "Wizard sees a tool set back down",
-    "Sheriff sees a tool set back down",
+    "싱귤래리티: 새 요청이 들어오는 것을 봄",
+    "보안관: 도구에 손을 뻗는 것을 봄",
+    "마법사: 도구를 내려놓는 것을 봄",
+    "보안관: 도구를 내려놓는 것을 봄",
   ]);
   for (const record of ambient) {
     const label = activityLabel(record);
@@ -146,24 +146,24 @@ test("ledger counts every refusal rule in order", () => {
 
 test("refusals name what each rule refuses; only the bell speaks of a stop passing", () => {
   const refusal = (rule) => describe({kind: "block", rule});
-  assert.match(refusal("balancer"), /^Sheriff: Refuses a tool call or file write outside the task's scope$/);
-  assert.match(refusal("tasks"), /check off a task that was not verified/);
-  assert.match(refusal("completion"), /success report/);
-  for (const rule of Object.keys(BLOCK_REASONS)) assert.doesNotMatch(refusal(rule), /stop|block/i);
-  assert.doesNotMatch(ledgerSectionHtml(), /block|stop/i);
-  assert.match(describe({kind: "bell"}), /stop passed/);
-  assert.match(describe({kind: "cast", card: "wizard-imp", field: "attack", before: 2, after: 1}), /scratch, not merged/);
-  assert.match(describe(patch("p", 1, "wizard-imp", "attack", 2, 1, "c".repeat(40))), /merged on main in ccccccc/);
-  assert.doesNotMatch(deed({kind: "job"}), /Singularity/, "the actor's own line does not repeat its name");
-  assert.equal(RECORDED_LABEL, "Recorded Kiro shift");
+  assert.match(refusal("balancer"), /^보안관: 작업 범위를 벗어난 도구 호출이나 파일 쓰기를 거부함$/);
+  assert.match(refusal("tasks"), /검증되지 않은 작업의 완료 처리를 거부함/);
+  assert.match(refusal("completion"), /성공 보고를 거부함/);
+  for (const rule of Object.keys(BLOCK_REASONS)) assert.doesNotMatch(refusal(rule), /차단|중단/);
+  assert.doesNotMatch(ledgerSectionHtml(), /차단|중단/);
+  assert.match(describe({kind: "bell"}), /중단이 점검을 통과함/);
+  assert.match(describe({kind: "cast", card: "wizard-imp", field: "attack", before: 2, after: 1}), /임시안, 병합 안 됨/);
+  assert.match(describe(patch("p", 1, "wizard-imp", "attack", 2, 1, "c".repeat(40))), /main에 병합됨 ccccccc/);
+  assert.doesNotMatch(deed({kind: "job"}), /싱귤래리티/, "the actor's own line does not repeat its name");
+  assert.equal(RECORDED_LABEL, "녹화된 Kiro 근무");
 });
 
 test("Wanted posters map bounty ids to their boss painting and never pass an unknown id to the atlas", () => {
-  assert.deepEqual(wantedPoster("lantern-wraith"), {slug: "lantern-wraith", name: "The Lantern Wraith", card: "wizard-lantern-wraith"});
-  assert.deepEqual(wantedPoster("graveyard-dragon"), {slug: "graveyard-dragon", name: "The Graveyard Dragon", card: "wizard-dragon"});
+  assert.deepEqual(wantedPoster("lantern-wraith"), {slug: "lantern-wraith", name: "랜턴 망령", card: "wizard-lantern-wraith"});
+  assert.deepEqual(wantedPoster("graveyard-dragon"), {slug: "graveyard-dragon", name: "묘지의 용", card: "wizard-dragon"});
   assert.deepEqual(wantedPoster("tin-golem"), {slug: "tin-golem", name: "Tin Golem", card: null});
   assert.equal(wantedPoster("wizard-imp").card, null, "a card id is not a bounty id");
-  assert.equal(describe({kind: "wanted", boss: "graveyard-dragon"}), "Bounty Hunter: Posts Wanted: The Graveyard Dragon");
+  assert.equal(describe({kind: "wanted", boss: "graveyard-dragon"}), "현상금 사냥꾼: 현상 수배 게시: 묘지의 용");
 });
 
 test("the checked-in recording survives the production path", () => {
@@ -210,9 +210,9 @@ test("the review state is a normal replay position on a fixture feed, so Step, P
 
 test("the Wizard's proposal states its direction in words, not colour alone", () => {
   const {events} = normalizeFeed(feed);
-  assert.match(proposalText(replayTo(events, events.length).proposal), /: health 3 → 4, raised$/);
-  assert.match(proposalText({card: "wizard-imp", field: "attack", before: 2, after: 1, change: "down"}), /2 → 1, lowered$/);
-  assert.equal(proposalText(null), "No proposal yet");
+  assert.match(proposalText(replayTo(events, events.length).proposal), /: 체력 3 → 4, 상향$/);
+  assert.match(proposalText({card: "wizard-imp", field: "attack", before: 2, after: 1, change: "down"}), /2 → 1, 하향$/);
+  assert.equal(proposalText(null), "아직 제안 없음");
 });
 
 test("only actors whose latest ambient note changed reach the illustrated stage", () => {
@@ -288,9 +288,9 @@ test("each merged patch note links its validated main commit and shows its UTC d
   const sha = "0123456789abcdef0123456789abcdef01234567";
   const [kept] = normalizeFeed({patches: [{...patch("p9", 0, "wizard-imp", "attack", 2, 1, sha), at: "2026-11-21T23:58:30.000Z"}]}).patches;
   assert.deepEqual(patchNote(kept), {
-    change: `${TYPES["wizard-imp"].name} attack 2 → 1`,
+    change: `${TYPES["wizard-imp"].name} 공격력 2 → 1`,
     commit: sha,
-    label: "main commit 0123456",
+    label: "main 커밋 0123456",
     href: `https://github.com/alejandro-publius/cowboys-vs-wizards/commit/${sha}`,
     at: "2026-11-21T23:58:30.000Z",
     when: "2026-11-21 23:58 UTC",
