@@ -63,4 +63,5 @@ MIT 라이선스. 원작자 **alejandro-publius** 의 저작물을 기반으로 
 - 카드 명세(`.kiro/specs/duel-card-pipeline/cards/*.json`)의 `showdown.name`에 한글 이름을 두고 생성기가 이를 허용합니다. 레인 카드 이름은 영문 그대로입니다.
 - 규칙 데스크 인덱스는 `scripts/rules-desk.ko.json` 오버레이를 합쳐 생성하며 `--check`가 통과합니다. 영문 규칙서 인용문은 원문 그대로 둡니다.
 - 엔진 동일성 검사(야간 감시 영수증)는 `card-specs.generated.js`, `showdown/cards.js`가 과거 커밋과 바이트가 다르다고 표시합니다. 두 파일(및 `rules.js`)의 코드 골격은 원본과 동일하고 문자열·주석만 다릅니다.
+- 포커(`/poker/`)는 엔진(`engine.js`, 증명·테스트가 의존)을 영문으로 두고, 표시 계층 `ko.js`가 엔진 문구를 한글로 바꿔 보여 줍니다. 전각 폭을 고려해 상자 테두리를 맞췄습니다.
 - 원본에서도 실패하는 테스트: `tests/experiments/trap-placeholder-scenarios.test.js`("no command for ride-out"). 한글화와 무관합니다.
