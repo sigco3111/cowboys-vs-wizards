@@ -12,20 +12,20 @@ import SHOWCASE from "../../docs/evidence/saloon-agent-arena/showcase.json" with
 
 // The persona ids and seats as experiments/agent-arena/playbook.js defines them.
 export const PERSONAS = Object.freeze({
-  "cautious-sheriff": Object.freeze({name: "Cautious Sheriff", side: "cowboy"}),
-  "reckless-wizard": Object.freeze({name: "Reckless Wizard", side: "wizard"}),
+  "cautious-sheriff": Object.freeze({name: "신중한 보안관", side: "cowboy"}),
+  "reckless-wizard": Object.freeze({name: "무모한 마법사", side: "wizard"}),
 });
 export const SEATS = Object.freeze(["cowboy", "wizard"]);
 export const REPLAY_KIND = "agent-arena-replay/1";
 export const MAX_STEPS = 1500;
 export const ACTION_TYPES = Object.freeze(["summon", "spell", "gear", "location", "set", "attack", "cover", "end"]);
 const PERSONA_OF = Object.freeze({cowboy: "cautious-sheriff", wizard: "reckless-wizard"});
-const SEAT_NAME = Object.freeze({cowboy: "Cowboy", wizard: "Wizard"});
+const SEAT_NAME = Object.freeze({cowboy: "카우보이", wizard: "마법사"});
 // Action types whose legal options depend on the acting hand. Their counts are never shown.
 const FROM_HAND = new Set(["summon", "spell", "gear", "location", "set"]);
 const TYPE_WORD = Object.freeze({
-  summon: "summon a troop", spell: "cast a spell", gear: "equip gear", location: "play a location",
-  set: "set a trap", attack: "attack", cover: "take cover", end: "end the turn",
+  summon: "부대 소환", spell: "주문 시전", gear: "장비 장착", location: "장소 놓기",
+  set: "함정 설치", attack: "공격", cover: "엄폐", end: "턴 종료",
 });
 const PREFER_OF = Object.freeze({attack: "attack", summon: "summon", spell: "spell", gear: "gear"});
 const TEXT_MAX = 200;
@@ -38,7 +38,7 @@ const isInt = (n, min = 0) => Number.isInteger(n) && n >= min;
 const isText = (s, max = TEXT_MAX) => typeof s === "string" && s.trim().length > 0 && s.length <= max;
 const isWordList = (v) => Array.isArray(v) && v.every((w) => isText(w, 40));
 const sum = (values) => values.reduce((a, b) => a + b, 0);
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+const plural = (n, word) => `${word} ${n}`;
 const canonical = (value) => JSON.stringify(value, (key, each) => (isRecord(each)
   ? Object.fromEntries(Object.keys(each).sort().map((name) => [name, each[name]])) : each));
 const personaName = (side) => PERSONAS[PERSONA_OF[side]].name;
@@ -125,7 +125,7 @@ const cardName = (id, types) => {
   const known = Object.hasOwn(types, id) && isRecord(types[id]) && isText(types[id].name, 80) ? types[id].name : null;
   return known ?? id;
 };
-const slotWord = (n) => (isInt(n) ? `slot ${n + 1}` : null);
+const slotWord = (n) => (isInt(n) ? `슬롯 ${n + 1}` : null);
 
 // Pure: what the acting character did, in words. Only face-up plays name a card.
 export function actionText(action, types = {}) {
@@ -134,20 +134,20 @@ export function actionText(action, types = {}) {
   switch (action.type) {
     case "summon": {
       const paid = Array.isArray(action.tributes) ? action.tributes.length : null;
-      const tribute = paid === null ? "" : paid === 0 ? " with no tribute" : `, tributing ${plural(paid, "troop")}`;
-      return `summoned ${card ?? "a troop"}${tribute}`;
+      const tribute = paid === null ? "" : paid === 0 ? ", 제물 없이" : `, 부대 ${paid}개를 제물로`;
+      return `${card ?? "부대"} 소환${tribute}`;
     }
-    case "spell": return `cast ${card ?? "a spell"}${slotWord(action.target) ? ` targeting ${slotWord(action.target)}` : ""}`;
-    case "gear": return `equipped ${card ?? "gear"}${slot ? ` to its troop in ${slot}` : ""}`;
-    case "location": return `played the location ${card ?? "card"}`;
-    case "set": return "set a face-down trap";
+    case "spell": return `${card ?? "주문"} 시전${slotWord(action.target) ? `, 대상 ${slotWord(action.target)}` : ""}`;
+    case "gear": return `${card ?? "장비"} 장착${slot ? `, ${slot}의 자기 부대에` : ""}`;
+    case "location": return `장소 ${card ?? "카드"} 사용`;
+    case "set": return "뒤집어 둔 함정 설치";
     case "attack": {
-      const from = slot ? ` with its troop in ${slot}` : "";
-      const at = action.target === "base" ? " at the other Base" : slotWord(action.target) ? ` at the other side's troop in ${slotWord(action.target)}` : "";
-      return `attacked${from}${at}`;
+      const from = slot ? `, ${slot}의 자기 부대로` : "";
+      const at = action.target === "base" ? ", 상대 기지 대상" : slotWord(action.target) ? `, 상대 ${slotWord(action.target)}의 부대 대상` : "";
+      return `공격${from}${at}`;
     }
-    case "cover": return `had its troop${slot ? ` in ${slot}` : ""} take cover`;
-    default: return "ended its turn";
+    case "cover": return `${slot ? `${slot}의 ` : ""}자기 부대를 엄폐시킴`;
+    default: return "턴 종료";
   }
 }
 
@@ -165,7 +165,7 @@ const list = (words) => words.join(", ");
 // of the chosen type. When the record does not add up, no explanation is claimed.
 export function personalityLines(policy, step) {
   const name = PERSONAS[step.persona].name;
-  if (!policy) return [`No playbook was recorded for ${name}, so this table does not explain the choice.`];
+  if (!policy) return [`${name}의 플레이북이 기록되지 않아 이 표는 선택 이유를 설명하지 않습니다.`];
   const pos = policy.order.indexOf(step.type);
   const counts = {};
   for (const action of step.legal) counts[action.type] = (counts[action.type] ?? 0) + 1;
@@ -179,33 +179,33 @@ export function personalityLines(policy, step) {
   };
   const agrees = pos !== -1 && chosenRuledOut >= 0 && chosenRuledOut < counts[step.type]
     && earlier.every((type) => canRuleOut[type]) && (chosenRuledOut === 0 || canRuleOut[step.type]);
-  if (!agrees) return ["The recorded playbook and this decision do not agree, so this table does not explain the choice."];
-  const lines = [`Playbook order: ${list(policy.order.map((t) => TYPE_WORD[t]))}. It chose to ${TYPE_WORD[step.type]}, number ${pos + 1} of ${policy.order.length}.`];
+  if (!agrees) return ["기록된 플레이북과 이 결정이 맞지 않아 이 표는 선택 이유를 설명하지 않습니다."];
+  const lines = [`플레이북 순서: ${list(policy.order.map((t) => TYPE_WORD[t]))}. 선택: ${TYPE_WORD[step.type]} (${policy.order.length}개 중 ${pos + 1}번째).`];
   // Options that depend on the hand are never counted or described, so nothing about unplayed cards shows.
   const why = {
-    attack: () => `${counts.attack === 1 ? "Its one legal attack" : `All ${counts.attack} legal attacks`} matched its avoid list (${list(policy.attack.avoid)}), so it held back.`,
-    cover: () => "It takes cover only when a troop is threatened, so it did not take cover.",
+    attack: () => `${counts.attack === 1 ? "가능한 공격 1개가" : `가능한 공격 ${counts.attack}개 모두가`} 기피 목록(${list(policy.attack.avoid)})에 해당해 공격을 자제했습니다.`,
+    cover: () => "부대가 위협받을 때만 엄폐하므로 엄폐하지 않았습니다.",
   };
   for (const type of earlier) if (why[type]) lines.push(why[type]());
   if (chosenRuledOut > 0 && step.type === "attack") {
-    lines.push(`It ruled out ${chosenRuledOut} of ${counts.attack} legal attacks on its avoid list (${list(policy.attack.avoid)}).`);
+    lines.push(`가능한 공격 ${counts.attack}개 중 ${chosenRuledOut}개는 기피 목록(${list(policy.attack.avoid)})에 해당해 제외했습니다.`);
   }
   const preferKey = PREFER_OF[step.type];
   const prefer = preferKey ? policy[preferKey].prefer : [];
   const kept = counts[step.type] - chosenRuledOut;
   if (FROM_HAND.has(step.type)) {
-    if (prefer.length) lines.push(`When it can ${TYPE_WORD[step.type]}, it prefers ${list(prefer)}.`);
+    if (prefer.length) lines.push(`${TYPE_WORD[step.type]}이(가) 가능하면 ${list(prefer)}을(를) 선호합니다.`);
     if (step.type === "summon" && policy.summon.maxTributes < 2) {
-      lines.push(`It ${policy.summon.maxTributes === 0 ? "makes only free summons" : `summons with at most ${plural(policy.summon.maxTributes, "tribute")}`}.`);
+      lines.push(`${policy.summon.maxTributes === 0 ? "제물 없는 소환만 합니다" : `제물은 최대 ${policy.summon.maxTributes}개까지만 씁니다`}.`);
     }
-    if (step.type === "spell" && policy.spell.onlyToKill) lines.push("It casts only spells that defeat a troop.");
+    if (step.type === "spell" && policy.spell.onlyToKill) lines.push("부대를 쓰러뜨리는 주문만 시전합니다.");
   } else if (step.type === "attack" && kept > 1) {
-    lines.push(prefer.length ? `It ranked ${kept} allowed attacks by ${list(prefer)} and took the top one.` : "It took the first allowed attack the engine listed.");
+    lines.push(prefer.length ? `허용된 공격 ${kept}개를 ${list(prefer)} 기준으로 순위를 매겨 1순위를 골랐습니다.` : "엔진이 나열한 첫 번째 허용 공격을 골랐습니다.");
   } else if (step.type !== "end" && kept === 1) {
-    lines.push(`This was its only allowed ${step.type === "attack" ? "attack" : "way to take cover"}.`);
+    lines.push(`허용된 ${step.type === "attack" ? "공격" : "엄폐 방법"}은 이것 하나뿐이었습니다.`);
   }
   const never = Object.keys(counts).filter((type) => !FROM_HAND.has(type) && !policy.order.includes(type));
-  if (never.length) lines.push(`Its playbook never chooses to ${list(never.map((t) => TYPE_WORD[t]))}.`);
+  if (never.length) lines.push(`이 플레이북은 다음을 절대 선택하지 않습니다: ${list(never.map((t) => TYPE_WORD[t]))}.`);
   return lines;
 }
 
@@ -213,13 +213,13 @@ export function personalityLines(policy, step) {
 export function scoreHtml(view) {
   const {summary} = view;
   const [sheriff, wizard] = Object.keys(PERSONAS);
-  const seat = (side) => `${SEAT_NAME[side]} moved first in ${summary.byStartingSeat[side].games}`;
-  return `<p class="arena-score" aria-label="Series score">
+  const seat = (side) => `${SEAT_NAME[side]} 선공 ${summary.byStartingSeat[side].games}판`;
+  return `<p class="arena-score" aria-label="시리즈 점수">
       <span>${PERSONAS[sheriff].name} <strong>${summary.wins[sheriff]}</strong></span>
       <span>${PERSONAS[wizard].name} <strong>${summary.wins[wizard]}</strong></span>
-      <span>Draws <strong>${summary.wins.draw}</strong></span>
+      <span>무승부 <strong>${summary.wins.draw}</strong></span>
     </p>
-    <p class="sd-note">${plural(summary.games, "game")}. ${seat("cowboy")}, ${seat("wizard")}.</p>`;
+    <p class="sd-note">총 ${summary.games}판. ${seat("cowboy")}, ${seat("wizard")}.</p>`;
 }
 
 function rosterHtml(view) {
@@ -228,20 +228,20 @@ function rosterHtml(view) {
     const motto = policy?.motto ? `<q class="arena-motto">${esc(policy.motto)}</q>` : "";
     const skipped = policy ? ACTION_TYPES.filter((t) => !policy.order.includes(t)) : [];
     const plan = policy
-      ? `<span class="sd-note">Tries: ${esc(list(policy.order.map((t) => TYPE_WORD[t])))}.${skipped.length ? ` Never: ${esc(list(skipped.map((t) => TYPE_WORD[t])))}.` : ""}</span>`
-      : `<span class="sd-note">No playbook was recorded for this character.</span>`;
-    return `<li data-persona="${id}"><strong>${name}</strong> <span class="arena-seat">${SEAT_NAME[side]} seat</span> ${motto} ${plan}</li>`;
+      ? `<span class="sd-note">시도: ${esc(list(policy.order.map((t) => TYPE_WORD[t])))}.${skipped.length ? ` 절대 안 함: ${esc(list(skipped.map((t) => TYPE_WORD[t])))}.` : ""}</span>`
+      : `<span class="sd-note">이 캐릭터의 플레이북이 기록되지 않았습니다.</span>`;
+    return `<li data-persona="${id}"><strong>${name}</strong> <span class="arena-seat">${SEAT_NAME[side]} 자리</span> ${motto} ${plan}</li>`;
   }).join("")}</ul>`;
 }
 
 function replayHeadHtml(view) {
   const r = view.replay;
   const winner = r.result.winner;
-  const result = SEATS.includes(winner) ? `${personaName(winner)} won` : "Draw";
-  const bases = SEATS.map((side) => `${personaName(side)} ${plural(r.finalBases[side], "orb")}`).join(", ");
-  return `<p class="arena-seed">Replay seed <strong>${r.seed}</strong>. ${personaName(r.first)} moved first.
-      ${plural(r.decisions, "decision")} over ${plural(r.turns, "turn")}.</p>
-    <p class="arena-result">${result} (${esc(r.result.reason)}). Final Bases: ${bases}.</p>`;
+  const result = SEATS.includes(winner) ? `${personaName(winner)} 승리` : "무승부";
+  const bases = SEATS.map((side) => `${personaName(side)} 구슬 ${r.finalBases[side]}개`).join(", ");
+  return `<p class="arena-seed">리플레이 시드 <strong>${r.seed}</strong>. ${personaName(r.first)} 선공.
+      ${r.turns}턴 동안 결정 ${r.decisions}번.</p>
+    <p class="arena-result">${result} (${esc(r.result.reason)}). 최종 기지: ${bases}.</p>`;
 }
 
 // Pure: one decision of the replay.
@@ -251,33 +251,33 @@ export function stepHtml(view, index) {
   const name = PERSONAS[step.persona].name;
   const events = eventWords(step.events);
   const lines = personalityLines(view.policies[step.persona], step);
-  return `<p class="arena-step-head"><strong>Step ${index + 1} of ${steps.length}</strong>, turn ${step.turn}</p>
+  return `<p class="arena-step-head"><strong>${index + 1}/${steps.length}단계</strong>, ${step.turn}턴</p>
     <p class="arena-did" data-side="${step.side}"><strong>${name}</strong> ${esc(actionText(step.action, view.types))}.</p>
-    ${events.length ? `<p class="sd-note">The engine reported: ${esc(list(events))}.</p>` : ""}
-    <ul class="arena-why" aria-label="Why ${name} chose this">${lines.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>`;
+    ${events.length ? `<p class="sd-note">엔진 보고: ${esc(list(events))}.</p>` : ""}
+    <ul class="arena-why" aria-label="${name}이(가) 이렇게 선택한 이유">${lines.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>`;
 }
 
 // Pure: the whole table, opened on view.start, or an honest note.
 export function tableHtml(view) {
-  const title = `<h3 id="arena-table-title">Agent Arena</h3>`;
+  const title = `<h3 id="arena-table-title">에이전트 경기장</h3>`;
   const note = (text) => `<section class="arena-table-body" aria-labelledby="arena-table-title">${title}<p class="arena-empty">${text}</p></section>`;
-  if (view.status === "none") return note("No verified Agent Arena match is recorded yet, so there is no score or replay to show.");
-  if (view.status === "unverified") return note("The recorded Agent Arena match is not marked verified, so nothing from it is shown.");
-  if (view.status !== "ok") return note("The recorded Agent Arena match is missing fields or does not add up, so nothing from it is shown.");
+  if (view.status === "none") return note("검증된 에이전트 경기장 대전이 아직 기록되지 않아 보여줄 점수나 리플레이가 없습니다.");
+  if (view.status === "unverified") return note("기록된 에이전트 경기장 대전이 검증됨으로 표시되지 않아 표시할 내용이 없습니다.");
+  if (view.status !== "ok") return note("기록된 에이전트 경기장 대전에 빠진 항목이 있거나 수치가 맞지 않아 표시할 내용이 없습니다.");
   const last = view.replay.steps.length - 1;
   return `<section class="arena-table-body" aria-labelledby="arena-table-title">
     ${title}
     ${scoreHtml(view)}
     ${rosterHtml(view)}
     ${replayHeadHtml(view)}
-    <div class="arena-replay" role="group" aria-label="Replay controls. Left and Right arrows step, Home and End jump." tabindex="0">
+    <div class="arena-replay" role="group" aria-label="리플레이 조작. 왼쪽/오른쪽 화살표는 한 단계 이동, Home/End는 처음/끝으로 이동." tabindex="0">
       <div class="arena-controls">
-        <button type="button" data-arena-step="back" aria-keyshortcuts="ArrowLeft"${view.start === 0 ? " disabled" : ""}>Back</button>
-        <button type="button" data-arena-step="forward" aria-keyshortcuts="ArrowRight"${view.start === last ? " disabled" : ""}>Forward</button>
+        <button type="button" data-arena-step="back" aria-keyshortcuts="ArrowLeft"${view.start === 0 ? " disabled" : ""}>이전</button>
+        <button type="button" data-arena-step="forward" aria-keyshortcuts="ArrowRight"${view.start === last ? " disabled" : ""}>다음</button>
       </div>
       <div class="arena-step" aria-live="polite">${stepHtml(view, view.start)}</div>
     </div>
-    <p class="sd-note">Played by native Kiro workflow <code>${esc(view.workflowId)}</code>. Playbook digests ${Object.keys(PERSONAS).map((p) => `<code>${esc(view.replay.playbookDigests[p].slice(0, 12))}</code>`).join(" and ")}.</p>
+    <p class="sd-note">Kiro 기본 워크플로 <code>${esc(view.workflowId)}</code>가 플레이했습니다. 플레이북 다이제스트 ${Object.keys(PERSONAS).map((p) => `<code>${esc(view.replay.playbookDigests[p].slice(0, 12))}</code>`).join(", ")}.</p>
   </section>`;
 }
 
