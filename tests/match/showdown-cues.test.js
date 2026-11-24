@@ -68,7 +68,7 @@ test("any slot attacking any slot: the trap, Last Stand and Sweep cues land on t
       assert.deepEqual(stand.marks, [{side: "wizard", slot: to}, {side: "cowboy", slot: from}], label);
       const sweep = only(cues, "sweep");
       assert.deepEqual(sweep.marks, [{side: "cowboy", slot: from}, {side: "wizard", at: "row"}], label);
-      assert.match(sweep.text, /2 other troops/);
+      assert.match(sweep.text, /다른 부대 2개에도/);
     }
   }
 });

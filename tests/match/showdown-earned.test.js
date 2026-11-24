@@ -47,8 +47,8 @@ test("the duel is twoPlayers() with the earned decks, copied, and the Wizards op
   const duel = earnedDuel(bootHillWon, wizard);
   const two = twoPlayers();
   assert.equal(duel.name, EARNED_NAME);
-  assert.match(duel.name, /not an even match/);
-  assert.match(duel.lesson, /Not an even match\. Nothing is saved\./);
+  assert.match(duel.name, /동등한 대결 아님/);
+  assert.match(duel.lesson, /동등한 대결이 아닙니다\. 아무것도 저장되지 않습니다\./);
   assert.deepEqual({...duel.options, decks: two.options.decks, first: undefined}, {...two.options, first: undefined}, "only decks and first differ");
   assert.equal(duel.options.first, "wizard");
   assert.equal(duel.level, two.level);

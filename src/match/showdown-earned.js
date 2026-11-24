@@ -12,7 +12,7 @@ import {DECK_SIZE} from "../game/showdown/progress.js";
 import {twoPlayers} from "./showdown-session.js";
 
 export const EARNED_NAME = "얻은 덱 (동등한 대결 아님)";
-const LESSON = "한 화면에서 둘이 하는 대결입니다. 카우보이는 캠프에 저장된 덱을, 마법사는 마법사 미리보기 덱을 쓰며 카우보이가 먼저 시작합니다. "
+const LESSON = "한 화면에서 둘이 하는 대결입니다. 카우보이는 캠프에 저장된 덱을, 마법사는 마법사 미리보기 덱을 쓰며 마법사가 먼저 시작합니다. "
   + "동등한 대결이 아닙니다. 아무것도 저장되지 않습니다. 턴이 끝나면 화면을 넘기세요.";
 
 // A whole deck of this side's cards: DECK_SIZE cards, every count a whole number.

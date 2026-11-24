@@ -65,9 +65,9 @@ test("hand-built events of each type read with card and side names", () => {
     const text = presentEvent({type, ...fields});
     assert.doesNotMatch(text, /undefined|NaN|\[object/, `${type}: ${text}`);
   }
-  assert.match(presentEvent({type: "turn", ...samples.turn}), /Turn 3: the Cowboys/);
-  assert.match(presentEvent({type: "attack", ...samples.attack}), /struck the Wizards' Base for 2/);
-  assert.match(presentEvent({type: "trap", ...samples.trap}), /attack was cancelled/);
+  assert.match(presentEvent({type: "turn", ...samples.turn}), /3턴: 카우보이 차례/);
+  assert.match(presentEvent({type: "attack", ...samples.attack}), /마법사 기지 공격: 오브 2개 피해/);
+  assert.match(presentEvent({type: "trap", ...samples.trap}), /공격이 취소됨/);
 });
 
 // Any real card id from that side's opening hand; the presenter only reads its name.
