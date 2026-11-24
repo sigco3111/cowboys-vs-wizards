@@ -261,22 +261,22 @@ test("saloon decision: the recorded Billy proposal shows its decision, rule and 
   assert.equal(TYPES["cowboy-billy"].attack, 2, "this build still has the current card, so the change is not applied");
   const decision = proposalDecision(BILLY);
   assert.ok(decision);
-  assert.equal(decision.change, "Billy attack 2 → 1");
-  assert.equal(decision.status, "Passed the written balance rule and awaits design approval. Billy has attack 2 in this build.");
+  assert.equal(decision.change, "빌리 공격력 2 → 1");
+  assert.equal(decision.status, "문서화된 균형 규칙을 통과했고 디자인 승인을 기다립니다. 이 빌드에서 빌리의 공격력 2입니다.");
   assert.equal(decision.rules[0],
-    "NSB-1, each faction wins 45–55% of games: Cowboys won 59.792% at attack 2 (outside) and 51.920% at attack 1 (inside).");
+    "NSB-1, 각 진영의 승률 45–55%: 카우보이는 공격력 2에서 59.792%(범위 밖), 공격력 1에서 51.920%(범위 안)를 기록했습니다.");
   assert.equal(decision.rules[1],
-    "NSB-2, the opener's distance from 50% may grow by at most 1 point: 9.412 at attack 2, 8.136 at attack 1 (within).");
+    "NSB-2, 선공의 50% 이탈 폭은 최대 1포인트까지만 커질 수 있습니다: 공격력 2에서 9.412, 공격력 1에서 8.136 (허용 범위 내).");
   assert.equal(decision.duels, 100000);
   assert.equal(decision.sourceCommit, "eedab9385931e093e156fdb7885c470eb2ec64eb");
 
   const html = decisionHtml(decision);
-  assert.match(html, /^<h5>Review of Kiro's proposal: Billy attack 2 → 1<\/h5>/);
-  assert.deepEqual([...html.matchAll(/<dt>([^<]+)<\/dt>/g)].map((m) => m[1]), ["Decision", "Rule", "Receipt"]);
-  assert.match(html, /Proposed by Kiro CLI; 100,000 recorded Node engine duels at source <code>eedab93<\/code>, protocol <code>1950574<\/code>\./);
-  assert.ok(html.includes(`Recheck: <code>${DECISION_RECHECK}</code>`) && html.includes(`Notes: <code>${DECISION_NOTES}</code>`));
-  assert.match(html, /It is not one of Kiro&#39;s six free-choice edits, which the reviewer rejected\./);
-  assert.doesNotMatch(html, /scratch|\.artifacts|fs_write/, "none of the live room's privacy canaries is printed");
+  assert.match(html, /^<h5>Kiro 제안 검토: 빌리 공격력 2 → 1<\/h5>/);
+  assert.deepEqual([...html.matchAll(/<dt>([^<]+)<\/dt>/g)].map((m) => m[1]), ["결정", "규칙", "영수증"]);
+  assert.match(html, /Kiro CLI 제안\. 소스 <code>eedab93<\/code>에서 녹화된 Node 엔진 대결 100,000판, 프로토콜 <code>1950574<\/code>\./);
+  assert.ok(html.includes(`재확인: <code>${DECISION_RECHECK}</code>`) && html.includes(`메모: <code>${DECISION_NOTES}</code>`));
+  assert.match(html, /검토자가 거부한 Kiro의 자유 선택 수정 여섯 건에는 속하지 않습니다\./);
+  assert.doesNotMatch(html, /임시안|\.artifacts|fs_write/, "none of the live room's privacy canaries is printed");
   assert.equal(decisionHtml(null), "");
 });
 
@@ -284,9 +284,9 @@ test("saloon decision: the status line and the opening caption lead to the decis
   const cast = recorded.find((event) => event.kind === "cast");
   assert.equal(recorded.indexOf(cast), 2);
   assert.equal(eventCaption(cast),
-    "Wizard: Proposes Billy attack 2 → 1 (scratch, not merged). Decision on the notice board: passed the balance rule, awaiting design approval.");
-  assert.equal(eventCaption(recorded[0]), "Singularity: Hands out a job", "other events keep their plain line");
-  assert.equal(idleCaption(recorded), `${IDLE_CAPTION} Step 3 shows Kiro's card proposal and its decision.`);
+    "마법사: 빌리 공격력 2 → 1 제안 (임시안, 병합 안 됨). 게시판 결정: 균형 규칙 통과, 디자인 승인 대기.");
+  assert.equal(eventCaption(recorded[0]), "싱귤래리티: 일감을 내줌", "other events keep their plain line");
+  assert.equal(idleCaption(recorded), `${IDLE_CAPTION} 3단계에서 Kiro의 카드 제안과 결정을 볼 수 있습니다.`);
   assert.equal(idleCaption(recorded.filter((event) => event.kind !== "cast")), IDLE_CAPTION);
   assert.equal(idleCaption(null), IDLE_CAPTION);
 });
@@ -344,7 +344,7 @@ test("saloon review: ?saloon=review lands on the step the validated audit finds,
   const {card, field, before, after: to} = review.shown.proposal;
   assert.deepEqual({card, field, before, after: to}, BILLY);
   assert.ok(proposalDecision(review.shown.proposal), "the notice board shows the decision at that step");
-  assert.equal(idleCaption(feed.events), `${IDLE_CAPTION} Step ${step} shows Kiro's card proposal and its decision.`);
+  assert.equal(idleCaption(feed.events), `${IDLE_CAPTION} ${step}단계에서 Kiro의 카드 제안과 결정을 볼 수 있습니다.`);
   // Play continues from the review and reaches the same end; Replay from start returns to the empty room.
   assert.deepEqual(feed.events.slice(review.count).reduce(applyEvent, review.shown), replayTo(feed.events, feed.events.length));
   assert.deepEqual(replayTo(feed.events, 0), emptyShift());
