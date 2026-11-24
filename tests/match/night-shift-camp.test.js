@@ -54,7 +54,7 @@ test("fixture records pass the real bridge, so the saloon is tested on what prod
 });
 
 test("four roles cover every shift event kind", () => {
-  assert.deepEqual(ACTORS.map((a) => a.role), ["Sheriff", "Wizard", "Bounty Hunter", "Singularity"]);
+  assert.deepEqual(ACTORS.map((a) => a.role), ["보안관", "마법사", "Bounty Hunter", "특이점"]);
   assert.deepEqual(ACTORS.map((a) => a.card), ["cowboy-sheriff", "wizard-wizard", "cowboy-ranger", "wizard-singularity"]);
   assert.equal(actorFor("block"), "sheriff");
   assert.equal(actorFor("cast"), "wizard");

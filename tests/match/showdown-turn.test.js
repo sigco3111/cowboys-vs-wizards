@@ -55,7 +55,7 @@ test("a fresh landing is the referee's decision state, with hidden zones as coun
   assert.equal(board(view, "wizard"), "용 4 | 잭오랜턴 1 cover | -");
   assert.equal(view.sides.wizard.board[0].cardId, "wizard-dragon-0");
   assert.deepEqual(view.sides.cowboy.traps.map((id) => cardOf(id).name), ["곰 덫"]);
-  assert.deepEqual(view.sides.cowboy.hand.map((id) => cardOf(id).name), ["Gatling Crew", "Outrider", "Billy"]);
+  assert.deepEqual(view.sides.cowboy.hand.map((id) => cardOf(id).name), ["개틀링 포대", "아웃라이더", "빌리"]);
   assert.equal(view.seed, undefined);
   for (const hidden of ["hand", "traps", "deck"]) assert.equal(view.sides.wizard[hidden], undefined);
   assert.equal(view.sides.cowboy.deck, undefined);

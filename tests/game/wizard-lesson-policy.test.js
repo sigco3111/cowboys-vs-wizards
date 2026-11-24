@@ -151,6 +151,6 @@ test("seed search for an authentic bait in the default decks (reports a miss, ne
 test("no card, deck or rule table changed", () => {
   assert.equal(JSON.stringify(TYPES), CARDS_BEFORE);
   assert.equal(JSON.stringify(DECKS), DECKS_BEFORE);
-  assert.deepEqual(TYPES["wizard-hellfire"], {side: "wizard", name: "Hellfire", rarity: "uncommon", kind: "spell", effect: "hellfire", fresh: true});
+  assert.deepEqual(TYPES["wizard-hellfire"], {side: "wizard", name: "지옥불", rarity: "uncommon", kind: "spell", effect: "hellfire", fresh: true});
   assert.deepEqual([TYPES["cowboy-dynamiter"].attack, TYPES["cowboy-dynamiter"].health], [3, 1]);
 });

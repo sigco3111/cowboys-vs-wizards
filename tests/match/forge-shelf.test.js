@@ -5,7 +5,7 @@ import {
   PREPARE_STEP, PENDING_NOTE, REQUEST_MAX, REQUEST_FILE, STAT_MAX, TEXT_MAX,
 } from "../../src/ui/forge-shelf.js";
 
-const TYPES = {"cowboy-billy": {name: "Billy"}};
+const TYPES = {"cowboy-billy": {name: "빌리"}};
 const record = (over = {}, draft = {}) => ({
   request: "A lawman who rides fast but breaks easy.",
   draft: {name: "Dust Rider", baseCard: "cowboy-billy", attack: 3, health: 1, stars: 2, ...draft},
@@ -25,7 +25,7 @@ test("a valid record keeps the exact request, name, base, stats and outcome", ()
   const view = forgeView(record({request: "  Two lines\nexactly  "}), TYPES);
   assert.equal(view.status, "ok");
   assert.equal(view.request, "  Two lines\nexactly  ");
-  assert.deepEqual([view.name, view.baseCard, view.baseName], ["Dust Rider", "cowboy-billy", "Billy"]);
+  assert.deepEqual([view.name, view.baseCard, view.baseName], ["Dust Rider", "cowboy-billy", "빌리"]);
   assert.deepEqual([view.attack, view.health, view.stars, view.verified, view.games], [3, 1, 2, false, 200]);
   assert.deepEqual(view.checks, ["schema", "balance"]);
 });
