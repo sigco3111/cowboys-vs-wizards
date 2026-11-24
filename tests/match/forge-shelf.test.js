@@ -17,8 +17,8 @@ test("no recorded run is reported as none, not as a card", () => {
   assert.deepEqual(forgeView(null, TYPES), {status: "none"});
   assert.deepEqual(forgeView(undefined, TYPES), {status: "none"});
   const html = showcaseHtml(forgeView(null, TYPES));
-  assert.match(html, /No Card Forge run is recorded yet/);
-  assert.doesNotMatch(html, /verifier passed|forge-card/i);
+  assert.match(html, /기록된 카드 포지 실행이 아직 없어/);
+  assert.doesNotMatch(html, /통과시켰|forge-card/i);
 });
 
 test("a valid record keeps the exact request, name, base, stats and outcome", () => {
@@ -37,15 +37,15 @@ test("a malformed or out-of-range record is refused whole", () => {
     record({checks: "schema"}), record({checks: [1]}), record({checks: [""]}), record({draft: null}),
     record({}, {attack: -1}), record({}, {health: STAT_MAX + 1}), record({}, {stars: 2.5}), record({}, {name: "  "}),
   ]) assert.equal(forgeView(bad, TYPES).status, "invalid", JSON.stringify(bad).slice(0, 80));
-  assert.match(showcaseHtml({status: "invalid"}), /nothing from it is shown/);
+  assert.match(showcaseHtml({status: "invalid"}), /표시할 내용이 없습니다/);
 });
 
 test("the verdict follows the recorded boolean only", () => {
   const failed = forgeView(record(), TYPES), passed = forgeView(record({verified: true, games: 1}), TYPES);
-  assert.equal(verdictText(failed), "Verifier did not pass this draft. It recorded 200 games.");
-  assert.equal(verdictText(passed), "Verifier passed this draft after 1 game.");
+  assert.equal(verdictText(failed), "검증기가 이 초안을 통과시키지 않았습니다. 기록: 200판.");
+  assert.equal(verdictText(passed), "검증기가 이 초안을 통과시켰습니다. 실행: 1판.");
   assert.match(showcaseHtml(failed), /data-verified="false"/);
-  assert.doesNotMatch(showcaseHtml(failed), /Verifier passed/);
+  assert.doesNotMatch(showcaseHtml(failed), /통과시켰습니다/);
 });
 
 test("every recorded string is escaped", () => {
@@ -70,7 +70,7 @@ test("the player's request is cleaned and bounded", () => {
   assert.equal(cleanRequest("x".repeat(REQUEST_MAX)).ok, true);
   assert.equal(cleanRequest("x".repeat(REQUEST_MAX + 1)).ok, false);
   assert.equal(requestFileText("A ghost"), "A ghost\n");
-  assert.equal(counterText("abc"), `3 of ${REQUEST_MAX} characters`);
+  assert.equal(counterText("abc"), `3/${REQUEST_MAX}자`);
 });
 
 test("the shelf has one bounded form, one button and the exact CLI step", () => {
@@ -81,12 +81,12 @@ test("the shelf has one bounded form, one button and the exact CLI step", () => 
   assert.match(html, new RegExp(`maxlength="${REQUEST_MAX}"`));
   assert.match(html, /<label for="forge-request">/);
   assert.ok(html.includes(`<code>${PREPARE_STEP}</code>`));
-  assert.match(html, /native Card Forge workflow\. It keeps your staged request\. With no staged request it uses the recorded example\./);
+  assert.match(html, /기본 카드 포지 워크플로를 고르세요\. 준비한 요청이 유지되며, 준비한 요청이 없으면 기록된 예시를 사용합니다\./);
   assert.doesNotMatch(html, /https?:|localStorage|reward(?!s\.)/i);
 });
 
 test("a saved request is pending, never verified", () => {
-  assert.match(PENDING_NOTE, /pending verification/);
-  assert.doesNotMatch(PENDING_NOTE, /\bverified\b/i);
+  assert.match(PENDING_NOTE, /검증 대기 중/);
+  assert.doesNotMatch(PENDING_NOTE, /검증된|검증됨/);
   assert.match(shelfHtml(forgeView(null, TYPES)), /<div class="forge-pending" hidden>/);
 });
