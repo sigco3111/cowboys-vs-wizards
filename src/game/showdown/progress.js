@@ -1,3 +1,4 @@
+import {josa} from "../../ui/josa.js";
 // Everything a player keeps between duels: the Trail, rivals, bounties, the collection, the
 // deck, packs and the card offered after a win. Pure: no DOM and no storage. The screen saves
 // the object these functions return.
@@ -64,9 +65,9 @@ export function deckProblems(save, deck, side = {}) {
     const copies = (deck[type] ?? 0) + (side[type] ?? 0);
     const card = TYPES[type];
     if (![deck[type] ?? 0, side[type] ?? 0].every((count) => Number.isInteger(count) && count >= 0)) problems.push(`${type}: 덱에는 온전한 카드 장수만 들어갑니다.`);
-    if (!card || card.side !== "cowboy") problems.push(`${type}은(는) 카우보이 카드가 아닙니다.`);
+    if (!card || card.side !== "cowboy") problems.push(`${josa(type, "은")} 카우보이 카드가 아닙니다.`);
     else if (copies > owned(save, type)) problems.push(`${card.name} 보유 수량은 ${owned(save, type)}장이며 ${copies}장은 넣을 수 없습니다.`);
-    else if (copies > cap(type)) problems.push(`${card.name}은(는) ${RARITY[card.rarity][0]} 등급입니다: 덱과 사이드 덱을 합쳐 최대 ${cap(type)}장입니다.`);
+    else if (copies > cap(type)) problems.push(`${josa(card.name, "은")} ${RARITY[card.rarity][0]} 등급입니다: 덱과 사이드 덱을 합쳐 최대 ${cap(type)}장입니다.`);
   }
   return problems;
 }

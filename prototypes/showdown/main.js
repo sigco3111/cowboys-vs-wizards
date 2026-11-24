@@ -172,7 +172,7 @@ function renderCamp() {
   $("bounties").innerHTML = list.filter((duel) => duel.kind === "hunt").map((duel) => {
     const bounty = BOUNTIES.find((each) => `hunt:${each.id}` === duel.id);
     return tile(duel, duel.state === "won" ? `체포: ${TYPES[bounty.reward].name}` : duel.state === "locked" ? "트레일 이후"
-      : `사냥 ${HUNTS}회 중 ${duel.cleared}회 승리. 5승하면 ${TYPES[bounty.reward].name}을(를) 체포합니다.`);
+      : `사냥 ${HUNTS}회 중 ${duel.cleared}회 승리. 5승하면 ${josa(TYPES[bounty.reward].name, "을")} 체포합니다.`);
   }).join("");
   const open = trailDone(save) && !save.offer;
   $("open").innerHTML = `<button type="button" data-duel="open" ${open ? "" : "disabled"}>대등한 승부${open ? "" : " (트레일 이후)"}</button>
@@ -235,24 +235,24 @@ function say(events) {
     else if (e.type === "tribute") lines.push({text: `${whose(e.side)} ${josa(name(e.cardId), "이")} 제물로 바쳐졌습니다.`});
     else if (e.type === "summon") lines.push({text: `${whose(e.side)} ${josa(name(e.cardId), "이")} 도착했습니다.`});
     else if (e.type === "raise") lines.push({text: `부활: ${whose(e.side)} ${josa(name(e.cardId), "이")} 구슬 1개로 묘지에서 돌아왔습니다.`});
-    else if (e.type === "set") lines.push({text: solo() && e.side === "cowboy" ? "함정을 뒤집어 놓았습니다." : `${faction(e.side)}이(가) 카드를 뒤집어 놓았습니다.`});
+    else if (e.type === "set") lines.push({text: solo() && e.side === "cowboy" ? "함정을 뒤집어 놓았습니다." : `${josa(faction(e.side), "이")} 카드를 뒤집어 놓았습니다.`});
     else if (e.type === "gear") lines.push({text: `${whose(e.side)} ${josa(name(e.target), "이")} ${josa(name(e.cardId), "을")} 장착했습니다.`});
     else if (e.type === "location") lines.push({text: `${whose(e.side)} ${josa(name(e.cardId), "이")} 새 장소가 되었습니다.`});
     else if (e.type === "cover") lines.push({text: `${whose(e.side)} ${josa(name(e.cardId), "이")} 엄폐했습니다.`});
-    else if (e.type === "draw") lines.push({text: solo() ? (e.side === "cowboy" ? "카드를 한 장 뽑았습니다." : "마법사가 카드를 한 장 뽑았습니다.") : `${faction(e.side)}이(가) 카드를 한 장 뽑았습니다.`});
+    else if (e.type === "draw") lines.push({text: solo() ? (e.side === "cowboy" ? "카드를 한 장 뽑았습니다." : "마법사가 카드를 한 장 뽑았습니다.") : `${josa(faction(e.side), "이")} 카드를 한 장 뽑았습니다.`});
     else if (e.type === "burn") lines.push({text: `${whose(e.side)} 손패가 가득 차서(최대 6장) ${josa(name(e.cardId), "이")} 버려졌습니다.`});
     else if (e.type === "fatigue") lines.push({text: `${whose(e.side)} 덱이 비었습니다: ${baseOf(e.side)}의 구슬 1개를 잃었습니다.`});
     else if (e.type === "spell") lines.push({text: `${whose(e.side)} ${josa(name(e.cardId), "이")} ${josa(name(e.target), "을")} 맞혔습니다: ${e.stunned ? "다음 턴 기절" : e.left === 0 ? "격파" : `구슬 ${e.left}개 남음`}.`});
-    else if (e.type === "trap") lines.push({text: `함정! ${whose(e.side)} ${josa(name(e.cardId), "이")} ${josa(name(e.target), "을")} 붙잡았습니다: ${cardOf(e.cardId).effect === "hex" ? "공격이 취소됨" : e.left === 0 ? "공격 전에 격파됨" : `${e.left}(으)로 줄었지만 그대로 공격함`}.`});
+    else if (e.type === "trap") lines.push({text: `함정! ${whose(e.side)} ${josa(name(e.cardId), "이")} ${josa(name(e.target), "을")} 붙잡았습니다: ${cardOf(e.cardId).effect === "hex" ? "공격이 취소됨" : e.left === 0 ? "공격 전에 격파됨" : `구슬 ${e.left}개로 줄었지만 그대로 공격함`}.`});
     else if (e.type === "laststand") lines.push({text: `최후의 저항: ${josa(name(e.cardId), "이")} ${name(e.target)}의 구슬 1개를 없앴습니다${e.left === 0 ? " (격파)" : ""}.`});
     else if (e.type === "sweep") lines.push({text: `휩쓸기: ${josa(name(e.cardId), "이")} 다른 부대 ${e.count}장에게도 1을 입혔습니다.`});
     else if (e.type === "attack") {
       const base = baseOf(opponent(e.side));
       const result = e.target === "base" ? null
-        : e.targetLeft === 0 ? `격파했고${e.baseDamage ? ` ${e.baseDamage}이(가) ${base}에 들어갔습니다` : e.covered ? ", 엄폐 중이라 기지에는 아무것도 닿지 않았습니다" : ""}`
+        : e.targetLeft === 0 ? `격파했고${e.baseDamage ? ` ${base}에 피해 ${e.baseDamage}만큼 들어갔습니다` : e.covered ? ", 엄폐 중이라 기지에는 아무것도 닿지 않았습니다" : ""}`
         : e.covered ? `${e.targetLeft}만 남겼고 엄폐 중이라 반격하지 않았습니다`
         : !e.hitBack ? `${e.targetLeft}만 남겼고 공격력이 없어 반격하지 않았습니다`
-        : `${e.targetLeft}만 남겼고 ${e.hitBack}로 반격했습니다${e.attackerLeft === 0 ? ` (${name(e.cardId)} 격파)` : ""}`;
+        : `${e.targetLeft}만 남겼고 ${e.hitBack}의 피해로 반격했습니다${e.attackerLeft === 0 ? ` (${name(e.cardId)} 격파)` : ""}`;
       lines.push({text: result ? `${whose(e.side)} ${josa(name(e.cardId), "이")} ${josa(name(e.target), "을")} 공격해 ${result}.` : `${whose(e.side)} ${josa(name(e.cardId), "이")} ${base}에 ${e.baseDamage}의 피해를 입혔습니다.`});
     }
   }
@@ -378,9 +378,9 @@ function preview(target) {
   if (target === "base") return `<span class="note good">${foe.board.some(Boolean) ? "돌파: " : ""}기지에 ${o.baseDamage} 피해</span>`;
   const lastStand = o.targetLeft === 0 && cardOf(foe.board[target].cardId).keys.includes("laststand") ? ". 상대의 최후의 저항으로 내 구슬 1개를 잃습니다" : "";
   if (o.targetLeft === 0) return `<span class="note good">격파${o.baseDamage ? `, 기지에 ${o.baseDamage} 관통` : foe.board[target].cover ? ", 기지에는 닿지 않음" : ""}${lastStand}</span>`;
-  if (foe.board[target].cover) return `<span class="note">${o.targetLeft}로 생존. 엄폐 중이라 반격하지 않습니다.</span>`;
-  if (attackOf(state, foe.board[target]) === 0) return `<span class="note">${o.targetLeft}로 생존. 공격력이 없어 내 부대는 무사합니다.</span>`;
-  return `<span class="note ${o.attackerLeft === 0 ? "warn" : ""}">${o.targetLeft}로 생존하고 반격: 내 부대는 ${o.attackerLeft === 0 ? "격파됨" : `${o.attackerLeft}(으)로 줄어듦`}</span>`;
+  if (foe.board[target].cover) return `<span class="note">구슬 ${o.targetLeft}개로 생존. 엄폐 중이라 반격하지 않습니다.</span>`;
+  if (attackOf(state, foe.board[target]) === 0) return `<span class="note">구슬 ${o.targetLeft}개로 생존. 공격력이 없어 내 부대는 무사합니다.</span>`;
+  return `<span class="note ${o.attackerLeft === 0 ? "warn" : ""}">구슬 ${o.targetLeft}개로 생존하고 반격: 내 부대는 ${o.attackerLeft === 0 ? "격파됨" : `구슬 ${o.attackerLeft}개로 줄어듦`}</span>`;
 }
 
 // What the "again" button does next, in words.
@@ -436,7 +436,7 @@ function drawDuel() {
         else if (troop.attacked && !troop.cover) note = "공격함";
       } else if (!isOwn && aims.has(slot)) {
         cls = " can"; data = `data-enemy="${slot}"`;
-        if (kind === "spell") note = cardOf(pick.card).effect === "tie" ? "기절하게 됨" : troop.health === 1 ? "격파됨" : `${troop.health - 1}(으)로 줄어듦`;
+        if (kind === "spell") note = cardOf(pick.card).effect === "tie" ? "기절하게 됨" : troop.health === 1 ? "격파됨" : `구슬 ${troop.health - 1}개로 줄어듦`;
       }
       const attack = attackOf(state, troop);
       return `<button type="button" class="slot ${side}${cls}" ${data}><strong>${card.name}</strong><span class="type">${MARK.troop} 부대 · ${TAGKO[card.tag] ?? card.tag}</span>
