@@ -49,9 +49,9 @@ test("mismatch guards: base, inputs and change must agree, and the fresh check m
   assert.equal(checkFieldTrial(trial({pass: "true"})).reason, "failed", "only a real true passes");
   const base2 = checkFieldTrial(trial({base: "f".repeat(40)}));
   assert.equal(base2.reason, "mismatch");
-  assert.match(base2.text, /different base/);
-  assert.match(checkFieldTrial(trial({inputs: {deals: [8], bots: "fixture"}})).text, /different set of inputs/);
-  assert.match(checkFieldTrial(trial({change: {...change, to: change.to + 1}})).text, /different card change/);
+  assert.match(base2.text, /서로 다른 기준/);
+  assert.match(checkFieldTrial(trial({inputs: {deals: [8], bots: "fixture"}})).text, /서로 다른 입력 묶음/);
+  assert.match(checkFieldTrial(trial({change: {...change, to: change.to + 1}})).text, /서로 다른 카드 변경/);
   assert.equal(checkFieldTrial(trial({inputs: null})).reason, "invalid");
   assert.equal(checkFieldTrial(trial({blocks: "none"})).reason, "invalid");
 });
@@ -60,7 +60,7 @@ test("the change must name a real card stat that this build still has at its sta
   const stale = checkFieldTrial(trial({change: {...change, from: change.from + 5, to: change.to + 5}},
     {change: {...change, from: change.from + 5, to: change.to + 5}}));
   assert.equal(stale.reason, "stale");
-  assert.match(stale.text, new RegExp(`this build has attack ${SPEC.attack}`));
+  assert.match(stale.text, new RegExp(`이 빌드는 공격력 ${SPEC.attack}`));
   for (const bad of [{...change, card: "no-such-card"}, {...change, field: "speed"}, {...change, to: change.from}, {...change, from: -1}]) {
     assert.equal(checkFieldTrial(trial({change: bad}, {change: bad})).reason, "invalid", JSON.stringify(bad));
   }
@@ -95,29 +95,29 @@ test("a prediction is required before the replay advances, and it locks once the
   assert.equal(repairReducer(s, {type: "predict", faction: "cowboy"}), s, "no call before a version is chosen");
   s = repairReducer(s, {type: "line", line: "candidate"});
   assert.equal(repairView(t, s).canNext, false);
-  assert.match(repairView(t, s).caption, /Which faction wins with Proposed .* at attack \d+\?/);
+  assert.match(repairView(t, s).caption, /제안 .* \(공격력 \d+\)일 때 어느 진영이 이길까요\?/);
   assert.equal(repairReducer(s, {type: "next"}), s, "the replay waits for the call");
   assert.equal(repairReducer(s, {type: "predict", faction: "outlaw"}), s);
   s = repairReducer(s, {type: "predict", faction: "wizard"});
-  assert.match(repairView(t, s).caption, /^Step 1 of 3 · Seed 42\. The Cowboys open\. Both versions play the same first 2 events\.$/);
+  assert.match(repairView(t, s).caption, /^1\/3단계 · 시드 42\. 카우보이 선공\. 두 버전 모두 처음 2개 이벤트는 같습니다\.$/);
   s = repairReducer(s, {type: "next"});
   assert.equal(repairReducer(s, {type: "predict", faction: "cowboy"}), s, "the call cannot change mid-replay");
-  assert.match(repairView(t, s).caption, /Turn 3, Proposed .*: Fixture proposed attack\.$/);
+  assert.match(repairView(t, s).caption, /3턴, 제안 .*: Fixture proposed attack\.$/);
   assert.match(repairView(t, s).stage, /Fixture &lt;current&gt; attack/, "both moves show, escaped");
   s = repairReducer(s, {type: "next"});
   assert.equal(s.step, STEPS - 1);
   assert.equal(s.revealed, true);
   assert.equal(repairReducer(s, {type: "next"}), s, "the finish is the last step");
   const finish = repairView(t, s);
-  assert.match(finish.caption, /The Cowboys win on turn 7\. You called the Wizards\. That call missed\.$/);
-  assert.match(finish.stage, /Recorded moves \(4\)/);
+  assert.match(finish.caption, /7턴에 카우보이 승리\. 마법사 승리를 예상하셨습니다\. 예상이 빗나갔습니다\.$/);
+  assert.match(finish.stage, /기록된 수 \(4\)/);
   s = repairReducer(s, {type: "restart"});
   assert.equal(s.step, 0);
   assert.equal(repairReducer(s, {type: "predict", faction: "cowboy"}), s, "a replay after the reveal keeps the original call");
   s = repairReducer(s, {type: "line", line: "baseline"});
   assert.deepEqual(s, {line: "baseline", prediction: null, step: 0, revealed: false}, "the other version is a new call");
   s = repairReducer(repairReducer(repairReducer(s, {type: "predict", faction: "wizard"}), {type: "next"}), {type: "next"});
-  assert.match(repairView(t, s).caption, /The Wizards win on turn 9\. You called the Wizards\. That call was right\.$/);
+  assert.match(repairView(t, s).caption, /9턴에 마법사 승리\. 마법사 승리를 예상하셨습니다\. 예상이 맞았습니다\.$/);
 });
 
 test("keyboard: arrows and Home step the replay, everything else keeps its meaning", () => {
@@ -140,15 +140,15 @@ test("keyboard: arrows and Home step the replay, everything else keeps its meani
 
 test("the section shows card, before/after stat, seed, opening faction, turn and divergence; refusals say why", () => {
   const html = repairHtml(checkFieldTrial(trial()));
-  assert.match(html, /<summary>Replay the repair<\/summary>/);
-  for (const text of [SPEC.name, `attack ${change.from} → ${change.to}`, ">42<", ">Cowboys<", ">3<", "First 2 events match",
-    `data-repair-portrait="${CARD}"`, "Fresh check passed on base <code>0123456</code>"]) {
+  assert.match(html, /<summary>수리 과정 다시 보기<\/summary>/);
+  for (const text of [SPEC.name, `공격력 ${change.from} → ${change.to}`, ">42<", ">카우보이<", ">3<", "처음 2개 이벤트는 같고",
+    `data-repair-portrait="${CARD}"`, "기준 <code>0123456</code>에서 새 검사를 통과했습니다"]) {
     assert.ok(html.includes(text), text);
   }
-  assert.match(html, /data-repair-line="baseline" aria-pressed="false"[^>]*>Current /);
-  assert.match(html, /data-repair-line="candidate" aria-pressed="false"[^>]*>Proposed /);
+  assert.match(html, /data-repair-line="baseline" aria-pressed="false"[^>]*>현재 /);
+  assert.match(html, /data-repair-line="candidate" aria-pressed="false"[^>]*>제안 /);
   const refused = repairHtml(checkFieldTrial(trial({base: "f".repeat(40)})));
-  assert.match(refused, /different base/);
+  assert.match(refused, /서로 다른 기준/);
   assert.doesNotMatch(refused, /data-repair-line/, "a mismatch shows no replay");
 });
 
@@ -161,7 +161,7 @@ test("mounting with no recorded trial hides the entry without touching anything 
   const shown = {hidden: true, innerHTML: ""};
   mountRepairReplay(shown, {trial: trial({pass: false})});
   assert.equal(shown.hidden, false, "a failed check is an honest empty state, not a hidden one");
-  assert.match(shown.innerHTML, /did not pass/);
+  assert.match(shown.innerHTML, /통과하지 못해/);
 });
 
 test("a complete failing fresh check shows without a witness: card, stat, exact reasons, no winner replay", () => {
@@ -173,16 +173,16 @@ test("a complete failing fresh check shows without a witness: card, stat, exact 
   assert.equal(check.declined.change.name, SPEC.name);
   assert.equal(checkFieldTrial({fresh: declined(), witness: witness()}).declined.reasons.length, 2, "a witness does not hide it");
   const html = repairHtml(check);
-  for (const text of [SPEC.name, `attack ${change.from} → ${change.to}`, "Cowboy first-player wins rose above 60%",
-    "Rule &lt;balance&gt; failed", "Refused a write outside scope", "No winner replay", `data-repair-portrait="${CARD}"`,
-    "base <code>0123456</code>"]) {
+  for (const text of [SPEC.name, `공격력 ${change.from} → ${change.to}`, "Cowboy first-player wins rose above 60%",
+    "Rule &lt;balance&gt; failed", "Refused a write outside scope", "승자 리플레이가 없습니다", `data-repair-portrait="${CARD}"`,
+    "기준 <code>0123456</code>의 새 검사"]) {
     assert.ok(html.includes(text), text);
   }
   assert.doesNotMatch(html, /Rule <balance>/, "reasons are escaped");
-  assert.doesNotMatch(html, /data-repair-line|data-repair-predict|data-repair-step|data-winner|win on turn/, "no outcome is invented");
+  assert.doesNotMatch(html, /data-repair-line|data-repair-predict|data-repair-step|data-winner|턴에 .* 승리/, "no outcome is invented");
   const objectBlock = checkFieldTrial({fresh: declined({blocks: [{rule: "balancer", reason: "Out of scope"}]}), witness: null});
   assert.deepEqual(objectBlock.declined.blocks, ["Out of scope"]);
-  assert.doesNotMatch(repairHtml(checkFieldTrial({fresh: declined({blocks: []}), witness: null})), /Block reasons/);
+  assert.doesNotMatch(repairHtml(checkFieldTrial({fresh: declined({blocks: []}), witness: null})), /블록 사유/);
 });
 
 test("a failing fresh check drops an untrustworthy card stat, and an incomplete one is not shown", () => {
@@ -200,18 +200,18 @@ test("a failing fresh check drops an untrustworthy card stat, and an incomplete 
   const mounted = mountRepairReplay(box, {trial: {fresh: declined(), witness: null}});
   assert.equal(box.hidden, false, "a declined run is shown, not hidden");
   assert.equal(mounted.state(), null);
-  assert.match(box.innerHTML, /No winner replay/);
+  assert.match(box.innerHTML, /승자 리플레이가 없습니다/);
 });
 
 test("a witness that seals the fresh record must name the same production hash", () => {
   const sealed = checkFieldTrial(trial({recordSha256: RECORD}, {fresh: {recordSha256: RECORD}}));
   assert.equal(sealed.ok, true, sealed.text);
   assert.equal(sealed.trial.record, RECORD);
-  assert.match(repairHtml(sealed), /Fresh check passed on base <code>0123456<\/code>, record <code>3f7a9c2<\/code>/);
+  assert.match(repairHtml(sealed), /기준 <code>0123456<\/code>, 기록 <code>3f7a9c2<\/code>에서 새 검사를 통과했습니다/);
   assert.equal(checkFieldTrial(trial({recordSha256: RECORD}, {fresh: RECORD})).ok, true, "a bare hash seal also binds");
   const wrong = checkFieldTrial(trial({recordSha256: OTHER}, {fresh: {recordSha256: RECORD}}));
   assert.equal(wrong.reason, "mismatch");
-  assert.match(wrong.text, /different fresh check record/);
+  assert.match(wrong.text, /서로 다른 새 검사 기록/);
   assert.doesNotMatch(repairHtml(wrong), /data-repair-line/, "a wrong hash shows no replay");
   assert.equal(checkFieldTrial(trial({}, {fresh: {recordSha256: RECORD}})).reason, "invalid", "a sealed witness needs the fresh hash");
   assert.equal(checkFieldTrial(trial({recordSha256: RECORD.toUpperCase()}, {fresh: {recordSha256: RECORD}})).reason, "invalid");

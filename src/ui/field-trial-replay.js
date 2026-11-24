@@ -11,7 +11,7 @@ import {FIELD_TRIAL} from "./field-trial-data.js";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
 
-export const FACTION = Object.freeze({cowboy: "Cowboys", wizard: "Wizards"});
+export const FACTION = Object.freeze({cowboy: "카우보이", wizard: "마법사"});
 export const LINES = Object.freeze(["baseline", "candidate"]);
 export const PREDICTIONS = Object.freeze(["cowboy", "wizard"]);
 export const STEPS = 3; // the deal, the changed move, the finish
@@ -29,7 +29,8 @@ const isObject = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v)
 const isInt = (n, min = 0) => Number.isInteger(n) && n >= min;
 const isText = (s, max) => typeof s === "string" && s.trim().length > 0 && s.length <= max;
 const typeFor = (id, types) => (typeof id === "string" && types[typeOf(id)] ? typeOf(id) : null);
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+const FIELD_KO = {attack: "공격력", health: "체력", stars: "별"};
+const fieldKo = (f) => FIELD_KO[f] ?? f;
 const shortBase = (base) => (/^[0-9a-f]{40}$/.test(base) ? base.slice(0, 7) : base);
 
 // Pure: one JSON text per value with object keys sorted, so equal records compare equal.
@@ -77,11 +78,11 @@ function cleanChange(change, types) {
 
 const refuse = (reason, text) => ({ok: false, reason, text});
 export const EMPTY_TEXT = Object.freeze({
-  missing: "No field trial is recorded for this build yet.",
-  failed: "The fresh check did not pass, so the repair is not replayed.",
-  invalid: "The witness replay is incomplete or does not add up, so the repair is not replayed.",
+  missing: "이 빌드에 기록된 현장 시험이 아직 없습니다.",
+  failed: "새 검사를 통과하지 못해 수리 과정을 재생하지 않습니다.",
+  invalid: "증인 리플레이가 불완전하거나 수치가 맞지 않아 수리 과정을 재생하지 않습니다.",
 });
-export const DECLINED_TEXT = "The fresh check did not pass. No winner replay: a failed check has no recorded finish to show.";
+export const DECLINED_TEXT = "새 검사를 통과하지 못했습니다. 실패한 검사에는 보여줄 기록된 결말이 없어 승자 리플레이가 없습니다.";
 
 const blockText = (b) => {
   if (isText(b, LABEL_MAX)) return b;
@@ -130,17 +131,17 @@ export function checkFieldTrial(input = FIELD_TRIAL, types = TYPES) {
   if (witness.inputs === undefined || witness.inputs === null || fresh.inputs === undefined || fresh.inputs === null) {
     return refuse("invalid", EMPTY_TEXT.invalid);
   }
-  const mismatch = (what) => refuse("mismatch", `The fresh check and the witness replay name a different ${what}, so the repair is not replayed.`);
-  if (seal !== undefined && fresh.recordSha256 !== seal) return mismatch("fresh check record");
-  if (fresh.base !== witness.base) return mismatch("base");
-  if (canonical(fresh.inputs) !== canonical(witness.inputs)) return mismatch("set of inputs");
+  const mismatch = (what) => refuse("mismatch", `새 검사와 증인 리플레이가 서로 다른 ${what}을(를) 가리켜 수리 과정을 재생하지 않습니다.`);
+  if (seal !== undefined && fresh.recordSha256 !== seal) return mismatch("새 검사 기록");
+  if (fresh.base !== witness.base) return mismatch("기준");
+  if (canonical(fresh.inputs) !== canonical(witness.inputs)) return mismatch("입력 묶음");
   const change = cleanChange(witness.change, types);
   if (!change || !cleanChange(fresh.change, types)) return refuse("invalid", EMPTY_TEXT.invalid);
-  if (canonical(fresh.change) !== canonical(witness.change)) return mismatch("card change");
+  if (canonical(fresh.change) !== canonical(witness.change)) return mismatch("카드 변경");
   const live = types[change.card][change.field];
   const name = types[change.card].name;
   if (live !== change.from) {
-    return refuse("stale", `The witness starts from ${name} ${change.field} ${change.from}, but this build has ${change.field} ${live}, so the repair is not replayed.`);
+    return refuse("stale", `증인 리플레이는 ${name} ${fieldKo(change.field)} ${change.from}에서 시작하지만 이 빌드는 ${fieldKo(change.field)} ${live}이라 수리 과정을 재생하지 않습니다.`);
   }
   const {seed, first, turn, matchedEvents} = witness;
   if (!isInt(seed) || !(first in FACTION) || !isInt(turn, 1) || !isInt(matchedEvents)) return refuse("invalid", EMPTY_TEXT.invalid);
@@ -157,10 +158,10 @@ export function checkFieldTrial(input = FIELD_TRIAL, types = TYPES) {
     blocks: fresh.blocks.length, record: seal ?? null, baseline, candidate}};
 }
 
-export const lineWord = (line) => (line === "baseline" ? "Current" : "Proposed");
+export const lineWord = (line) => (line === "baseline" ? "현재" : "제안");
 export const lineName = (line, trial) => `${lineWord(line)} ${trial.name}`;
 export const lineValue = (line, trial) => (line === "baseline" ? trial.change.from : trial.change.to);
-export const statText = (line, trial) => `${trial.change.field} ${lineValue(line, trial)}`;
+export const statText = (line, trial) => `${fieldKo(trial.change.field)} ${lineValue(line, trial)}`;
 
 // --- The interaction model: choose a line, predict, then step. The prediction locks once the finish shows. ---
 export function initialRepair() {
@@ -198,13 +199,13 @@ export function keyAction(event) {
 }
 
 export function finishText(run) {
-  return run.winner === "draw" ? `A draw on turn ${run.endTurn}: neither faction won`
-    : `The ${FACTION[run.winner]} win on turn ${run.endTurn}`;
+  return run.winner === "draw" ? `${run.endTurn}턴에 무승부: 어느 진영도 이기지 못했습니다`
+    : `${run.endTurn}턴에 ${FACTION[run.winner]} 승리`;
 }
 
 export function verdictText(run, prediction) {
   const right = run.winner === prediction;
-  return `You called the ${FACTION[prediction]}. ${right ? "That call was right." : "That call missed."}`;
+  return `${FACTION[prediction]} 승리를 예상하셨습니다. ${right ? "예상이 맞았습니다." : "예상이 빗나갔습니다."}`;
 }
 
 const portraitSpan = (id) => {
@@ -215,19 +216,19 @@ const portraitSpan = (id) => {
 function moveHtml(line, trial, chosen) {
   const {move} = trial[line];
   return `<li class="saloon-repair-move${line === chosen ? " is-chosen" : ""}">${portraitSpan(move.card)}${portraitSpan(move.target)}`
-    + `<span><strong>${esc(lineWord(line))}</strong> · ${esc(statText(line, trial))}<br>Turn ${move.turn}: ${esc(move.label)}</span></li>`;
+    + `<span><strong>${esc(lineWord(line))}</strong> · ${esc(statText(line, trial))}<br>${move.turn}턴: ${esc(move.label)}</span></li>`;
 }
 
 function logHtml(run) {
   if (!run.events.length) return "";
-  const items = run.events.map((e) => `<li><span class="saloon-repair-turn">Turn ${e.turn}</span> ${esc(e.label)}</li>`).join("");
-  return `<details class="saloon-repair-log"><summary>Recorded moves (${run.events.length})</summary><ol>${items}</ol></details>`;
+  const items = run.events.map((e) => `<li><span class="saloon-repair-turn">${e.turn}턴</span> ${esc(e.label)}</li>`).join("");
+  return `<details class="saloon-repair-log"><summary>기록된 수 (${run.events.length})</summary><ol>${items}</ol></details>`;
 }
 
 // Pure: everything the replay shows and which controls work, for one state.
 export function repairView(trial, state = initialRepair()) {
   const s = state;
-  const steps = `Step ${s.step + 1} of ${STEPS}`;
+  const steps = `${s.step + 1}/${STEPS}단계`;
   const view = {line: s.line, prediction: s.prediction, step: s.step,
     canPredict: Boolean(s.line) && !s.revealed && s.step === 0,
     canNext: Boolean(s.line && s.prediction) && s.step < LAST,
@@ -235,22 +236,22 @@ export function repairView(trial, state = initialRepair()) {
     canRestart: Boolean(s.line) && s.step > 0};
   if (!s.line) {
     return {...view, stage: "",
-      caption: `Choose ${lineName("baseline", trial)} or ${lineName("candidate", trial)}, then predict which faction wins.`};
+      caption: `${lineName("baseline", trial)} 또는 ${lineName("candidate", trial)}를 고른 뒤 어느 진영이 이길지 예상하세요.`};
   }
   if (!s.prediction) {
     return {...view, stage: "",
-      caption: `Which faction wins with ${lineName(s.line, trial)} at ${statText(s.line, trial)}? Make your call to start the replay.`};
+      caption: `${lineName(s.line, trial)} (${statText(s.line, trial)})일 때 어느 진영이 이길까요? 예상을 정하면 리플레이가 시작됩니다.`};
   }
   const run = trial[s.line];
-  const called = `<p class="saloon-repair-call">Your call: the ${esc(FACTION[s.prediction])} win.</p>`;
+  const called = `<p class="saloon-repair-call">내 예상: ${esc(FACTION[s.prediction])} 승리.</p>`;
   if (s.step === 0) {
     return {...view, stage: called,
-      caption: `${steps} · Seed ${trial.seed}. The ${FACTION[trial.first]} open. Both versions play the same first ${plural(trial.matchedEvents, "event")}.`};
+      caption: `${steps} · 시드 ${trial.seed}. ${FACTION[trial.first]} 선공. 두 버전 모두 처음 ${trial.matchedEvents}개 이벤트는 같습니다.`};
   }
-  const moves = `<ol class="saloon-repair-moves" aria-label="Where the versions split on turn ${trial.turn}">${LINES.map((line) => moveHtml(line, trial, s.line)).join("")}</ol>`;
+  const moves = `<ol class="saloon-repair-moves" aria-label="${trial.turn}턴에서 버전이 갈라지는 지점">${LINES.map((line) => moveHtml(line, trial, s.line)).join("")}</ol>`;
   if (s.step === 1) {
     return {...view, stage: `${called}${moves}`,
-      caption: `${steps} · Turn ${trial.turn}, ${lineName(s.line, trial)}: ${run.move.label}.`};
+      caption: `${steps} · ${trial.turn}턴, ${lineName(s.line, trial)}: ${run.move.label}.`};
   }
   const finish = `<p class="saloon-repair-finish" data-winner="${esc(run.winner)}"><strong>${esc(finishText(run))}.</strong> ${esc(verdictText(run, s.prediction))}</p>`;
   return {...view, stage: `${moves}${finish}${logHtml(run)}`,
@@ -258,7 +259,7 @@ export function repairView(trial, state = initialRepair()) {
 }
 
 const fact = (term, value) => `<div><dt>${term}</dt><dd>${value}</dd></div>`;
-const changeText = (change) => `${esc(change.field)} ${change.from} → ${change.to}`;
+const changeText = (change) => `${esc(fieldKo(change.field))} ${change.from} → ${change.to}`;
 const reasonList = (label, items) => (items.length
   ? `<p><strong>${label}</strong></p><ul class="saloon-repair-reasons">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`
   : "");
@@ -267,53 +268,53 @@ const reasonList = (label, items) => (items.length
 function declinedHtml(d) {
   const card = d.change ? `<div class="saloon-repair-deal">
       ${portraitSpan(d.change.card)}
-      <dl class="saloon-repair-facts">${fact("Card", esc(d.change.name))}${fact("Change", changeText(d.change))}</dl>
+      <dl class="saloon-repair-facts">${fact("카드", esc(d.change.name))}${fact("변경", changeText(d.change))}</dl>
     </div>` : "";
   return `<div class="saloon-repair-body saloon-repair-declined">
     <p class="sd-note saloon-repair-empty">${esc(DECLINED_TEXT)}</p>
     ${card}
-    <p class="sd-note">Fresh check on base <code>${esc(shortBase(d.base))}</code>.</p>
-    ${reasonList("Failing rules", d.reasons)}
-    ${reasonList("Block reasons", d.blocks)}
+    <p class="sd-note">기준 <code>${esc(shortBase(d.base))}</code>의 새 검사.</p>
+    ${reasonList("실패한 규칙", d.reasons)}
+    ${reasonList("블록 사유", d.blocks)}
   </div>`;
 }
 
 // Pure: the section's inner HTML. A missing trial is hidden by the caller; any other refusal says why.
 export function repairHtml(check) {
-  const summary = `<summary>Replay the repair</summary>`;
+  const summary = `<summary>수리 과정 다시 보기</summary>`;
   if (!check.ok && check.declined) return `${summary}${declinedHtml(check.declined)}`;
   if (!check.ok) return `${summary}<p class="sd-note saloon-repair-empty">${esc(check.text)}</p>`;
   const t = check.trial;
   const button = (attr, value, label, extra = "") => `<button type="button" ${attr}="${value}" aria-pressed="false"${extra}>${esc(label)}</button>`;
-  const record = t.record ? `, record <code>${esc(t.record.slice(0, 7))}</code>` : "";
+  const record = t.record ? `, 기록 <code>${esc(t.record.slice(0, 7))}</code>` : "";
   return `${summary}
   <div class="saloon-repair-body">
     <div class="saloon-repair-deal">
       ${portraitSpan(t.change.card)}
       <dl class="saloon-repair-facts">
-        ${fact("Card", esc(t.name))}
-        ${fact("Change", changeText(t.change))}
-        ${fact("Seed", String(t.seed))}
-        ${fact("Opening faction", FACTION[t.first])}
-        ${fact("Turn", String(t.turn))}
-        ${fact("Divergence", `First ${plural(t.matchedEvents, "event")} match, then the versions split`)}
+        ${fact("카드", esc(t.name))}
+        ${fact("변경", changeText(t.change))}
+        ${fact("시드", String(t.seed))}
+        ${fact("선공 진영", FACTION[t.first])}
+        ${fact("턴", String(t.turn))}
+        ${fact("분기", `처음 ${t.matchedEvents}개 이벤트는 같고, 그 뒤 버전이 갈라집니다`)}
       </dl>
     </div>
-    <p class="sd-note">Fresh check passed on base <code>${esc(shortBase(t.base))}</code>${record}. Recorded games, replayed as they happened.</p>
-    <div class="saloon-buttons saloon-repair-lines" role="group" aria-label="Choose the version to replay">
+    <p class="sd-note">기준 <code>${esc(shortBase(t.base))}</code>${record}에서 새 검사를 통과했습니다. 기록된 게임을 있었던 그대로 재생합니다.</p>
+    <div class="saloon-buttons saloon-repair-lines" role="group" aria-label="재생할 버전 선택">
       ${LINES.map((line) => button("data-repair-line", line, `${lineName(line, t)} · ${statText(line, t)}`, ' aria-controls="saloon-repair-stage"')).join("")}
     </div>
-    <div class="saloon-buttons saloon-repair-predict" role="group" aria-label="Predict which faction wins" hidden>
-      ${PREDICTIONS.map((faction) => button("data-repair-predict", faction, `${FACTION[faction]} win`)).join("")}
+    <div class="saloon-buttons saloon-repair-predict" role="group" aria-label="어느 진영이 이길지 예상" hidden>
+      ${PREDICTIONS.map((faction) => button("data-repair-predict", faction, `${FACTION[faction]} 승리`)).join("")}
     </div>
     <div id="saloon-repair-stage" class="saloon-repair-stage"></div>
     <p class="saloon-repair-now" role="status" aria-live="polite"></p>
-    <div class="saloon-buttons saloon-repair-steps" role="group" aria-label="Replay steps" hidden>
-      <button type="button" data-repair-step="back">Back a step</button>
-      <button type="button" data-repair-step="next">Next step</button>
-      <button type="button" data-repair-step="restart">Replay from the start</button>
+    <div class="saloon-buttons saloon-repair-steps" role="group" aria-label="리플레이 단계" hidden>
+      <button type="button" data-repair-step="back">이전 단계</button>
+      <button type="button" data-repair-step="next">다음 단계</button>
+      <button type="button" data-repair-step="restart">처음부터 다시</button>
     </div>
-    <p class="sd-note saloon-repair-keys">Keys: Right arrow for the next step, Left arrow to go back, Home to start over.</p>
+    <p class="sd-note saloon-repair-keys">키: 오른쪽 화살표는 다음 단계, 왼쪽 화살표는 이전 단계, Home은 처음으로.</p>
   </div>`;
 }
 
