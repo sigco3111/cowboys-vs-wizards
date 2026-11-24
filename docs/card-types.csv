@@ -1,6 +1,6 @@
 Category,What it is,Deck rule,Frame,Corner mark,Type line,State
-Troop,A fighter that stays on the board until it is defeated.,Up to the card's copy limit.,Single solid border in the faction's colour.,●,Troop,In the game
-Spell,A one-time effect that goes to the graveyard after it resolves.,Up to the card's copy limit.,Double border.,✦,Spell,In the game
-Trap,A card set face down that answers the other side's move.,Not deck-eligible yet.,Dashed border.,▲,Trap,Prototype only
-Boss (Wanted),A unique enemy you hunt on the Wanted board.,Cannot be added to a deck.,Thick border with a WANTED banner across the top.,★,Boss · Wanted,In the game
-Boss (Captured),"The boss's own card, earned by clearing its bounty five times.",One copy per deck.,"The same thick border, with the banner reading CAPTURED.",★,Boss · Captured,In the game
+부대,A fighter that stays on the board until it is defeated.,Up to the card's copy limit.,Single solid border in the faction's colour.,●,부대,In the game
+주문,A one-time effect that goes to the graveyard after it resolves.,Up to the card's copy limit.,Double border.,✦,주문,In the game
+함정,A card set face down that answers the other side's move.,Not deck-eligible yet.,Dashed border.,▲,함정,Prototype only
+보스 (현상 수배),A unique enemy you hunt on the Wanted board.,Cannot be added to a deck.,Thick border with a WANTED banner across the top.,★,보스 · 현상 수배,In the game
+보스 (생포),"The boss's own card, earned by clearing its bounty five times.",One copy per deck.,"The same thick border, with the banner reading CAPTURED.",★,보스 · 생포,In the game
