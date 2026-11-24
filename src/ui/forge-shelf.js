@@ -18,6 +18,7 @@ const CHECK_KO = {
   "Unmodified snapshot compiled and its games ended legally": "수정하지 않은 스냅샷이 컴파일되고 대결이 규칙대로 끝남",
   "Variant compiled in a disposable snapshot": "변형본이 임시 스냅샷에서 컴파일됨",
 };
+const sourceKo = (t) => String(t).replace(/^Card Forge native workflow (\S+?); verifier passed (\S+) at base (\S+)$/, "카드 포지 기본 워크플로 $1; 검증기 통과 $2, 기준 $3");
 const checkKo = (c) => {
   const m = /^Variant was summoned in (\d+) of (\d+) games$/.exec(c);
   return m ? `변형본이 ${m[2]}판 중 ${m[1]}판에서 소환됨` : (CHECK_KO[c] ?? c);
@@ -97,7 +98,7 @@ export function showcaseHtml(view) {
     </div>
     <p class="forge-verdict">${esc(verdictText(view))}</p>
     ${checks}
-    <p class="sd-note">출처 <code>${esc(view.source)}</code></p>
+    <p class="sd-note">출처 <code>${esc(sourceKo(view.source))}</code></p>
   </figure>`;
 }
 
