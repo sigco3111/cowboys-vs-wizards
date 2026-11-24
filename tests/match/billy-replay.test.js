@@ -16,16 +16,16 @@ test("the open Ledger leads with the recorded duel, links its source, and retain
   assert.match(replay, /data-ledger-portrait="wizard-bone-wall"/);
   assert.match(replay, /61\.04%/);
   assert.match(replay, /52\.92%/);
-  assert.match(replay, /5,000 games per version, fixed decks and two level-2 bots/);
+  assert.match(replay, /버전당 5,000판, 고정 덱과 2레벨 봇 둘/);
   assert.match(replay, /verify-billy-replay\.mjs --full/);
   assert.ok(readFileSync(GATE_RECORD, "utf8").includes(R.source.proposalSeal));
 });
 
 test("both recorded branches reach their own orb count and winner", () => {
-  for (const [line, orbs, side, end] of [["baseline", 0, "Cowboys", 13], ["candidate", 1, "Wizards", 20]]) {
-    assert.match(replayView(line, 0).stage, /aria-label="2 orbs"/);
-    assert.match(replayView(line, 2).stage, new RegExp('aria-label="' + orbs + ' orb' + (orbs === 1 ? '' : 's') + '"'));
-    assert.match(replayView(line, 3).caption, new RegExp(side + " win on turn " + end));
+  for (const [line, orbs, side, end] of [["baseline", 0, "카우보이", 13], ["candidate", 1, "마법사", 20]]) {
+    assert.match(replayView(line, 0).stage, /aria-label="구슬 2개"/);
+    assert.match(replayView(line, 2).stage, new RegExp('aria-label="구슬 ' + orbs + '개"'));
+    assert.match(replayView(line, 3).caption, new RegExp(end + "턴에 " + side + " 승리"));
     assert.equal(replayView(line, 20).step, 3);
   }
 });
@@ -56,20 +56,20 @@ test("the same controls can step, restart and switch lines without changing the 
   assert.equal(current.getAttribute("aria-pressed"), "true");
   assert.equal(ui.back.getAttribute("aria-disabled"), "true");
   for (let step = 0; step < 3; step++) ui.press(ui.next);
-  assert.match(ui.caption(), /Cowboys win on turn 13/);
+  assert.match(ui.caption(), /13턴에 카우보이 승리/);
   assert.equal(ui.next.getAttribute("aria-disabled"), "true");
   ui.press(ui.next);
-  assert.match(ui.caption(), /Step 4 of 4/);
+  assert.match(ui.caption(), /4\/4단계/);
   ui.press(ui.back);
-  assert.match(ui.caption(), /is defeated/);
+  assert.match(ui.caption(), /쓰러짐/);
   ui.press(ui.again);
-  assert.match(ui.caption(), /Step 1 of 4/);
+  assert.match(ui.caption(), /1\/4단계/);
   ui.press(proposed);
   assert.equal(current.getAttribute("aria-pressed"), "false");
   assert.equal(proposed.getAttribute("aria-pressed"), "true");
   ui.press(ui.next);
   ui.press(ui.next);
-  assert.match(ui.caption(), /survives with 1 orb/);
+  assert.match(ui.caption(), /구슬 1개 남음/);
   ui.press(ui.next);
-  assert.match(ui.caption(), /Wizards win on turn 20/);
+  assert.match(ui.caption(), /20턴에 마법사 승리/);
 });

@@ -28,40 +28,40 @@ test("rows give Cowboy win shares per opening faction from the raw counts", () =
   const seat = synthetic();
   assert.ok(seatAuditOk(seat));
   assert.deepEqual(seatRows(seat).map((r) => [r.label, r.baseline.wins, r.baseline.games, r.candidate.wins, r.candidate.games, r.change]), [
-    ["All starts", 11, 20, 8, 20, "−15.00 pts"],
-    ["Cowboys open", 7, 10, 5, 10, "−20.00 pts"],
-    ["Wizards open", 4, 10, 3, 10, "−10.00 pts"],
+    ["모든 시작", 11, 20, 8, 20, "−15.00%p"],
+    ["카우보이 선공", 7, 10, 5, 10, "−20.00%p"],
+    ["마법사 선공", 4, 10, 3, 10, "−10.00%p"],
   ]);
   const first = firstPlayerShares(seat);
-  assert.deepEqual([first.baseline.wins, first.candidate.wins, first.baseline.games, first.change], [13, 12, 20, "−5.00 pts"]);
+  assert.deepEqual([first.baseline.wins, first.candidate.wins, first.baseline.games, first.change], [13, 12, 20, "−5.00%p"]);
   assert.equal(seatObservation(first, R),
-    "The side that goes first wins 65.00% of games with Billy at attack 2 and 60.00% at attack 1, so going first still gives an edge.");
+    "선공 진영이 이긴 비율은 빌리 공격력 2일 때 전체의 65.00%, 공격력 1일 때 60.00%이므로, 선공이 여전히 유리합니다.");
 });
 
 test("the takeaway names the favoured seat from the recorded shares", () => {
   const at = (before, now) => seatObservation({baseline: {share: before}, candidate: {share: now}}, R);
-  assert.match(at(0.45, 0.55), /so going first now gives an edge\.$/);
-  assert.match(at(0.45, 0.4), /so going second still gives an edge\.$/);
-  assert.match(at(0.55, 0.5), /so neither seat has an edge\.$/);
-  assert.equal(at(null, null), "No games are recorded yet.");
+  assert.match(at(0.45, 0.55), /선공이 이제 유리합니다\.$/);
+  assert.match(at(0.45, 0.4), /후공이 여전히 유리합니다\.$/);
+  assert.match(at(0.55, 0.5), /어느 쪽도 유리하지 않습니다\.$/);
+  assert.equal(at(null, null), "기록된 게임이 아직 없습니다.");
 });
 
 test("the detail renders a labelled table, the derived finding and the reproduce command", () => {
   const html = seatAuditHtml(synthetic(), R);
-  assert.match(html, /<summary>Who wins when they go first\?<\/summary>/);
-  assert.match(html, /<th scope="col">Attack 2<\/th><th scope="col">Attack 1<\/th>/);
-  assert.match(html, /<th scope="row">All starts<\/th><td>55\.00%<\/td><td>40\.00%<\/td><td>−15\.00 pts<\/td>/);
-  assert.match(html, /<th scope="row">Cowboys open<\/th><td>70\.00%<\/td><td>50\.00%<\/td>/);
-  assert.match(html, /<th scope="row">Wizards open<\/th><td>40\.00%<\/td><td>30\.00%<\/td>/);
-  assert.match(html, /<p class="sd-billy-seat-finding">The side that goes first wins 65\.00% of games with Billy at attack 2 and 60\.00% at attack 1, so going first still gives an edge\.<\/p>/);
+  assert.match(html, /<summary>선공하면 누가 이기나요\?<\/summary>/);
+  assert.match(html, /<th scope="col">공격력 2<\/th><th scope="col">공격력 1<\/th>/);
+  assert.match(html, /<th scope="row">모든 시작<\/th><td>55\.00%<\/td><td>40\.00%<\/td><td>−15\.00%p<\/td>/);
+  assert.match(html, /<th scope="row">카우보이 선공<\/th><td>70\.00%<\/td><td>50\.00%<\/td>/);
+  assert.match(html, /<th scope="row">마법사 선공<\/th><td>40\.00%<\/td><td>30\.00%<\/td>/);
+  assert.match(html, /<p class="sd-billy-seat-finding">선공 진영이 이긴 비율은 빌리 공격력 2일 때 전체의 65\.00%, 공격력 1일 때 60\.00%이므로, 선공이 여전히 유리합니다\.<\/p>/);
   assert.equal(html.match(/65\.00%/g).length, 1, "the first-player share appears once");
-  assert.match(html, /40 games from 10 deals/);
-  assert.match(html, /20 paired comparisons/);
-  assert.match(html, /Draws: 0 at attack 2, 1 at attack 1/);
-  assert.match(html, /two level-2 bots with fixed decks/);
+  assert.match(html, /10번의 딜\(시드 [0-9–]+\)에서 40판/);
+  assert.match(html, /20쌍의 비교/);
+  assert.match(html, /무승부: 공격력 2에서 0판, 공격력 1에서 1판/);
+  assert.match(html, /고정 덱을 쓰는 2레벨 봇 둘/);
   assert.doesNotMatch(html, /not the balance of every card/);
   assert.ok(html.includes(`<code>${SEAT_REPRODUCE}</code>`));
-  assert.match(html, /outcome hash <code>synthet<\/code>/);
+  assert.match(html, /결과 해시 <code>synthet<\/code>/);
   assert.doesNotMatch(html, /undefined/);
   assert.ok(!html.includes("<i>"), "data strings are escaped");
 });
@@ -69,7 +69,7 @@ test("the detail renders a labelled table, the derived finding and the reproduce
 test("a nested disclosure names the written rule and both gate runs without stating a verdict", () => {
   const html = seatAuditHtml(synthetic(), R);
   const nested = html.slice(html.indexOf("<details", 1), html.indexOf("</details>") + 10);
-  assert.match(nested, /^<details class="sd-note sd-billy-seat-verify"><summary>Check each version against the written rule<\/summary>/);
+  assert.match(nested, /^<details class="sd-note sd-billy-seat-verify"><summary>각 버전을 명문화된 규칙과 대조하기<\/summary>/);
   assert.ok(nested.includes(`<code>${RULE_SOURCE}</code>`));
   for (const arm of ["baseline", "candidate"]) assert.ok(nested.includes(`<code>${RULE_GATE} ${arm}</code>`));
   assert.doesNotMatch(nested, /\b(passes|passed|rejected|fails)\b/i);
@@ -81,7 +81,7 @@ test("hashes the result does not record are left out of the verify line", () => 
   delete seat.csvSha256;
   seat.protocolSha256 = 42;
   const html = seatAuditHtml(seat, R);
-  assert.doesNotMatch(html, /undefined|outcome hash|protocol hash/);
+  assert.doesNotMatch(html, /undefined|결과 해시|프로토콜 해시/);
   assert.ok(html.includes(`<code>${SEAT_REPRODUCE}</code>`));
 });
 
@@ -99,8 +99,8 @@ test("no games shows dashes instead of dividing by zero", () => {
   for (const r of seatRows(seat)) assert.deepEqual([r.baseline.share, r.candidate.share, r.change], [null, null, "—"]);
   const html = seatAuditHtml(seat, R);
   assert.doesNotMatch(html, /NaN|Infinity/);
-  assert.match(html, /<th scope="row">All starts<\/th><td>—<\/td><td>—<\/td><td>—<\/td>/);
-  assert.match(html, /No games are recorded yet\./);
+  assert.match(html, /<th scope="row">모든 시작<\/th><td>—<\/td><td>—<\/td><td>—<\/td>/);
+  assert.match(html, /기록된 게임이 아직 없습니다\./);
 });
 
 test("counts that are not whole numbers or do not add up show no figures", () => {
@@ -111,15 +111,15 @@ test("counts that are not whole numbers or do not add up show no figures", () =>
   for (const seat of [bad, off, null, {...synthetic(), schema: 2}]) {
     assert.equal(seatAuditOk(seat), false);
     const html = seatAuditHtml(seat, R);
-    assert.match(html, /do not add up, so no figures are shown/);
+    assert.match(html, /집계가 맞지 않아 수치를 표시하지 않습니다/);
     assert.doesNotMatch(html, /<b>|<table/);
   }
 });
 
 test("the replay keeps its own 10,000-game text and the seat sample follows it", () => {
   const html = billyReplayHtml(R, synthetic());
-  assert.match(html, /5,000 games per version, fixed decks and two level-2 bots/);
-  assert.match(html, /Independent of the 10,000-game replay cohort above/);
-  assert.ok(html.indexOf("How to verify this replay") < html.indexOf("Who wins when they go first?"));
+  assert.match(html, /버전당 5,000판, 고정 덱과 2레벨 봇 둘/);
+  assert.match(html, /위 리플레이 표본\(10,000판\)과 별개로/);
+  assert.ok(html.indexOf("이 리플레이 검증 방법") < html.indexOf("선공하면 누가 이기나요?"));
   assert.match(html, /data-billy-line="baseline"/);
 });
