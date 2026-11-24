@@ -3,6 +3,7 @@
 // Output is lines of [tone, text] segments; toAnsi and toHtml colour them.
 
 import { SEAT_NAMES } from './engine.js';
+import { ko, koSeat } from './ko.js';
 
 export const SCREEN_WIDTH = 66;
 const INDENT = '  ';
@@ -11,7 +12,9 @@ const CARD_WIDTH = 7;
 const SUIT_GLYPHS = { S: '♠', H: '♥', D: '♦', C: '♣' };
 const BACK_ROWS = ['┌─────┐', '│▒▒▒▒▒│', '│▒░░░▒│', '│▒▒▒▒▒│', '└─────┘'];
 
-const width = (text) => [...text].length;
+// 한글·전각 문자는 터미널에서 두 칸을 차지한다.
+const cellOf = (ch) => { const c = ch.codePointAt(0); return (c >= 0x1100 && c <= 0x115f) || (c >= 0x2e80 && c <= 0xa4cf) || (c >= 0xac00 && c <= 0xd7a3) || (c >= 0xf900 && c <= 0xfaff) || (c >= 0xff00 && c <= 0xff60) ? 2 : 1; };
+const width = (text) => [...text].reduce((n, ch) => n + cellOf(ch), 0);
 
 function faceRows(card) {
   const rank = card[0] === 'T' ? '10' : card[0];
@@ -40,8 +43,8 @@ function wrap(text, size) {
 }
 
 function drewText(count) {
-  if (count === null) return 'yet to draw';
-  return count === 0 ? 'stood pat' : `drew ${count}`;
+  if (count === null) return '아직 뽑지 않음';
+  return count === 0 ? '그대로 둠' : `${count}장 뽑음`;
 }
 
 function cardRows(cards, toneFor) {
@@ -66,10 +69,10 @@ export function renderScreen(view, { notice = '', hungUp = false } = {}) {
   if (hungUp) {
     blank();
     line(['dim', `${INDENT}+++ATH0`]);
-    line(['alert', `${INDENT}NO CARRIER`]);
+    line(['alert', `${INDENT}연결 끊김 (NO CARRIER)`]);
     blank();
-    line(['text', `${INDENT}The line to Boot Hill went quiet.`]);
-    line(['key', `${INDENT}Press any key to redial.`]);
+    line(['text', `${INDENT}부트 힐과의 연결이 조용해졌습니다.`]);
+    line(['key', `${INDENT}아무 키나 눌러 다시 거세요.`]);
     return lines;
   }
 
@@ -83,30 +86,30 @@ export function renderScreen(view, { notice = '', hungUp = false } = {}) {
   const result = view.result;
 
   line(['frame', `╔${'═'.repeat(inner)}╗`]);
-  boxed([['hi', '  B O O T   H I L L   P O K E R']], [['dim', 'node 1 · 2400 baud  ']]);
-  boxed([['text', '  Five-card draw at the Last Chance Saloon']], [['dim', 'est. 1881  ']]);
+  boxed([['hi', '  부 트   힐   포 커']], [['dim', '노드 1 · 2400 보  ']]);
+  boxed([['text', '  라스트 찬스 살롱의 파이브 카드 드로우']], [['dim', '1881년 설립  ']]);
   line(['frame', `╠${'═'.repeat(inner)}╣`]);
   boxed(
-    [['text', `  Deal ${view.dealNumber}  Seed ${view.seed}  Turn ${view.turn}/2  Deck ${view.deckCount}`]],
-    [['dim', `${SEAT_NAMES[view.first]} first  `]],
+    [['text', `  패 ${view.dealNumber}  시드 ${view.seed}  턴 ${view.turn}/2  덱 ${view.deckCount}`]],
+    [['dim', `${koSeat(SEAT_NAMES[view.first])} 선공  `]],
   );
   line(['frame', `╚${'═'.repeat(inner)}╝`]);
   blank();
 
-  const tag = (seat) => (result && result.winner === seat ? [['win', '  « WINNER']] : []);
+  const tag = (seat) => (result && result.winner === seat ? [['win', '  « 승리']] : []);
   line(
-    ['hi', `${INDENT}THE ${opp.toUpperCase()}`],
+    ['hi', `${INDENT}${koSeat(opp)}`],
     ['dim', ` · ${drewText(view.opponentDrew)}`],
-    ...(view.opponentLabel ? [['text', ` · ${view.opponentLabel}`]] : [['dim', ' · cards face down']]),
+    ...(view.opponentLabel ? [['text', ` · ${ko(view.opponentLabel)}`]] : [['dim', ' · 카드 뒷면']]),
     ...tag(view.opponent),
   );
   lines.push(...cardRows(view.opponentHand, (card) => (!card ? 'back' : 'HD'.includes(card[1]) ? 'red' : 'card')));
   blank();
 
   line(
-    ['hi', `${INDENT}THE ${you.toUpperCase()} (YOU)`],
+    ['hi', `${INDENT}${koSeat(you)} (나)`],
     ['dim', ` · ${drewText(view.youDrew)}`],
-    ['text', ` · ${view.handLabel}`],
+    ['text', ` · ${ko(view.handLabel)}`],
     ...tag(view.you),
   );
   const marked = new Set(view.marked);
@@ -120,7 +123,7 @@ export function renderScreen(view, { notice = '', hungUp = false } = {}) {
         holds.push(['text', GAP]);
       }
       keys.push(['key', center(`[${i + 1}]`, CARD_WIDTH)]);
-      holds.push(marked.has(i) ? ['alert', center('TOSS', CARD_WIDTH)] : ['text', center('HOLD', CARD_WIDTH)]);
+      holds.push(marked.has(i) ? ['alert', center('버림', CARD_WIDTH)] : ['text', center('유지', CARD_WIDTH)]);
     });
     lines.push(keys, holds);
   }
@@ -129,27 +132,27 @@ export function renderScreen(view, { notice = '', hungUp = false } = {}) {
 
   if (result) {
     const banner = result.winner === 'draw'
-      ? '>>> DEAD EVEN. THE HAND IS A DRAW. <<<'
-      : `>>> THE ${SEAT_NAMES[result.winner].toUpperCase()} TAKES THE HAND <<<`;
+      ? '>>> 완전히 같습니다. 무승부입니다. <<<'
+      : `>>> ${koSeat(SEAT_NAMES[result.winner])}가 이 패를 가져갑니다 <<<`;
     line(['win', `${INDENT}${banner}`]);
-    for (const text of wrap(result.reason, SCREEN_WIDTH - 4)) line(['text', `${INDENT}${text}`]);
+    for (const text of wrap(ko(result.reason), SCREEN_WIDTH - 4)) line(['text', `${INDENT}${text}`]);
     blank();
   }
   if (notice) {
-    wrap(notice, SCREEN_WIDTH - 4).forEach((text, i) => line(['key', `${INDENT}${i === 0 ? '> ' : '  '}${text}`]));
+    wrap(ko(notice), SCREEN_WIDTH - 4).forEach((text, i) => line(['key', `${INDENT}${i === 0 ? '> ' : '  '}${text}`]));
   }
   for (const entry of view.log.filter((e) => !e.startsWith('Showdown')).slice(-3)) {
-    for (const text of wrap(entry, SCREEN_WIDTH - 6)) line(['dim', `${INDENT}· ${text}`]);
+    for (const text of wrap(ko(entry), SCREEN_WIDTH - 6)) line(['dim', `${INDENT}· ${text}`]);
   }
   rule();
 
   if (view.canAct) {
-    line(['key', `${INDENT}[1-5]`], ['text', ' toss/hold a card    '], ['key', '[ENTER]'], ['text', ' draw']);
+    line(['key', `${INDENT}[1-5]`], ['text', ' 카드 버리기/유지    '], ['key', '[ENTER]'], ['text', ' 뽑기']);
   }
   line(
-    ['key', `${INDENT}[R]`], ['text', ' replay this deal    '],
-    ['key', '[N]'], ['text', ' new deal    '],
-    ['key', '[Q]'], ['text', ' hang up'],
+    ['key', `${INDENT}[R]`], ['text', ' 이 패 다시    '],
+    ['key', '[N]'], ['text', ' 새 패    '],
+    ['key', '[Q]'], ['text', ' 끊기'],
   );
   return lines;
 }
@@ -177,9 +180,11 @@ export function toAnsi(lines, { color = true } = {}) {
 }
 
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// 한글은 글꼴과 상관없이 정확히 두 칸 폭으로 고정해 테두리가 어긋나지 않게 한다.
+const wideHtml = (html) => html.replace(/[\u1100-\u115f\u2e80-\ua4cf\uac00-\ud7a3\uf900-\ufaff\uff00-\uff60]/g, '<span class="w">$&</span>');
 
 export function toHtml(lines) {
   return lines
-    .map((segs) => segs.map(([tone, text]) => `<span class="t-${tone}">${escapeHtml(text)}</span>`).join(''))
+    .map((segs) => segs.map(([tone, text]) => `<span class="t-${tone}">${wideHtml(escapeHtml(text))}</span>`).join(''))
     .join('\n');
 }

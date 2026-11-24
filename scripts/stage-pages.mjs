@@ -18,7 +18,7 @@ import {fileURLToPath} from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const web = new URL("../dist/web/", import.meta.url);
 const POKER_SOURCE = new URL("../experiments/boot-hill-poker/", import.meta.url);
-const POKER_FILES = ["index.html", "app.js", "controls.js", "render.js", "engine.js"];
+const POKER_FILES = ["index.html", "app.js", "controls.js", "render.js", "engine.js", "ko.js"];
 const args = process.argv.slice(2);
 const commit = args[0] === "--commit" ? args[1] : undefined;
 if (args.length && (args.length !== 2 || commit === undefined)) {

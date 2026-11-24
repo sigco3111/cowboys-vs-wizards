@@ -8,7 +8,7 @@ import {FIELD_TRIAL} from "../../src/ui/field-trial-data.js";
 
 const outpost = readFileSync("src/ui/showdown-3d/camp-outpost.js", "utf8");
 const pokerHref = new Function(`${outpost.match(/export function pokerHref[\s\S]*?\n}\n/)[0].replace(/^export /, "")}; return pokerHref;`)();
-const POKER_FILES = ["index.html", "app.js", "controls.js", "render.js", "engine.js"];
+const POKER_FILES = ["index.html", "app.js", "controls.js", "render.js", "engine.js", "ko.js"];
 
 test("FIELD_TRIAL is exactly the two checked-in evidence files", () => {
   const read = (name) => JSON.parse(readFileSync(`docs/evidence/night-shift-repair/${name}.json`, "utf8"));
@@ -50,11 +50,11 @@ test("staging copies the five poker browser files to poker/ and the tree check e
   for (const name of POKER_FILES) assert.ok(existsSync(`experiments/boot-hill-poker/${name}`), `experiments/boot-hill-poker/${name} exists`);
   const stage = readFileSync("scripts/stage-pages.mjs", "utf8");
   assert.match(stage, /"\.\.\/experiments\/boot-hill-poker\/"/);
-  assert.match(stage, /\["index\.html", "app\.js", "controls\.js", "render\.js", "engine\.js"\]/);
+  assert.match(stage, /\["index\.html", "app\.js", "controls\.js", "render\.js", "engine\.js", "ko\.js"\]/);
   const staged = stage.indexOf("poker/${name}"), identity = stage.indexOf("write-build-identity.mjs\", \"--commit\"");
   assert.ok(staged > 0 && identity > staged, "poker/ is staged before the build identity is written");
   const tree = readFileSync("scripts/check-pages-tree.mjs", "utf8");
-  assert.match(tree, /\["app\.js", "controls\.js", "engine\.js", "index\.html", "render\.js"\]/);
+  assert.match(tree, /\["app\.js", "controls\.js", "engine\.js", "index\.html", "ko\.js", "render\.js"\]/);
   assert.match(tree, /\.\.\.POKER_FILES\.map\(\(name\) => `poker\/\$\{name\}`\)/);
   assert.match(tree, /pokerImportGraph\(pokerText\)/, "the tree check walks the served import graph");
   for (const source of ["cli.mjs", "engine.test.mjs", "README.md"]) {

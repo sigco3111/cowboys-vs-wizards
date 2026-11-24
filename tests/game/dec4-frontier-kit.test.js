@@ -91,7 +91,7 @@ test("runtime packaging: the staged /poker/ graph is still exactly its four scri
   // scripts/stage-pages.mjs copies only these files into /poker/ and scripts/check-pages-tree.mjs requires the graph
   // to equal them. If engine.js imported the kit, both shared scripts would have to stage packages/frontier-kit too.
   const graph = importGraph([`${POKER_DIR}/app.js`]);
-  assert.deepEqual(graph.files, ["app.js", "controls.js", "engine.js", "render.js"].map((f) => `${POKER_DIR}/${f}`));
+  assert.deepEqual(graph.files, ["app.js", "controls.js", "engine.js", "ko.js", "render.js"].map((f) => `${POKER_DIR}/${f}`));
 });
 
 test("both games' verifier entrypoints reach the kit, one of them only indirectly", () => {

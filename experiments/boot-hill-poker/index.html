@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Boot Hill Poker BBS</title>
+  <title>부트 힐 포커 BBS</title>
   <style>
+    .w { display: inline-block; width: 2ch; text-align: center; }
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
     body {
@@ -76,19 +77,19 @@
 </head>
 <body>
   <main class="crt">
-    <pre id="screen" aria-live="polite">Dialing Boot Hill... (this page needs JavaScript modules; serve the folder over http)</pre>
-    <nav aria-label="Controls">
-      <button type="button" data-key="1" aria-pressed="false">[1] card</button>
-      <button type="button" data-key="2" aria-pressed="false">[2] card</button>
-      <button type="button" data-key="3" aria-pressed="false">[3] card</button>
-      <button type="button" data-key="4" aria-pressed="false">[4] card</button>
-      <button type="button" data-key="5" aria-pressed="false">[5] card</button>
-      <button type="button" data-key="Enter">[ENTER] draw</button>
-      <button type="button" data-key="r">[R] replay</button>
-      <button type="button" data-key="n">[N] new deal</button>
-      <button type="button" data-key="q">[Q] hang up</button>
+    <pre id="screen" aria-live="polite">부트 힐에 전화 거는 중... (이 페이지는 JavaScript 모듈이 필요합니다. http로 폴더를 서비스하세요)</pre>
+    <nav aria-label="조작">
+      <button type="button" data-key="1" aria-pressed="false">[1] 카드</button>
+      <button type="button" data-key="2" aria-pressed="false">[2] 카드</button>
+      <button type="button" data-key="3" aria-pressed="false">[3] 카드</button>
+      <button type="button" data-key="4" aria-pressed="false">[4] 카드</button>
+      <button type="button" data-key="5" aria-pressed="false">[5] 카드</button>
+      <button type="button" data-key="Enter">[ENTER] 뽑기</button>
+      <button type="button" data-key="r">[R] 다시</button>
+      <button type="button" data-key="n">[N] 새 패</button>
+      <button type="button" data-key="q">[Q] 끊기</button>
     </nav>
-    <p class="hint">Keyboard: 1-5 toss/hold, Enter draws, R replays the seed, N deals anew, Q hangs up. Add ?seed=17&amp;first=wizard to the URL to pick a deal.</p>
+    <p class="hint">키보드: 1-5 버리기/유지, Enter 뽑기, R 같은 시드로 다시, N 새 패, Q 끊기. 주소에 ?seed=17&amp;first=wizard를 붙이면 패를 고를 수 있습니다.</p>
   </main>
   <script type="module" src="./app.js"></script>
 </body>

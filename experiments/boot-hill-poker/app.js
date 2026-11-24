@@ -14,7 +14,7 @@ try {
     strategy: params.get('strategy') ?? 'standard',
   });
 } catch (error) {
-  screen.textContent = `Boot Hill Poker could not start: ${error.message}`;
+  screen.textContent = `부트 힐 포커를 시작하지 못했습니다: ${error.message}`;
   throw error;
 }
 

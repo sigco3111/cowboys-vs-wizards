@@ -35,7 +35,7 @@ import {fileURLToPath} from "node:url";
 import {verifyLive} from "./verify-build-identity.mjs";
 
 const BASE_PATH = "/cowboys-vs-wizards/";
-const POKER_FILES = ["app.js", "controls.js", "engine.js", "index.html", "render.js"];
+const POKER_FILES = ["app.js", "controls.js", "engine.js", "index.html", "ko.js", "render.js"];
 const CHROME = process.env.CHROME ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = process.argv.slice(2);
