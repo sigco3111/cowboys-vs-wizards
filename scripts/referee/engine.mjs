@@ -49,6 +49,9 @@ import {resolve} from "node:path";
 import {pathToFileURL} from "node:url";
 import {OPENING_HAND, SECOND_PLAYER_CARDS, TRAP_SLOTS, applyAction, createShowdown} from "../../src/game/showdown/rules.js";
 import {DECKS, TYPES} from "../../src/game/showdown/cards.js";
+import CATALOG_NAMES from "./catalog-names.json" with {type: "json"};
+// The referee judges against the original catalog's printed (English) names; the page may show translations.
+export const printedName = (type) => CATALOG_NAMES[type] ?? TYPES[type].name;
 
 export const SIDES = Object.freeze(["cowboy", "wizard"]);
 export const ACTION_TYPES = Object.freeze(["summon", "spell", "gear", "location", "set", "attack", "cover", "end"]);
@@ -64,7 +67,7 @@ export function decodeInstance(id) {
   const type = match[1];
   if (!Object.hasOwn(TYPES, type)) throw new Error(`card instance ${id} names no catalog entry`);
   const card = TYPES[type];
-  return {id, type, copy: Number(match[2]), side: card.side, name: card.name, kind: card.kind};
+  return {id, type, copy: Number(match[2]), side: card.side, name: printedName(type), kind: card.kind};
 }
 
 export function validateDuel(duel) {
@@ -89,7 +92,7 @@ export function validateDuel(duel) {
     if (!isObject(duel.cardNames)) throw new Error("cardNames must map catalog types to printed names");
     for (const [type, name] of Object.entries(duel.cardNames)) {
       if (!Object.hasOwn(TYPES, type)) throw new Error(`cardNames lists ${type}, which is not in the catalog`);
-      if (TYPES[type].name !== name) throw new Error(`cardNames says ${type} is ${JSON.stringify(name)}; the catalog prints ${JSON.stringify(TYPES[type].name)}`);
+      if (printedName(type) !== name) throw new Error(`cardNames says ${type} is ${JSON.stringify(name)}; the catalog prints ${JSON.stringify(printedName(type))}`);
     }
   }
   return duel;

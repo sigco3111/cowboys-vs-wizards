@@ -40,7 +40,7 @@ import {fileURLToPath, pathToFileURL} from "node:url";
 import {parseArgs} from "node:util";
 import {DECKS, TYPES, tributes, typeOf} from "../../src/game/showdown/cards.js";
 import {applyAction, legalActions, random} from "../../src/game/showdown/rules.js";
-import {SIDES, checkDealAgreement, initialState, seededDeal} from "./engine.mjs";
+import {SIDES, printedName, checkDealAgreement, initialState, seededDeal} from "./engine.mjs";
 import {canonicalJson, hashFile, hashTree, oracleSkip, sha256} from "./prove.mjs";
 
 export const ROOT = fileURLToPath(new URL("../../", import.meta.url));
@@ -62,7 +62,7 @@ export function reachable(duel) {
 
 export function cardNamesFor(decks) {
   const types = [...new Set(SIDES.flatMap((side) => decks[side].map(typeOf)))].sort();
-  return Object.fromEntries(types.map((type) => [type, TYPES[type].name]));
+  return Object.fromEntries(types.map((type) => [type, printedName(type)]));
 }
 
 // An action the page has no gesture for, or null. src/ui/showdown-screen.js clickCard plays a card at once when it

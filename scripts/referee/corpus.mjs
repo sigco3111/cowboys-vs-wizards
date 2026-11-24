@@ -42,7 +42,7 @@ import {pathToFileURL} from "node:url";
 import {parseArgs} from "node:util";
 import {BOARD_SIZE, TRAP_SLOTS, applyAction, attackOf, attackOutcome, canAttack, legalActions, opponent, playTurn, random} from "../../src/game/showdown/rules.js";
 import {DECKS, EFFECTS, RARITY, TYPES, cardOf, has, tributes, typeOf} from "../../src/game/showdown/cards.js";
-import {ACTION_TYPES, SIDES, applyInput, checkDealAgreement, initialState, replayDuel, seededDeal} from "./engine.mjs";
+import {ACTION_TYPES, SIDES, printedName, applyInput, checkDealAgreement, initialState, replayDuel, seededDeal} from "./engine.mjs";
 
 // 16-card lists. "even" is the shipped even match; the other two add the earned gear, locations,
 // Gatling Crew and second traps so every non-bounty card and action type gets played.
@@ -298,7 +298,7 @@ const MAX_ACTIONS = 5000;
 
 function cardNamesFor(decks) {
   const types = [...new Set(SIDES.flatMap((side) => decks[side].map(typeOf)))].sort();
-  return Object.fromEntries(types.map((type) => [type, TYPES[type].name]));
+  return Object.fromEntries(types.map((type) => [type, printedName(type)]));
 }
 
 function playDuel(seed, deal, deckList, {probeRate, policies}, stats) {
