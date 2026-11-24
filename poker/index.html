@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boot Hill Poker BBS</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: radial-gradient(ellipse at center, #2a1706 0%, #0d0702 65%, #000 100%);
+      color: #ffb347;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+    }
+    .crt {
+      position: relative;
+      max-width: 100%;
+      padding: 22px 26px 18px;
+      border-radius: 20px;
+      background: radial-gradient(ellipse at center, #1c1004 0%, #110902 80%);
+      box-shadow: 0 0 0 4px #3b2410, 0 0 0 10px #1a0f05, inset 0 0 60px rgba(255, 140, 0, 0.12), 0 24px 70px rgba(0, 0, 0, 0.7);
+    }
+    .crt::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, 0.22) 2px 3px);
+    }
+    #screen {
+      margin: 0;
+      overflow-x: auto;
+      white-space: pre;
+      font-size: clamp(10px, 1.85vw, 16px);
+      line-height: 1.22;
+      text-shadow: 0 0 3px rgba(255, 170, 50, 0.6), 0 0 12px rgba(255, 120, 0, 0.25);
+    }
+    .t-frame { color: #8f5c24; }
+    .t-text { color: #ffb347; }
+    .t-hi { color: #ffe9b8; font-weight: bold; }
+    .t-dim { color: #a77a42; }
+    .t-card { color: #ffe3bd; }
+    .t-red { color: #ff6e4a; }
+    .t-back { color: #7d4b1d; }
+    .t-key { color: #ffc95e; font-weight: bold; }
+    .t-win { color: #ffd640; font-weight: bold; }
+    .t-alert { color: #ff5c3c; font-weight: bold; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    button {
+      font: inherit;
+      font-size: 14px;
+      color: #ffc95e;
+      background: #1f1206;
+      border: 1px solid #8f5c24;
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      text-shadow: 0 0 4px rgba(255, 170, 50, 0.5);
+    }
+    button:hover:not(:disabled), button:focus-visible { background: #3a2210; outline: 2px solid #ffc95e; outline-offset: 1px; }
+    button[aria-pressed="true"] { color: #ff5c3c; border-color: #ff5c3c; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    .hint { margin: 10px 0 0; font-size: 12px; color: #a77a42; }
+  </style>
+</head>
+<body>
+  <main class="crt">
+    <pre id="screen" aria-live="polite">Dialing Boot Hill... (this page needs JavaScript modules; serve the folder over http)</pre>
+    <nav aria-label="Controls">
+      <button type="button" data-key="1" aria-pressed="false">[1] card</button>
+      <button type="button" data-key="2" aria-pressed="false">[2] card</button>
+      <button type="button" data-key="3" aria-pressed="false">[3] card</button>
+      <button type="button" data-key="4" aria-pressed="false">[4] card</button>
+      <button type="button" data-key="5" aria-pressed="false">[5] card</button>
+      <button type="button" data-key="Enter">[ENTER] draw</button>
+      <button type="button" data-key="r">[R] replay</button>
+      <button type="button" data-key="n">[N] new deal</button>
+      <button type="button" data-key="q">[Q] hang up</button>
+    </nav>
+    <p class="hint">Keyboard: 1-5 toss/hold, Enter draws, R replays the seed, N deals anew, Q hangs up. Add ?seed=17&amp;first=wizard to the URL to pick a deal.</p>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
