@@ -1,1 +1,1 @@
-{ "type": "wizard-raven-familiar", "side": "wizard", "order": 8, "name": "Raven Familiar", "kind": "troop", "stars": 2, "health": 1, "attack": 1, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Beast", "keys": ["scout"] } }
+{ "type": "wizard-raven-familiar", "side": "wizard", "order": 8, "name": "까마귀 사역마", "kind": "troop", "stars": 2, "health": 1, "attack": 1, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Beast", "keys": ["scout"] } }

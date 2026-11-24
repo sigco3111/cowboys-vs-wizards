@@ -1,1 +1,1 @@
-{ "type": "cowboy-captured-wraith", "side": "cowboy", "order": 6, "name": "Captured Wraith", "kind": "troop", "stars": 3, "health": 2, "attack": 2, "copies": 0, "bounty": true, "showdown": { "rarity": "legendary", "tag": "Undead", "keys": ["ghostly"] } }
+{ "type": "cowboy-captured-wraith", "side": "cowboy", "order": 6, "name": "Captured Wraith", "kind": "troop", "stars": 3, "health": 2, "attack": 2, "copies": 0, "bounty": true, "showdown": { "name": "생포한 망령", "rarity": "legendary", "tag": "Undead", "keys": ["ghostly"] } }

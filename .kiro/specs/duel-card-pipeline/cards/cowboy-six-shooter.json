@@ -1,1 +1,1 @@
-{ "type": "cowboy-six-shooter", "side": "cowboy", "order": 14, "name": "Six-Shooter", "kind": "gear", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "sixshooter" } }
+{ "type": "cowboy-six-shooter", "side": "cowboy", "order": 14, "name": "6연발 권총", "kind": "gear", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "sixshooter" } }

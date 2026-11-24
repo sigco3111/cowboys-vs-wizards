@@ -1,1 +1,1 @@
-{ "type": "cowboy-sheriffs-office", "side": "cowboy", "order": 15, "name": "Sheriff's Office", "kind": "location", "showdownOnly": true, "showdown": { "rarity": "rare", "effect": "office" } }
+{ "type": "cowboy-sheriffs-office", "side": "cowboy", "order": 15, "name": "보안관 사무소", "kind": "location", "showdownOnly": true, "showdown": { "rarity": "rare", "effect": "office" } }

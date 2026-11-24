@@ -1,1 +1,1 @@
-{ "type": "wizard-hex", "side": "wizard", "order": 12, "name": "Hex", "kind": "trap", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "hex" } }
+{ "type": "wizard-hex", "side": "wizard", "order": 12, "name": "저주", "kind": "trap", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "hex" } }

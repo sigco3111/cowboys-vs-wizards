@@ -1,1 +1,1 @@
-{ "type": "wizard-bone-armor", "side": "wizard", "order": 13, "name": "Bone Armor", "kind": "gear", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "bonearmor" } }
+{ "type": "wizard-bone-armor", "side": "wizard", "order": 13, "name": "뼈 갑옷", "kind": "gear", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "bonearmor" } }

@@ -1,1 +1,1 @@
-{ "type": "cowboy-ranger", "side": "cowboy", "order": 10, "name": "Ranger", "kind": "troop", "stars": 5, "health": 4, "attack": 2, "copies": 0, "limit": 2, "rides": true, "showdown": { "rarity": "uncommon", "tag": "Lawman", "keys": ["scout"] } }
+{ "type": "cowboy-ranger", "side": "cowboy", "order": 10, "name": "Ranger", "kind": "troop", "stars": 5, "health": 4, "attack": 2, "copies": 0, "limit": 2, "rides": true, "showdown": { "name": "레인저", "rarity": "uncommon", "tag": "Lawman", "keys": ["scout"] } }

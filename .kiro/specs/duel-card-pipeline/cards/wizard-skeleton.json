@@ -1,1 +1,1 @@
-{ "type": "wizard-skeleton", "side": "wizard", "order": 1, "name": "Skeleton", "kind": "troop", "stars": 1, "health": 3, "attack": 1, "copies": 6, "showdown": { "rarity": "basic", "tag": "Undead", "keys": [] } }
+{ "type": "wizard-skeleton", "side": "wizard", "order": 1, "name": "Skeleton", "kind": "troop", "stars": 1, "health": 3, "attack": 1, "copies": 6, "showdown": { "name": "해골", "rarity": "basic", "tag": "Undead", "keys": [] } }

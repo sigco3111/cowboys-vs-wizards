@@ -1,1 +1,1 @@
-{ "type": "cowboy-sheriff", "side": "cowboy", "order": 1, "name": "Sheriff", "kind": "troop", "stars": 2, "health": 3, "attack": 1, "copies": 6, "showdown": { "rarity": "basic", "tag": "Lawman", "keys": [] } }
+{ "type": "cowboy-sheriff", "side": "cowboy", "order": 1, "name": "Sheriff", "kind": "troop", "stars": 2, "health": 3, "attack": 1, "copies": 6, "showdown": { "name": "보안관", "rarity": "basic", "tag": "Lawman", "keys": [] } }

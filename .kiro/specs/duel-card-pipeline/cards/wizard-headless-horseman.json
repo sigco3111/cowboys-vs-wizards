@@ -1,1 +1,1 @@
-{ "type": "wizard-headless-horseman", "side": "wizard", "order": 9, "name": "Headless Horseman", "kind": "troop", "stars": 5, "health": 3, "attack": 2, "showdownOnly": true, "showdown": { "rarity": "rare", "tag": "Undead", "keys": ["ride"] } }
+{ "type": "wizard-headless-horseman", "side": "wizard", "order": 9, "name": "목 없는 기수", "kind": "troop", "stars": 5, "health": 3, "attack": 2, "showdownOnly": true, "showdown": { "rarity": "rare", "tag": "Undead", "keys": ["ride"] } }

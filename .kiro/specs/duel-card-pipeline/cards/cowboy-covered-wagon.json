@@ -1,1 +1,1 @@
-{ "type": "cowboy-covered-wagon", "side": "cowboy", "order": 7, "name": "Covered Wagon", "kind": "troop", "stars": 4, "health": 4, "attack": 1, "copies": 0, "limit": 2, "showdown": { "rarity": "common", "tag": "Rig", "keys": ["guard"] } }
+{ "type": "cowboy-covered-wagon", "side": "cowboy", "order": 7, "name": "Covered Wagon", "kind": "troop", "stars": 4, "health": 4, "attack": 1, "copies": 0, "limit": 2, "showdown": { "name": "포장마차", "rarity": "common", "tag": "Rig", "keys": ["guard"] } }

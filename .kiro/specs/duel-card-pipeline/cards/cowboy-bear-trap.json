@@ -1,1 +1,1 @@
-{ "type": "cowboy-bear-trap", "side": "cowboy", "order": 13, "name": "Bear Trap", "kind": "trap", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "snare" } }
+{ "type": "cowboy-bear-trap", "side": "cowboy", "order": 13, "name": "곰 덫", "kind": "trap", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "snare" } }

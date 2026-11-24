@@ -85,7 +85,9 @@ function validateShowdown(file, spec) {
   const block = spec.showdown;
   if (block === null || typeof block !== "object" || Array.isArray(block)) return [`${file}: showdown must be an object`];
   const fields = spec.kind === "troop" ? ["rarity", "tag", "keys"] : ["rarity", "effect"];
-  for (const key of Object.keys(block)) if (!fields.includes(key)) fail(`${key} is not a field for a ${spec.kind}`);
+  // `name` is optional: the Showdown name when it is printed differently from the lane duel (a translation).
+  if ("name" in block && (typeof block.name !== "string" || block.name.trim() === "")) fail("name must be a non-empty string");
+  for (const key of Object.keys(block)) if (!fields.includes(key) && key !== "name") fail(`${key} is not a field for a ${spec.kind}`);
   for (const key of fields) if (!(key in block)) fail(`${key} is missing`);
   if (!RARITIES.includes(block.rarity)) fail(`rarity must be one of ${RARITIES.join(", ")}`);
   if (spec.kind === "troop") {

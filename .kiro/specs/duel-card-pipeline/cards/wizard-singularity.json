@@ -1,1 +1,1 @@
-{ "type": "wizard-singularity", "side": "wizard", "order": 4, "name": "Singularity", "kind": "spell", "relocates": true, "copies": 2, "showdown": { "rarity": "common", "effect": "shot" } }
+{ "type": "wizard-singularity", "side": "wizard", "order": 4, "name": "Singularity", "kind": "spell", "relocates": true, "copies": 2, "showdown": { "name": "특이점", "rarity": "common", "effect": "shot" } }

@@ -1,1 +1,1 @@
-{ "type": "wizard-bone-wall", "side": "wizard", "order": 7, "name": "Bone Wall", "kind": "troop", "stars": 3, "health": 4, "attack": 0, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Undead", "keys": ["guard"] } }
+{ "type": "wizard-bone-wall", "side": "wizard", "order": 7, "name": "뼈 방벽", "kind": "troop", "stars": 3, "health": 4, "attack": 0, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Undead", "keys": ["guard"] } }

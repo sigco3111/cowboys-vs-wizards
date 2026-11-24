@@ -1,1 +1,1 @@
-{ "type": "wizard-lantern-wraith", "side": "wizard", "order": 5, "name": "Lantern Wraith", "kind": "troop", "stars": 6, "health": 4, "attack": 2, "copies": 0, "bounty": true, "showdown": { "rarity": "legendary", "tag": "Undead", "keys": ["ghostly"] } }
+{ "type": "wizard-lantern-wraith", "side": "wizard", "order": 5, "name": "Lantern Wraith", "kind": "troop", "stars": 6, "health": 4, "attack": 2, "copies": 0, "bounty": true, "showdown": { "name": "랜턴 망령", "rarity": "legendary", "tag": "Undead", "keys": ["ghostly"] } }

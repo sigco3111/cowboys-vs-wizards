@@ -1,1 +1,1 @@
-{ "type": "cowboy-mounted-billy", "side": "cowboy", "order": 3, "name": "Mounted Billy", "kind": "troop", "stars": 7, "health": 5, "attack": 3, "copies": 1, "rides": true, "showdown": { "rarity": "rare", "tag": "Outlaw", "keys": ["ride"] } }
+{ "type": "cowboy-mounted-billy", "side": "cowboy", "order": 3, "name": "Mounted Billy", "kind": "troop", "stars": 7, "health": 5, "attack": 3, "copies": 1, "rides": true, "showdown": { "name": "말 탄 빌리", "rarity": "rare", "tag": "Outlaw", "keys": ["ride"] } }

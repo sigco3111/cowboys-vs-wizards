@@ -1,1 +1,1 @@
-{ "type": "cowboy-dynamiter", "side": "cowboy", "order": 9, "name": "Dynamiter", "kind": "troop", "stars": 3, "health": 1, "attack": 3, "copies": 0, "limit": 2, "showdown": { "rarity": "uncommon", "tag": "Outlaw", "keys": ["laststand"] } }
+{ "type": "cowboy-dynamiter", "side": "cowboy", "order": 9, "name": "Dynamiter", "kind": "troop", "stars": 3, "health": 1, "attack": 3, "copies": 0, "limit": 2, "showdown": { "name": "다이너마이터", "rarity": "uncommon", "tag": "Outlaw", "keys": ["laststand"] } }

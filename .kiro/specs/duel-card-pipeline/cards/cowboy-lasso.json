@@ -1,1 +1,1 @@
-{ "type": "cowboy-lasso", "side": "cowboy", "order": 12, "name": "Lasso", "kind": "spell", "relocates": true, "copies": 0, "limit": 2, "showdown": { "rarity": "uncommon", "effect": "tie" } }
+{ "type": "cowboy-lasso", "side": "cowboy", "order": 12, "name": "Lasso", "kind": "spell", "relocates": true, "copies": 0, "limit": 2, "showdown": { "name": "올가미", "rarity": "uncommon", "effect": "tie" } }

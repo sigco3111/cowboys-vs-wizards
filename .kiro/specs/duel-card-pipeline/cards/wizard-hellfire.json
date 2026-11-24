@@ -1,1 +1,1 @@
-{ "type": "wizard-hellfire", "side": "wizard", "order": 11, "name": "Hellfire", "kind": "spell", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "hellfire" } }
+{ "type": "wizard-hellfire", "side": "wizard", "order": 11, "name": "지옥불", "kind": "spell", "showdownOnly": true, "showdown": { "rarity": "uncommon", "effect": "hellfire" } }

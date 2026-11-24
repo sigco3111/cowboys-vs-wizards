@@ -1,1 +1,1 @@
-{ "type": "cowboy-gatling-crew", "side": "cowboy", "order": 11, "name": "Gatling Crew", "kind": "troop", "stars": 7, "health": 4, "attack": 4, "copies": 0, "limit": 1, "showdown": { "rarity": "rare", "tag": "Rig", "keys": ["sweep"] } }
+{ "type": "cowboy-gatling-crew", "side": "cowboy", "order": 11, "name": "Gatling Crew", "kind": "troop", "stars": 7, "health": 4, "attack": 4, "copies": 0, "limit": 1, "showdown": { "name": "개틀링 포대", "rarity": "rare", "tag": "Rig", "keys": ["sweep"] } }

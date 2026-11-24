@@ -1,1 +1,1 @@
-{ "type": "wizard-dragon", "side": "wizard", "order": 3, "name": "Dragon", "kind": "troop", "stars": 8, "health": 5, "attack": 3, "copies": 1, "showdown": { "rarity": "legendary", "tag": "Beast", "keys": ["sweep"] } }
+{ "type": "wizard-dragon", "side": "wizard", "order": 3, "name": "Dragon", "kind": "troop", "stars": 8, "health": 5, "attack": 3, "copies": 1, "showdown": { "name": "용", "rarity": "legendary", "tag": "Beast", "keys": ["sweep"] } }

@@ -1,1 +1,1 @@
-{ "type": "wizard-jack-o-lantern", "side": "wizard", "order": 10, "name": "Jack-o'-Lantern", "kind": "troop", "stars": 1, "health": 1, "attack": 1, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Fiend", "keys": ["laststand"] } }
+{ "type": "wizard-jack-o-lantern", "side": "wizard", "order": 10, "name": "잭오랜턴", "kind": "troop", "stars": 1, "health": 1, "attack": 1, "showdownOnly": true, "showdown": { "rarity": "common", "tag": "Fiend", "keys": ["laststand"] } }

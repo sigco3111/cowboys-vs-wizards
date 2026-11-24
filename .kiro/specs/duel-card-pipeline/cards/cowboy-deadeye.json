@@ -1,1 +1,1 @@
-{ "type": "cowboy-deadeye", "side": "cowboy", "order": 4, "name": "Deadeye", "kind": "spell", "relocates": false, "copies": 2, "showdown": { "rarity": "common", "effect": "shot" } }
+{ "type": "cowboy-deadeye", "side": "cowboy", "order": 4, "name": "Deadeye", "kind": "spell", "relocates": false, "copies": 2, "showdown": { "name": "명사수", "rarity": "common", "effect": "shot" } }

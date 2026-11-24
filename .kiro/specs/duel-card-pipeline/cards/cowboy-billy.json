@@ -1,1 +1,1 @@
-{ "type": "cowboy-billy", "side": "cowboy", "order": 2, "name": "Billy", "kind": "troop", "stars": 5, "health": 4, "attack": 2, "copies": 3, "showdown": { "rarity": "basic", "tag": "Outlaw", "keys": [] } }
+{ "type": "cowboy-billy", "side": "cowboy", "order": 2, "name": "Billy", "kind": "troop", "stars": 5, "health": 4, "attack": 2, "copies": 3, "showdown": { "name": "빌리", "rarity": "basic", "tag": "Outlaw", "keys": [] } }
