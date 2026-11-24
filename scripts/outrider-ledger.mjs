@@ -12,11 +12,11 @@ import {createShowdownSession} from "../src/match/showdown-session.js";
 import {outriderDuel} from "../src/match/showdown-outrider.js";
 
 // Same text as build-sheriffs-ledger.mjs laTime (not imported: that module loads the whole Ledger's inputs).
-const LA = new Intl.DateTimeFormat("en-US", {timeZone: "America/Los_Angeles", year: "numeric", month: "long", day: "numeric",
-  hour: "numeric", minute: "2-digit", hour12: true, timeZoneName: "short"});
+const LA = new Intl.DateTimeFormat("en-US", {timeZone: "America/Los_Angeles", year: "numeric", month: "numeric", day: "numeric",
+  hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZoneName: "short"});
 function laTime(iso) {
   const p = Object.fromEntries(LA.formatToParts(new Date(iso)).map(({type, value}) => [type, value]));
-  return `${p.month} ${p.day}, ${p.year}, ${p.hour}:${p.minute} ${p.dayPeriod} ${p.timeZoneName}`;
+  return `${p.year}년 ${p.month}월 ${p.day}일 ${p.hour}:${p.minute} ${p.timeZoneName}`;
 }
 
 export const NIGHT_WATCH_RECEIPT = "docs/evidence/night-shift/receipt.json";
@@ -88,7 +88,7 @@ export function nightWatch(root) {
 }
 
 const SIDE = {cowboy: "Cowboys", wizard: "Wizards"};
-const boardText = (side) => side.board.map((t) => (t ? `${cardOf(t.cardId).name} ${t.health}${t.cover ? " (cover)" : ""}` : "empty")).join(" · ");
+const boardText = (side) => side.board.map((t) => (t ? `${cardOf(t.cardId).name} ${t.health}${t.cover ? " (엄폐)" : ""}` : "비어 있음")).join(" · ");
 
 // The public picture at a case's landing, from the replay itself (names, orbs, Bases only).
 function position(entry) {

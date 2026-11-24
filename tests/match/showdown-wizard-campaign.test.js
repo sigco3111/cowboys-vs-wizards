@@ -52,11 +52,11 @@ function seedFor(duel, wizardWins) {
 }
 
 test("the track is Fable's table: names, AI decks, levels, Bases, rewards, Wizards open", () => {
-  assert.equal(PREVIEW_LABEL, "Wizard preview");
+  assert.equal(PREVIEW_LABEL, "마법사 미리보기");
   assert.deepEqual(WIZARD_TRACK.map((d) => [d.id, d.name, d.level, d.base]),
-    [["dry-gulch", "Dry Gulch", 0, 3], ["wagon-ring", "Wagon Ring", 0, 4], ["trapline-pass", "Trapline Pass", 1, 3], ["high-noon", "High Noon", 1.5, 4]]);
+    [["dry-gulch", "마른 골짜기", 0, 3], ["wagon-ring", "마차 원진", 0, 4], ["trapline-pass", "덫줄 고개", 1, 3], ["high-noon", "한낮의 결투", 1.5, 4]]);
   assert.deepEqual(WIZARD_TRACK.map((d) => d.deck), [{"cowboy-sheriff": 16}, {"cowboy-sheriff": 14, "cowboy-covered-wagon": 2}, deckAfter(4), DECKS.cowboy]);
-  assert.ok(WIZARD_TRACK[1].lesson.endsWith(" A Covered Wagon has Guard: it must fall first."), "Fable's final lesson 2 sentence");
+  assert.ok(WIZARD_TRACK[1].lesson.endsWith(" 포장마차는 수호를 가지므로 먼저 쓰러뜨려야 합니다."), "Fable's final lesson 2 sentence");
   assert.ok(Object.keys(deckAfter(4)).includes("cowboy-bear-trap"), "Trapline Pass's face-down card is a Bear Trap");
   assert.deepEqual(WIZARD_TRACK.map((d) => d.reward), [
     [["wizard-raven-familiar", "wizard-skeleton", 2]], [["wizard-bone-wall", "wizard-skeleton", 2]],
@@ -135,25 +135,25 @@ test("the shipping cards.csv agrees with every lesson claim and rarity cap the p
   }
   // Lesson 1: the Wizard costs one tribute and raises an Undead; a Skeleton is Undead.
   assert.equal(row("wizard-wizard")["Tributes to summon"], "1");
-  assert.equal(row("wizard-wizard").Keywords, "Raise");
-  assert.match(row("wizard-wizard")["What it does"], /last Undead troop in your graveyard returns with 1 orb/);
+  assert.equal(row("wizard-wizard").Keywords, "소생");
+  assert.match(row("wizard-wizard")["What it does"], /묘지에 있는 마지막 언데드 부대가 오브 1개로 돌아옵니다/);
   assert.equal(row("wizard-skeleton").Type, "Undead");
   // Lesson 2: Raven Familiar draws on arrival and is not Undead; a Covered Wagon has Guard.
-  assert.equal(row("wizard-raven-familiar").Keywords, "Scout");
-  assert.match(row("wizard-raven-familiar")["What it does"], /When it arrives, draw a card/);
+  assert.equal(row("wizard-raven-familiar").Keywords, "정찰");
+  assert.match(row("wizard-raven-familiar")["What it does"], /등장하면 카드를 한 장 뽑습니다/);
   assert.notEqual(row("wizard-raven-familiar").Type, "Undead");
-  assert.equal(row("cowboy-covered-wagon").Keywords, "Guard");
-  assert.match(row("cowboy-covered-wagon")["What it does"], /must attack this troop before any other troop/);
+  assert.equal(row("cowboy-covered-wagon").Keywords, "수호");
+  assert.match(row("cowboy-covered-wagon")["What it does"], /다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다/);
   // Lesson 3: Bone Wall has Guard; the face-down Cowboy card in Trapline Pass is a Bear Trap and its only trap.
-  assert.equal(row("wizard-bone-wall").Keywords, "Guard");
+  assert.equal(row("wizard-bone-wall").Keywords, "수호");
   const traps = Object.keys(WIZARD_TRACK[2].deck).filter((type) => TYPES[type].kind === "trap");
   assert.deepEqual(traps, ["cowboy-bear-trap"]);
   assert.equal(row("cowboy-bear-trap").Kind, "Trap");
   // Lesson 4: the Imp strikes the turn it arrives; the Hex cancels an attack.
-  assert.equal(row("wizard-imp").Keywords, "Quickdraw");
-  assert.match(row("wizard-imp")["What it does"], /attack on the turn it arrives/);
+  assert.equal(row("wizard-imp").Keywords, "속사");
+  assert.match(row("wizard-imp")["What it does"], /등장한 턴에 공격할 수 있습니다/);
   assert.equal(row("wizard-hex").Kind, "Trap");
-  assert.match(row("wizard-hex")["What it does"], /the attack is cancelled/);
+  assert.match(row("wizard-hex")["What it does"], /그 공격이 취소됩니다/);
 });
 
 test("Fable's fixture: tribute [0] raises a 1-orb Skeleton; with all three slots full, nothing rises", () => {
@@ -177,7 +177,7 @@ test("a fresh preview: duel 1 open, the rest locked, Wizard seat, Base 5, Wizard
   const preview = createWizardPreview(storage);
   assert.deepEqual(preview.duels().map((d) => [d.id, d.state]), [["wizard:dry-gulch", "open"], ["wizard:wagon-ring", "locked"],
     ["wizard:trapline-pass", "locked"], ["wizard:high-noon", "locked"], [OPEN_RANGE_ID, "locked"]]);
-  assert.equal(preview.duels().at(-1).name, "Open range, Wizard seat");
+  assert.equal(preview.duels().at(-1).name, "열린 벌판, 마법사 자리");
   const duel = preview.trailDuel();
   assert.equal(duel.seat, "wizard");
   assert.deepEqual(duel.options, {decks: {wizard: WIZARD_STARTER, cowboy: {"cowboy-sheriff": 16}}, baseOrbs: {wizard: 5, cowboy: 3}, first: "wizard"});
@@ -220,7 +220,7 @@ test("real legal journey: loss, grit rematch, four wins with each swap, then Ope
   assert.equal(storage.map.get(WIZARD_PREVIEW_KEY), JSON.stringify({v: 1, wins: 4, losses: 0}));
   assert.equal(preview.trailDuel(), null);
   const open = preview.duel(OPEN_RANGE_ID);
-  assert.equal(open.name, "Open range, Wizard seat");
+  assert.equal(open.name, "열린 벌판, 마법사 자리");
   assert.equal(open.level, 2);
   assert.deepEqual(open.options.decks, {wizard: wizardDeckAfter(4), cowboy: DECKS.cowboy});
   assert.ok(playDuel(open, 0));
@@ -240,7 +240,7 @@ test("no double pay: a second settle, a reload, a stale tab and a retry of a won
   assert.deepEqual(tabA.settle(duel, true).earned.cards, [], "the same finished duel settled twice");
   assert.deepEqual(tabB.settle(tabB.trailDuel(), true).earned.cards, [], "a stale tab's Dry Gulch");
   assert.deepEqual(createWizardPreview(storage).settle(duel, true).earned.cards, [], "after a reload");
-  assert.equal(tabB.trailDuel().name, "Wagon Ring", "the stale tab took the stored win");
+  assert.equal(tabB.trailDuel().name, "마차 원진", "the stale tab took the stored win");
   assert.deepEqual(tabA.settle({...duel, id: "wizard:wagon-ring"}, true).earned.cards, [], "a forged id with the wrong index");
   assert.deepEqual(tabA.settle({...duel, kind: "trail"}, true).earned.cards, []);
   assert.deepEqual(tabA.settle(null, true).earned.cards, []);
@@ -256,7 +256,7 @@ test("an old tab cannot bring back a save that was started over, and its later w
   assert.equal(other.reset(), true); // "Start preview over" in another tab
   assert.deepEqual(old.settle(stale, true).earned.cards, [], "the old tab's Trapline Pass win pays nothing");
   assert.equal(storage.map.get(WIZARD_PREVIEW_KEY), JSON.stringify({v: 1, wins: 0, losses: 0}));
-  assert.equal(old.trailDuel().name, "Dry Gulch", "the old tab now follows the reset");
+  assert.equal(old.trailDuel().name, "마른 골짜기", "the old tab now follows the reset");
   // A loss in the old tab after the reset counts on the fresh save, not the old one.
   old.settle(stale, false);
   assert.equal(storage.map.get(WIZARD_PREVIEW_KEY), JSON.stringify({v: 1, wins: 0, losses: 0}));
@@ -278,7 +278,7 @@ test("a write that fails keeps the progress in memory, and a later write that wo
   assert.equal(preview.settle(preview.trailDuel(), true).earned.cards.length, 1);
   assert.equal(preview.saved(), false);
   assert.equal(preview.settle(preview.trailDuel(), false).grit, 1, "Wagon Ring lost, still in memory");
-  assert.equal(preview.trailDuel().name, "Wagon Ring");
+  assert.equal(preview.trailDuel().name, "마차 원진");
   assert.equal(preview.trailDuel().options.baseOrbs.wizard, 6);
   full = false;
   assert.equal(preview.settle(preview.trailDuel(), true).earned.cards.length, 1);
@@ -295,7 +295,7 @@ test("invalid stored values start fresh; a valid one loads", () => {
     assert.deepEqual([preview.progress().wins, preview.progress().losses], [0, 0], text);
   }
   const preview = createWizardPreview(memory({[WIZARD_PREVIEW_KEY]: '{"losses":1,"wins":2,"v":1}'}));
-  assert.equal(preview.trailDuel().name, "Trapline Pass");
+  assert.equal(preview.trailDuel().name, "덫줄 고개");
   assert.equal(preview.trailDuel().options.baseOrbs.wizard, 6);
   assert.equal(preview.duel("wizard:open", {"wizard-dragon": 16}), null);
 });
@@ -307,7 +307,7 @@ test("blocked, missing or full storage: play goes on in memory and saved() says 
     assert.equal(preview.saved(), true);
     assert.equal(preview.settle(preview.trailDuel(), true).earned.cards.length, 1);
     assert.equal(preview.saved(), false);
-    assert.equal(preview.trailDuel().name, "Wagon Ring", "the win is kept in memory");
+    assert.equal(preview.trailDuel().name, "마차 원진", "the win is kept in memory");
     assert.equal(preview.reset(), false);
   }
 });

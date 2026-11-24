@@ -150,7 +150,8 @@ test("the imported search cases are fresh and ship setup only", async (t) => {
   assert.deepEqual(["case-e", "case-a"].map((id) => decision.results[id].kind), ["fight-only", "ride-only"]);
   assert.doesNotMatch(JSON.stringify(built.ledger.positions), /winner|results|"turn":(1\d|2\d)/);
   assert.equal(built.ledger.nightWatch.engine.same, false, "the historical receipt predates the presentation callback in playTurn");
-  assert.deepEqual(built.ledger.nightWatch.engine.differ, ["src/game/showdown/rules.js"]);
+  // 한글화는 카드 이름 문자열만 바꾼다(코드 골격은 원본과 동일, 검증 완료): 번역된 두 파일이 바이트 차이 목록에 추가된다.
+  assert.deepEqual(built.ledger.nightWatch.engine.differ, ["src/game/card-specs.generated.js", "src/game/showdown/cards.js", "src/game/showdown/rules.js"]);
   assert.equal(built.ledger.nightWatch.rulesBlobMatch, true);
   assert.deepEqual([built.ledger.research.holdout.correct, built.ledger.research.holdout.alwaysRide, built.ledger.research.holdout.flips], [3, 5, 7]);
   assert.doesNotMatch(JSON.stringify(built.cases), /winner|"arms"|"choices"|"target":"base"|ride-only|fight-only/);
@@ -164,17 +165,17 @@ test("Ledger section: neutral before the reveal, results only when fresh, links 
   assert.match(html, /id="ledger-outrider-reveal"/);
   assert.deepEqual([...html.matchAll(/data-outrider="([^"]+)"/g)].map((m) => m[1]), ["case-e", "case-a"]);
   assert.equal([...outriderLedgerHtml(built.ledger, []).matchAll(/data-outrider=/g)].length, 0);
-  assert.match(comparisonLines(built.ledger).join("\n"), /Position 1: ride to the Base, Wizards won on turn 10; fight the troop, Cowboys won on turn 23/);
-  assert.match(researchLine(built.ledger), /right in 3 of 7 fresh reversals .* against 5 of 7 for always riding: unsupported\. No general rule is proven/);
-  assert.match(researchLine(built.ledger), /depends on every later move/);
-  assert.match(nightWatchLine(built.ledger), /November 19, 2026, 11:46 PM PST .* whole ruleset, not this move\. Its engine differs from this build in src\/game\/showdown\/rules\.js/);
+  assert.match(comparisonLines(built.ledger).join("\n"), /국면 1: 기지로 돌진하면 10턴에 마법사 승리, 부대와 싸우면 23턴에 카우보이 승리/);
+  assert.match(researchLine(built.ledger), /새 역전 7건 중 3건이 맞았고, 항상 돌진하면 5건: 뒷받침되지 않음\. 일반 규칙이 증명된 것은 아닙니다/);
+  assert.match(researchLine(built.ledger), /이후의 수에 좌우됩니다/);
+  assert.match(nightWatchLine(built.ledger), /2026년 11월 19일 23:46 PST .* 규칙 묶음 전체를 측정합니다\. 엔진이 이 빌드와 .*src\/game\/showdown\/rules\.js에서 달라서/);
   const stale = {...built.ledger, status: "stale", statusText: "withheld", positions: []};
   const staleHtml = outriderLedgerHtml(stale, built.cases);
   assert.doesNotMatch(staleHtml, /data-outrider|ledger-outrider-reveal|won/);
   assert.deepEqual(comparisonLines(stale), []);
   assert.equal(researchLine(stale), null);
   const differs = {...built.ledger, nightWatch: {...built.ledger.nightWatch, rulesBlobMatch: false, engine: {...built.ledger.nightWatch.engine, same: false, differ: ["src/game/showdown/rules.js"]}}};
-  assert.match(nightWatchLine(differs), /differs from this build in src\/game\/showdown\/rules\.js, so its numbers describe the earlier rules/);
+  assert.match(nightWatchLine(differs), /src\/game\/showdown\/rules\.js에서 달라서, 수치는 이전 규칙을 나타냅니다/);
 });
 
 // CI repair: a shallow or exported checkout lacks the Night Watch commit. The checked-in snapshot of its four engine
@@ -190,7 +191,7 @@ test("Night Watch engine identity without history: snapshot compares, mismatched
     assert.deepEqual([bare.checked, bare.from, bare.files, bare.same], [true, ENGINE_SNAPSHOT, 4, full.same]);
     assert.deepEqual(bare.notMeasured, full.notMeasured);
     writeFileSync(path.join(dir, "src/game/showdown/cards.js"), `${readFileSync(path.join(dir, "src/game/showdown/cards.js"), "utf8")}\n// changed\n`);
-    assert.deepEqual(engineIdentity(receipt.commit, dir, receipt.rulesBlob).differ, [...bare.differ, "src/game/showdown/cards.js"].sort());
+    assert.deepEqual(engineIdentity(receipt.commit, dir, receipt.rulesBlob).differ, [...new Set([...bare.differ, "src/game/showdown/cards.js"])].sort());
     assert.match(engineIdentity(receipt.commit, dir, "0".repeat(40)).reason, /does not equal the receipt's rulesBlob/);
     assert.match(engineIdentity("f".repeat(40), dir, receipt.rulesBlob).reason, /not in this checkout and no engine snapshot names it/);
     rmSync(path.join(dir, ENGINE_SNAPSHOT));

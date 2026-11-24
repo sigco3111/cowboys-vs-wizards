@@ -6,7 +6,7 @@ import {SHOWDOWN_SPECS} from "../card-specs.generated.js";
 // Every keyword has one fixed meaning, printed on the screen and in cards.csv.
 export const KEYWORDS = Object.freeze({
   guard: ["수호", "적은 다른 부대나 기지보다 이 부대를 먼저 공격해야 합니다."],
-  quickdraw: ["속사", "자유롭게 낸 경우에도 등장한 턴에 공격할 수 있습니다."],
+  quickdraw: ["속사", "제물 없이 소환해도 등장한 턴에 공격할 수 있습니다."],
   ride: ["돌파", "수호를 가진 적이 없다면 적 부대를 지나쳐 기지에 오브 1개 피해를 줄 수 있습니다."],
   scout: ["정찰", "등장하면 카드를 한 장 뽑습니다."],
   raise: ["소생", "등장하면 묘지에 있는 마지막 언데드 부대가 오브 1개로 돌아옵니다."],

@@ -39,7 +39,7 @@ export function mountWizardCamp(root, {preview, track, onDuel, onCowboyCamp, con
       : "마법사 대결 네 번을 모두 이겼고 용이 덱에 들어왔습니다. 다음: <strong>열린 벌판, 마법사 자리</strong>. 완성된 덱으로 카우보이 전체 덱과 맞붙습니다. 보상은 없습니다.";
     $("wizard-track").innerHTML = list.map((duel) => {
       const step = track[duel.index];
-      const note = !step ? (duel.state === "open" ? "보상 없음" : "잠김 · 하이 눈 이후")
+      const note = !step ? (duel.state === "open" ? "보상 없음" : "잠김 · 한낮의 결투 이후")
         : duel.state === "won" ? `획득: ${earned(step.reward)}` : duel.state === "locked" ? `잠김 · 이기면 획득: ${earned(step.reward)}` : `이기면 획득: ${earned(step.reward)}`;
       return `<li><button type="button" class="sd-tile ${duel.state}" id="${tileId(duel.id)}" data-wizard-duel="${duel.id}"${duel.state === "open" ? "" : " disabled"}>
         <strong>${duel.state === "won" ? "✓ " : ""}${duel.name}</strong><span class="sd-note">${note}</span></button></li>`;

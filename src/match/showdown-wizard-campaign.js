@@ -27,7 +27,7 @@ export const WIZARD_TRACK = Object.freeze([
   {id: "trapline-pass", name: "덫줄 고개", level: 1, base: 3, deck: deckAfter(4),
     lesson: "뼈 방벽은 수호를 가집니다. 상대의 뒷면 카드는 곰 덫입니다. 되살린 오브 1개짜리 해골을 먼저 보내세요.",
     reward: [["wizard-imp", "wizard-skeleton", 1], ["wizard-hex", "wizard-singularity", 1]]},
-  {id: "high-noon", name: "하이 눈", level: 1.5, base: 4, deck: DECKS.cowboy,
+  {id: "high-noon", name: "한낮의 결투", level: 1.5, base: 4, deck: DECKS.cowboy,
     lesson: "무리 전체를 계획적으로 운용하세요. 임프는 등장한 턴에 공격하고, 저주는 공격 하나를 무효로 합니다.",
     reward: [["wizard-dragon", "wizard-wizard", 1]]},
 ].map((duel) => Object.freeze({...duel, deck: Object.freeze({...duel.deck})})));

@@ -15,8 +15,8 @@ const SIDE = {cowboy: "카우보이", wizard: "마법사", draw: "무승부"};
 export function nightWatchLine(section = OUTRIDER_LEDGER) {
   const nw = section.nightWatch;
   if (!nw) return null;
-  const head = `야간 감시 영수증 ${nw.source}, ${nw.local} (${nw.trigger}): 커밋 ${short(nw.commit)}, 규칙 blob ${short(nw.rulesBlob)}, `
-    + `${nw.bot}, 시드 ${nw.seeds.from}–${nw.seeds.to}, ${nw.games.toLocaleString("en-US")}판. 이 수가 아니라 규칙 묶음 전체를 측정합니다.`;
+  const head = `야간 감시 영수증 ${nw.source}, ${nw.local} (${nw.trigger === "on-demand" ? "요청 시 실행" : nw.trigger}): 커밋 ${short(nw.commit)}, 규칙 blob ${short(nw.rulesBlob)}, `
+    + `${String(nw.bot).replace("(both seats)", "(양쪽 좌석)")}, 시드 ${nw.seeds.from}–${nw.seeds.to}, ${nw.games.toLocaleString("en-US")}판. 이 수가 아니라 규칙 묶음 전체를 측정합니다.`;
   const e = nw.engine;
   if (!e?.checked) return `${head} 이 빌드와 엔진을 비교할 수 없었습니다: ${e?.reason ?? "알 수 없음"}.`;
   const same = e.same ? `실행에 쓰인 엔진 파일 ${e.files}개가 이 빌드와 바이트 단위로 같습니다${nw.rulesBlobMatch ? ". 규칙 blob도 일치합니다" : ""}.`
