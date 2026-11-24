@@ -12,6 +12,7 @@ export { RULES_INDEX };
 
 // Each preset is answered by the same search a typed question uses, and
 // tests/match/rules-desk.test.js pins the clause it must reach.
+export const PRESET_LABELS_KO = ['제물은 부대 비용이 얼마인가요?', '누가 먼저 하나요?', '처음에 카드를 몇 장 받나요?', '부대는 등장한 턴에 공격할 수 있나요?', '기지는 언제 공격할 수 있나요?', '공격한 뒤에도 카드를 낼 수 있나요?', '패가 가득 차면 어떻게 되나요?', '함정은 언제 발동하나요?', '80턴 이후 게임은 어떻게 끝나나요?', '균형 요건은 무엇인가요?'];
 export const PRESET_QUESTIONS = [
   'How many tributes does a troop cost?',
   'Who goes first?',
@@ -47,7 +48,12 @@ const TEXT_POINTS = 0.5;
 const RELATED_SHARE = 0.6;
 const RELATED_MAX = 2;
 
+const HANGUL = /[가-힣]/;
+const KO_ENDINGS = /(하나요|되나요|인가요|있나요|받나요|끝나나요|나요|가요|까요|해요|어요|야)$/;
+const KO_STOP = new Set(['언제', '어떻게', '무엇', '뭐', '얼마', '몇', '누가', '어디', '왜', '어떤', '뭔가요', '있어', '해', '수', '뒤에', '낼', '처음', '장', '차면', '지나면', '요건', '이후', '게임', '카드', '받', '되', '있']);
+const KO_PARTICLES = /(으로|에서|에게|은|는|이|가|을|를|의|에|로|도|와|과)$/;
 export function normalizeToken(raw) {
+  if (HANGUL.test(raw)) { const t = String(raw).replace(KO_ENDINGS, '').replace(KO_PARTICLES, ''); return t.length ? t : ''; }
   let word = String(raw).toLowerCase().replace(/[’`]/g, "'").replace(/'s$/, '').replace(/'/g, '');
   if (word.length > 4 && word.endsWith('ies')) return `${word.slice(0, -3)}y`;
   if (word.length > 3 && word.endsWith('oes')) return word.slice(0, -2);
@@ -58,9 +64,9 @@ export function normalizeToken(raw) {
 
 export function tokenize(text) {
   const seen = new Set();
-  for (const raw of String(text ?? '').toLowerCase().split(/[^a-z0-9'’]+/)) {
+  for (const raw of String(text ?? '').toLowerCase().split(/[^a-z0-9가-힣'’]+/)) {
     const clean = raw.replace(/[’']/g, '');
-    if (!clean || STOP_WORDS.has(clean)) continue;
+    if (!clean || STOP_WORDS.has(clean) || KO_STOP.has(clean)) continue;
     const token = normalizeToken(raw);
     if (token && !STOP_WORDS.has(token)) seen.add(token);
   }
@@ -94,7 +100,7 @@ export function searchRules(question, index = RULES_INDEX) {
     const strong = [];
     const weak = [];
     for (const token of tokens) {
-      if (keys.has(token)) {
+      if (keys.has(token) || (HANGUL.test(token) && token.length > 1 && [...keys].some((k) => HANGUL.test(k) && k.length > 1 && (k.startsWith(token) || token.startsWith(k))))) {
         if (WEAK_TOKENS.has(token)) {
           score += WEAK_POINTS;
           weak.push(token);
@@ -139,16 +145,16 @@ const REF = /^[A-Za-z0-9._/-]+$/;
 // A commit ref gives a pinned permalink. A branch ref is labelled as current
 // source, since its lines can move. Without a valid repo and ref no link is made.
 export function sourceLink(clause, source = {}) {
-  const text = `${clause.path}, line ${clause.line}`;
+  const text = `${clause.path}, ${clause.line}행`;
   const repo = typeof source?.repo === 'string' ? source.repo.replace(/\/+$/, '') : '';
   const ref = typeof source?.ref === 'string' ? source.ref : '';
   if (!GITHUB_REPO.test(repo) || !REF.test(ref) || ref.includes('..')) {
-    return { href: null, text, pin: 'unlinked', pinLabel: 'Current source in this checkout (no repository link configured)' };
+    return { href: null, text, pin: 'unlinked', pinLabel: '이 체크아웃의 현재 소스 (저장소 링크 미설정)' };
   }
   const path = clause.path.split('/').map(encodeURIComponent).join('/');
   const href = `${repo}/blob/${ref}/${path}?plain=1#L${clause.line}`;
-  if (COMMIT.test(ref)) return { href, text, pin: 'commit', pinLabel: `Pinned to commit ${ref.slice(0, 12)}` };
-  return { href, text, pin: 'branch', pinLabel: `Current source on ${ref}; line numbers can move` };
+  if (COMMIT.test(ref)) return { href, text, pin: 'commit', pinLabel: `커밋 ${ref.slice(0, 12)}에 고정` };
+  return { href, text, pin: 'branch', pinLabel: `${ref}의 현재 소스, 줄 번호는 바뀔 수 있음` };
 }
 
 function el(doc, tag, props = {}, children = []) {
@@ -173,7 +179,7 @@ function citation(doc, clause, source) {
     ? el(doc, 'a', { href: link.href, target: '_blank', rel: 'noopener noreferrer', text: link.text })
     : el(doc, 'span', { text: link.text });
   return el(doc, 'p', { class: 'rules-desk-cite' }, [
-    doc.createTextNode('Source: '),
+    doc.createTextNode('출처: '),
     where,
     el(doc, 'span', { class: 'rules-desk-pin', text: ` (${link.pinLabel})` }),
   ]);
@@ -185,14 +191,14 @@ function quoteBlock(doc, clause) {
 
 function renderResult(doc, result, source) {
   if (result.status === 'empty') {
-    return [el(doc, 'p', { text: 'Type a rules question or pick one of the common questions.' })];
+    return [el(doc, 'p', { text: '규칙 질문을 입력하거나 자주 묻는 질문을 고르세요.' })];
   }
   if (result.status === 'abstain') {
     return [
-      el(doc, 'p', { class: 'rules-desk-abstain' }, [el(doc, 'strong', { text: 'No matching rule.' })]),
+      el(doc, 'p', { class: 'rules-desk-abstain' }, [el(doc, 'strong', { text: '맞는 규칙이 없습니다.' })]),
       el(doc, 'p', {
-        text: 'No indexed clause of the Showdown rulebook or balance requirements shares words with this question, '
-          + 'so the desk will not answer it. Try other words, or read prototypes/showdown/RULEBOOK.md.',
+        text: '쇼다운 규칙서나 균형 요건의 어떤 조항도 이 질문과 겹치는 단어가 없어 답하지 않습니다. '
+          + '다른 단어로 물어보거나 prototypes/showdown/RULEBOOK.md를 읽어 보세요.',
       }),
     ];
   }
@@ -200,8 +206,8 @@ function renderResult(doc, result, source) {
   if (result.status === 'partial') {
     nodes.push(el(doc, 'p', {
       class: 'rules-desk-partial',
-      text: `Closest clause only. These words matched no rule: ${result.unmatched.join(', ')}. `
-        + 'It may not answer your question.',
+      text: `가장 가까운 조항만 보여 드립니다. 다음 단어는 어떤 규칙과도 맞지 않았습니다: ${result.unmatched.join(', ')}. `
+        + '질문의 답이 아닐 수 있습니다.',
     }));
   }
   const { clause } = result;
@@ -210,11 +216,11 @@ function renderResult(doc, result, source) {
     el(doc, 'p', { class: 'rules-desk-summary', text: clause.answer }),
     quoteBlock(doc, clause),
     citation(doc, clause, source),
-    el(doc, 'p', { class: 'rules-desk-note', text: 'The quoted text is the rule. The summary above is only a reading aid.' }),
+    el(doc, 'p', { class: 'rules-desk-note', text: '인용문(영어 원문)이 규칙입니다. 위의 한국어 요약은 읽기 도움일 뿐입니다.' }),
   );
   if (result.related.length) {
     nodes.push(
-      el(doc, 'h4', { text: 'Related clauses' }),
+      el(doc, 'h4', { text: '관련 조항' }),
       el(doc, 'ul', { class: 'rules-desk-related' }, result.related.map((other) => el(doc, 'li', {}, [
         el(doc, 'p', { text: other.label }),
         quoteBlock(doc, other),
@@ -244,11 +250,11 @@ export function mountRulesDesk(host, options = {}) {
     autocomplete: 'off',
     'aria-describedby': `${uid}-hint`,
   });
-  const form = el(doc, 'form', { class: 'rules-desk-form', role: 'search', 'aria-label': 'Rules question' }, [
-    el(doc, 'label', { for: `${uid}-q`, text: 'Ask a rules question' }),
+  const form = el(doc, 'form', { class: 'rules-desk-form', role: 'search', 'aria-label': '규칙 질문' }, [
+    el(doc, 'label', { for: `${uid}-q`, text: '규칙 질문하기' }),
     input,
-    el(doc, 'button', { type: 'submit', text: 'Ask' }),
-    el(doc, 'p', { id: `${uid}-hint`, class: 'rules-desk-hint', text: 'Use words from the rules, such as tribute, trap or turn 80.' }),
+    el(doc, 'button', { type: 'submit', text: '질문' }),
+    el(doc, 'p', { id: `${uid}-hint`, class: 'rules-desk-hint', text: '규칙에 나오는 단어를 쓰세요. 예: 제물, 함정, 80턴.' }),
   ]);
   const output = el(doc, 'div', { class: 'rules-desk-answer', role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
 
@@ -263,22 +269,22 @@ export function mountRulesDesk(host, options = {}) {
     ask(input.value);
   });
 
-  const presets = el(doc, 'div', { class: 'rules-desk-presets', role: 'group', 'aria-label': 'Common questions' },
-    PRESET_QUESTIONS.map((question) => {
-      const button = el(doc, 'button', { type: 'button', text: question });
+  const presets = el(doc, 'div', { class: 'rules-desk-presets', role: 'group', 'aria-label': '자주 묻는 질문' },
+    PRESET_QUESTIONS.map((question, i) => {
+      const button = el(doc, 'button', { type: 'button', text: PRESET_LABELS_KO[i] ?? question });
       button.addEventListener('click', () => {
-        input.value = question;
+        input.value = PRESET_LABELS_KO[i] ?? question;
         ask(question);
       });
       return button;
     }));
 
   const element = el(doc, 'section', { class: 'rules-desk', 'aria-labelledby': `${uid}-title` }, [
-    el(doc, 'h2', { id: `${uid}-title`, text: 'Rules desk' }),
+    el(doc, 'h2', { id: `${uid}-title`, text: '규칙 데스크' }),
     el(doc, 'p', {
       class: 'rules-desk-intro',
-      text: 'Answers quote the Showdown rulebook and balance requirements with their exact line. '
-        + 'If no rule matches, the desk says so instead of guessing.',
+      text: '답변은 쇼다운 규칙서와 균형 요건의 정확한 줄을 인용합니다(원문은 영어). '
+        + '맞는 규칙이 없으면 추측하지 않고 그렇게 알려 드립니다.',
     }),
     form,
     presets,

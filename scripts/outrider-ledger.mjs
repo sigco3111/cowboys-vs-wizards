@@ -116,20 +116,20 @@ function research(root, dir) {
 // curated: {camp, compare: [id, id]}. verdicts: judge() rows. decision: loadDecision(). verified: ids shipped as links.
 export function outriderLedger({curated, verdicts, decision, root, dir}) {
   const base = {schema: "outrider-ledger/1", nightWatch: nightWatch(root), record: dir};
-  if (!decision || decision.missing?.length) return {...base, status: "missing", statusText: "No Outrider cases are recorded for this build, so there is nothing to compare.", positions: []};
+  if (!decision || decision.missing?.length) return {...base, status: "missing", statusText: "이 빌드에 기록된 아웃라이더 사례가 없어 비교할 것이 없습니다.", positions: []};
   const byId = Object.fromEntries(verdicts.map((v) => [v.id, v]));
   const stale = curated.compare.filter((id) => !byId[id]?.fresh);
   if (stale.length) {
     return {...base, status: "stale", positions: [],
-      statusText: `The Outrider comparison no longer replays as measured in this build (${stale.join(", ")}), so its results and links are withheld. `
-        + "Run node scripts/outrider-gate.mjs --check for the details."};
+      statusText: `아웃라이더 비교가 이 빌드에서 측정된 대로 재현되지 않아(${stale.join(", ")}) 결과와 링크를 숨깁니다. `
+        + "자세한 내용은 node scripts/outrider-gate.mjs --check를 실행하세요."};
   }
   const entries = Object.fromEntries(decision.cases.map((c) => [c.id, c]));
   const measured = (id, arm) => { const m = (decision.results.cases?.[id] ?? decision.results[id])[arm]; return {winner: m.winner, turn: m.turn}; };
   return {...base, status: "fresh",
-    statusText: `Both positions replay in this build exactly as measured (${verdicts.filter((v) => v.fresh).length} of ${verdicts.length} recorded cases fresh).`,
+    statusText: `두 국면 모두 이 빌드에서 측정된 그대로 재현됩니다(기록된 사례 ${verdicts.length}건 중 ${verdicts.filter((v) => v.fresh).length}건이 최신).`,
     // Public positions and measured results are kept apart: the position objects never carry an outcome.
-    positions: curated.compare.map((id, i) => ({id, label: `Position ${i + 1}`, ...position(entries[id])})),
+    positions: curated.compare.map((id, i) => ({id, label: `국면 ${i + 1}`, ...position(entries[id])})),
     results: Object.fromEntries(curated.compare.map((id) => [id, {ride: measured(id, "ride"), fight: measured(id, "fight")}])),
     research: research(root, dir), sides: SIDE};
 }
