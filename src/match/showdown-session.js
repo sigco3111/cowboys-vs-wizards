@@ -11,8 +11,8 @@ import {duelFor, newSave} from "../game/showdown/progress.js";
 export const bootHill = () => duelFor(newSave(), "trail");
 
 // Two players on one screen, each with a starter deck, as in the reference screen (prototypes/showdown/main.js).
-export const twoPlayers = () => ({id: "two", kind: "two", name: "Two players",
-  lesson: "Two players on one screen, each with a starter deck. Pass the screen when the turn ends.", options: {decks: DECKS}});
+export const twoPlayers = () => ({id: "two", kind: "two", name: "2인 대결",
+  lesson: "한 화면에서 둘이 하는 대결입니다. 각자 기본 덱으로 시작합니다. 턴이 끝나면 화면을 넘기세요.", options: {decks: DECKS}});
 
 // first: who opens, overriding the duel's own option (the loser of a best-of-three game opens the next one).
 export function createShowdownSession({seed, duel, seat = "cowboy", players = 1, first}) {

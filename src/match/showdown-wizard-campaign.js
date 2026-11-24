@@ -1,4 +1,4 @@
-// The Wizard preview (Fable's ruling, "Wizard preview"): four fixed duels from the Wizard seat against the
+// The Wizard preview (Fable's ruling, "마법사 미리보기"): four fixed duels from the Wizard seat against the
 // Cowboy bot, then "Open range, Wizard seat". Fixed reward swaps and grit only: no offers, packs or builder.
 // Modelled on showdown-practice.js and the Cowboy campaign object (showdown-campaign.js) so the screen can take
 // it as a per-start campaign (seat "wizard"). Its own save holds only {v: 1, wins, losses} under its own key;
@@ -7,7 +7,7 @@ import {DECKS, RARITY, TYPES} from "../game/showdown/cards.js";
 import {GRIT_CAP, deckAfter} from "../game/showdown/trail.js";
 
 export const WIZARD_PREVIEW_KEY = "cvw-showdown-wizard-preview-v1";
-export const PREVIEW_LABEL = "Wizard preview";
+export const PREVIEW_LABEL = "마법사 미리보기";
 export const OPEN_RANGE_ID = "wizard:open";
 const DECK_SIZE = 16;
 const WIZARD_BASE = 5;
@@ -18,17 +18,17 @@ export const WIZARD_STARTER = Object.freeze({"wizard-skeleton": 10, "wizard-wiza
 // reward: [card earned, card it replaces, copies], paid on the first win. Numbers are Fable's final table (../ruling.md):
 // Wagon Ring's deck is the one measured replacement; Trapline Pass ships at Cowboy Base 3. The Wizard Base is 5 + grit.
 export const WIZARD_TRACK = Object.freeze([
-  {id: "dry-gulch", name: "Dry Gulch", level: 0, base: 3, deck: {"cowboy-sheriff": 16},
-    lesson: "Your Wizard costs one tribute, then raises the last Undead in your graveyard with 1 orb. Pay with a Skeleton and it returns, unless all three slots are full.",
+  {id: "dry-gulch", name: "마른 골짜기", level: 0, base: 3, deck: {"cowboy-sheriff": 16},
+    lesson: "마법사는 제물 하나가 필요하며, 묘지의 마지막 언데드를 오브 1개로 되살립니다. 해골을 제물로 내면 해골이 돌아옵니다. 칸 세 개가 모두 차 있으면 안 됩니다.",
     reward: [["wizard-raven-familiar", "wizard-skeleton", 2]]},
-  {id: "wagon-ring", name: "Wagon Ring", level: 0, base: 4, deck: {"cowboy-sheriff": 14, "cowboy-covered-wagon": 2},
-    lesson: "A Raven Familiar draws a card when it arrives. Pay for the Wizard with it and an earlier Skeleton rises instead. A Covered Wagon has Guard: it must fall first.",
+  {id: "wagon-ring", name: "마차 원진", level: 0, base: 4, deck: {"cowboy-sheriff": 14, "cowboy-covered-wagon": 2},
+    lesson: "까마귀 사역마는 등장할 때 카드를 한 장 뽑습니다. 이것을 마법사의 제물로 쓰면 먼저 쓰러진 해골이 대신 되살아납니다. 포장마차는 수호를 가지므로 먼저 쓰러뜨려야 합니다.",
     reward: [["wizard-bone-wall", "wizard-skeleton", 2]]},
-  {id: "trapline-pass", name: "Trapline Pass", level: 1, base: 3, deck: deckAfter(4),
-    lesson: "A Bone Wall has Guard. Their face-down card is a Bear Trap: send a raised 1-orb Skeleton in first.",
+  {id: "trapline-pass", name: "덫줄 고개", level: 1, base: 3, deck: deckAfter(4),
+    lesson: "뼈 방벽은 수호를 가집니다. 상대의 뒷면 카드는 곰덫입니다. 되살린 오브 1개짜리 해골을 먼저 보내세요.",
     reward: [["wizard-imp", "wizard-skeleton", 1], ["wizard-hex", "wizard-singularity", 1]]},
-  {id: "high-noon", name: "High Noon", level: 1.5, base: 4, deck: DECKS.cowboy,
-    lesson: "The whole posse, played with a plan. Your Imp strikes the turn it arrives; your Hex cancels one attack.",
+  {id: "high-noon", name: "하이 눈", level: 1.5, base: 4, deck: DECKS.cowboy,
+    lesson: "무리 전체를 계획적으로 운용하세요. 임프는 등장한 턴에 공격하고, 저주는 공격 하나를 무효로 합니다.",
     reward: [["wizard-dragon", "wizard-wizard", 1]]},
 ].map((duel) => Object.freeze({...duel, deck: Object.freeze({...duel.deck})})));
 
@@ -121,8 +121,8 @@ export function createWizardPreview(storage) {
   function duel(id, played) {
     const wizard = wizardDeck(played) ? {...played} : deck();
     if (id === OPEN_RANGE_ID) {
-      return done() ? {id, kind: "wizard", seat: "wizard", preview: true, name: "Open range, Wizard seat", level: 2, reward: [],
-        lesson: "Play your earned Wizard deck against the full Cowboy deck. The Cowboys plan every turn. It pays nothing.",
+      return done() ? {id, kind: "wizard", seat: "wizard", preview: true, name: "열린 벌판, 마법사 자리", level: 2, reward: [],
+        lesson: "얻은 마법사 덱으로 카우보이 전체 덱과 맞붙습니다. 카우보이는 매 턴 계획을 세웁니다. 보상은 없습니다.",
         options: {decks: {wizard, cowboy: {...DECKS.cowboy}}}} : null;
     }
     const index = save.wins;
@@ -138,7 +138,7 @@ export function createWizardPreview(storage) {
     duels: () => [
       ...WIZARD_TRACK.map((each, index) => ({id: trackId(each), kind: "wizard", index, name: each.name,
         state: index < save.wins ? "won" : index === save.wins ? "open" : "locked"})),
-      {id: OPEN_RANGE_ID, kind: "wizard", index: WIZARD_TRACK.length, name: "Open range, Wizard seat", state: done() ? "open" : "locked"},
+      {id: OPEN_RANGE_ID, kind: "wizard", index: WIZARD_TRACK.length, name: "열린 벌판, 마법사 자리", state: done() ? "open" : "locked"},
     ],
     trailDuel: () => (done() ? null : duel(trackId(WIZARD_TRACK[save.wins]))),
     duel,

@@ -7,7 +7,7 @@ import {choose, deckProblems, duelFor, duelList, newSave, openPack, owned, settl
 import {GRIT_CAP, TRAIL} from "../game/showdown/trail.js";
 
 export class CampaignChanged extends Error {
-  constructor() { super("Your Camp changed in another tab. The latest progress is loaded."); }
+  constructor() { super("다른 탭에서 캠프가 바뀌었습니다. 최신 진행 상황을 불러왔습니다."); }
 }
 
 // deferImport (K-096, a direct ?practice boot): write nothing yet. The keepsake import and the career load wait

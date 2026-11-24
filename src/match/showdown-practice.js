@@ -6,7 +6,7 @@
 import {bootHill} from "./showdown-session.js";
 
 export const PRACTICE_SEEDS = [0, 60];
-const NOTE = "Practice: nothing here is saved.";
+const NOTE = "연습: 여기서는 아무것도 저장되지 않습니다.";
 
 // The seed for a raw ?practice value, or null. Only the exact strings "0" and "60" pass.
 export function practiceSeed(raw) {
