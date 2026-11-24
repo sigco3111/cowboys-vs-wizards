@@ -4,6 +4,7 @@
 // has its own Start preview over. Everything it shows comes from the preview object
 // (src/match/showdown-wizard-campaign.js); it reads and writes no Cowboy progress.
 // Selectors are listed for the browser check in the release notes (entry-api.md).
+import {josa} from "./josa.js";
 import {TYPES} from "../game/showdown/cards.js";
 import {GRIT_CAP} from "../game/showdown/trail.js";
 import {pays} from "./showdown-screen.js";
@@ -17,7 +18,7 @@ const TEMPLATE = `<summary>마법사 미리보기</summary>
   <p id="wizard-deck" class="sd-note"></p>
   <div class="sd-row"><button type="button" id="wizard-reset">미리보기 다시 시작</button> <span id="wizard-reset-note" class="sd-note" role="status"></span></div>`;
 
-const swaps = (reward) => reward.map(([type, replaced, copies]) => `${TYPES[replaced].name} ×${copies}을(를) ${TYPES[type].name} ×${copies}(으)로 교체`).join(", ");
+const swaps = (reward) => reward.map(([type, replaced, copies]) => `${josa(`${TYPES[replaced].name} ×${copies}`, "을")} ${josa(`${TYPES[type].name} ×${copies}`, "으로")} 교체`).join(", ");
 const earned = (reward) => pays(reward.map(([type, , copies]) => [type, copies]));
 const tileId = (id) => `wizard-duel-${id.replace(/^wizard:/, "")}`;
 

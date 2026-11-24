@@ -11,6 +11,7 @@
 // Wizard seat (for the proposed Wizard campaign, docs/design/showdown-wizard-campaign-brief.md): start(..., {seat:
 // "wizard"}) gives the human the Wizards against the bot's Cowboys. It settles only through a campaign passed to
 // that start, never through the mount's (Cowboy) campaign, and adds no playtest line.
+import {josa} from "./josa.js";
 import {EFFECTS, KEYWORDS, RARITY, TYPES, cardOf, has, tributes, typeOf} from "../game/showdown/cards.js";
 import {presentEvent} from "../game/showdown/presenter.js";
 import {newRunId} from "../match/showdown-playtest.js";
@@ -323,7 +324,7 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     return [
       earned.captured ? `<h2>생포</h2><div class="sd-row"><div class="sd-card ${TYPES[earned.captured].side} ${TYPES[earned.captured].rarity}" data-frame="${TYPES[earned.captured].kind}">${face(earned.captured)}</div></div>` : "",
       earned.cards.length ? `<h2>컬렉션에 새로 추가</h2><p class="sd-good">획득: ${pays(earned.cards)}.</p>` : "",
-      intoDeck.length ? `<p class="sd-note">현재 덱: ${intoDeck.map(([type, copies, replaced]) => `${TYPES[replaced].name} ×${copies}을(를) ${TYPES[type].name} ×${copies}(으)로 교체`).join(", ")}.</p>` : "",
+      intoDeck.length ? `<p class="sd-note">현재 덱: ${intoDeck.map(([type, copies, replaced]) => `${josa(`${TYPES[replaced].name} ×${copies}`, "을")} ${josa(`${TYPES[type].name} ×${copies}`, "으로")} 교체`).join(", ")}.</p>` : "",
       earned.packs ? `<p class="sd-good">획득: ${plural(earned.packs, "pack")}. 캠프에서 열어 보세요.</p>` : "",
       earned.cards.length && !intoDeck.length ? `<p class="sd-note">컬렉션에 있지만 아직 덱에는 없습니다. 캠프의 덱 구성을 사용하세요.</p>` : "",
       won && offer ? `<h2>${OFFER_HEADING}</h2>${offerRow(offer, camp.owned)}`
@@ -425,7 +426,7 @@ export function mountShowdown(root, {onHome, campaign, writeCamp = (change) => c
     const canCover = attacking && options.some((a) => a.type === "cover" && a.slot === pick.troop);
     const guarded = view.sides[foe].board.some((troop) => troop && has(troop.cardId, "guard"));
     $("sd-prompt").textContent = r ? "" : pick?.tributes ? `선택: ${name(pick.card)}의 대가로 묘지에 보낼 내 부대 ${tributes(pick.card)}개를 고르세요.`
-      : kind === "gear" ? `선택: ${name(pick.card)}을(를) 들 내 부대 하나를 고르세요.`
+      : kind === "gear" ? `${josa(name(pick.card), "을")} 들고 갈 내 부대를 하나 고르세요.`
       : kind === "spell" ? `선택: ${name(pick.card)}의 대상이 될 적 부대를 고르세요.`
       : attacking ? `${aims.size === 0 ? "이 부대는 지금 공격할 수 없습니다." : guarded ? "수호 부대가 가로막고 있습니다. 먼저 공격하세요." : aims.has("base") && aims.size === 1 ? "적 부대가 없습니다. 기지를 공격하세요." : "선택: 공격할 대상을 고르세요."}${
         canCover ? " 아니면 엄폐하세요. 다음 턴까지 기지가 받는 추가 피해를 막아 주지만 반격하지는 못합니다." : ""}`

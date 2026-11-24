@@ -6,6 +6,7 @@
 // check passed, both name the same base, inputs and change (and the same record hash when the witness
 // seals one), the change matches the card in this build, and the witness adds up.
 // No timer, audio or network: every step is a button press or an arrow key.
+import {josa} from "./josa.js";
 import {TYPES, typeOf} from "../game/showdown/cards.js";
 import {FIELD_TRIAL} from "./field-trial-data.js";
 
@@ -131,7 +132,7 @@ export function checkFieldTrial(input = FIELD_TRIAL, types = TYPES) {
   if (witness.inputs === undefined || witness.inputs === null || fresh.inputs === undefined || fresh.inputs === null) {
     return refuse("invalid", EMPTY_TEXT.invalid);
   }
-  const mismatch = (what) => refuse("mismatch", `새 검사와 증인 리플레이가 서로 다른 ${what}을(를) 가리켜 수리 과정을 재생하지 않습니다.`);
+  const mismatch = (what) => refuse("mismatch", `새 검사와 증인 리플레이가 서로 다른 ${josa(what, "을")} 가리켜 수리 과정을 재생하지 않습니다.`);
   if (seal !== undefined && fresh.recordSha256 !== seal) return mismatch("새 검사 기록");
   if (fresh.base !== witness.base) return mismatch("기준");
   if (canonical(fresh.inputs) !== canonical(witness.inputs)) return mismatch("입력 묶음");

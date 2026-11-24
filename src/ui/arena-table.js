@@ -7,6 +7,7 @@
 // Nothing here plays, scores or verifies a game. A record that is missing a field or disagrees with
 // itself is not shown at all. Cards still in a hand are never shown: the table names only cards that
 // were played face up, never a face-down trap, never the other legal options and never event payloads.
+import {josa} from "./josa.js";
 import {TYPES} from "../game/showdown/cards.js";
 import SHOWCASE from "../../docs/evidence/saloon-agent-arena/showcase.json" with {type: "json"};
 
@@ -194,7 +195,7 @@ export function personalityLines(policy, step) {
   const prefer = preferKey ? policy[preferKey].prefer : [];
   const kept = counts[step.type] - chosenRuledOut;
   if (FROM_HAND.has(step.type)) {
-    if (prefer.length) lines.push(`${TYPE_WORD[step.type]}이(가) 가능하면 ${list(prefer)}을(를) 선호합니다.`);
+    if (prefer.length) lines.push(`${josa(TYPE_WORD[step.type], "이")} 가능하면 ${josa(list(prefer), "을")} 선호합니다.`);
     if (step.type === "summon" && policy.summon.maxTributes < 2) {
       lines.push(`${policy.summon.maxTributes === 0 ? "제물 없는 소환만 합니다" : `제물은 최대 ${policy.summon.maxTributes}개까지만 씁니다`}.`);
     }
@@ -254,7 +255,7 @@ export function stepHtml(view, index) {
   return `<p class="arena-step-head"><strong>${index + 1}/${steps.length}단계</strong>, ${step.turn}턴</p>
     <p class="arena-did" data-side="${step.side}"><strong>${name}</strong> ${esc(actionText(step.action, view.types))}.</p>
     ${events.length ? `<p class="sd-note">엔진 보고: ${esc(list(events))}.</p>` : ""}
-    <ul class="arena-why" aria-label="${name}이(가) 이렇게 선택한 이유">${lines.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>`;
+    <ul class="arena-why" aria-label="${josa(name, "이")} 이렇게 선택한 이유">${lines.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>`;
 }
 
 // Pure: the whole table, opened on view.start, or an honest note.

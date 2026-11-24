@@ -3,6 +3,7 @@
 // the Wanted hunts and Open range (the even match and best of three), two players on one screen at any
 // time, the saved deck and collection, Build deck, the save code with Start over, and the playtest report.
 // Every rule (what is open, what a win pays, what a pack holds) comes from progress.js through the campaign.
+import {josa} from "./josa.js";
 import {TYPES} from "../game/showdown/cards.js";
 import {BOUNTIES, HUNTS, RIVALS, trailDone} from "../game/showdown/progress.js";
 import {decodeSaveCode, describeSave, encodeSave, sameSave} from "../game/showdown/savecode.js";
@@ -86,7 +87,7 @@ export function mountCamp(root, {campaign, writeCamp = (change) => change(), pla
       : opened ? `<h2>팩 안의 카드</h2><div class="sd-row">${opened.map((type) => `<div class="sd-card cowboy ${TYPES[type].rarity}" data-frame="${TYPES[type].kind}" data-opened="${type}">${face(type)}</div>`).join("")}</div>
         <div class="sd-row"><button type="button" id="camp-pack-done">${progress.packs ? `다음 팩 열기 (${progress.packs} 남음)` : "컬렉션에 추가"}</button></div>`
       : progress.packs ? `${hint}<h2>${plural(progress.packs, "pack")} 열기</h2><div class="sd-row"><button type="button" id="camp-pack">팩 열기: 카드 세 장</button></div>`
-      : `${hint}${next ? `<p id="camp-next">${progress.wins === 0 ? "여기서 시작" : "다음"}: <strong>${next.name}</strong> 을(를) 눌러 ${progress.wins === 0 ? "첫 대결을 시작하세요" : "it"}.</p>` : "<p>트레일 전체를 클리어했습니다.</p>"}`;
+      : `${hint}${next ? `<p id="camp-next">${progress.wins === 0 ? "여기서 시작" : "다음"}: <strong>${next.name}</strong>${josa(next.name, "을").slice(next.name.length)} 눌러 ${progress.wins === 0 ? "첫 대결을 시작하세요" : "다음 대결을 시작하세요"}.</p>` : "<p>트레일 전체를 클리어했습니다.</p>"}`;
 
     paintCardFaces?.($("camp-claim"), "[data-choose], [data-opened]");
 
