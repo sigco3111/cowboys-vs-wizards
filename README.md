@@ -53,3 +53,14 @@ node scripts/stage-pages.mjs   # dist/web 생성
 ## 📜 라이선스 · 크레딧
 
 MIT 라이선스. 원작자 **alejandro-publius** 의 저작물을 기반으로 한 한글화입니다.
+
+## 검증 기준 변경 (한글화에 따른 기대값 조정)
+
+한글화로 화면 문구와 카드 이름이 바뀌어, 언어에 의존하는 테스트 기대값만 한글판에 맞췄습니다. 규칙 검사 자체는 그대로 유지합니다.
+
+- 테스트의 영어 문구 기대값(정규식, 라벨, CSV 키워드·효과문)을 한글로 교체했습니다.
+- 심판(referee, 동결된 Python)은 원본 영문 카드 이름으로 판정하므로 `scripts/referee/catalog-names.json`에 영문 이름을 보관하고, 심판 관련 테스트는 원래 영문 기대값을 그대로 씁니다.
+- 카드 명세(`.kiro/specs/duel-card-pipeline/cards/*.json`)의 `showdown.name`에 한글 이름을 두고 생성기가 이를 허용합니다. 레인 카드 이름은 영문 그대로입니다.
+- 규칙 데스크 인덱스는 `scripts/rules-desk.ko.json` 오버레이를 합쳐 생성하며 `--check`가 통과합니다. 영문 규칙서 인용문은 원문 그대로 둡니다.
+- 엔진 동일성 검사(야간 감시 영수증)는 `card-specs.generated.js`, `showdown/cards.js`가 과거 커밋과 바이트가 다르다고 표시합니다. 두 파일(및 `rules.js`)의 코드 골격은 원본과 동일하고 문자열·주석만 다릅니다.
+- 원본에서도 실패하는 테스트: `tests/experiments/trap-placeholder-scenarios.test.js`("no command for ride-out"). 한글화와 무관합니다.
