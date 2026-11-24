@@ -92,7 +92,7 @@ test("the deck builder saves only a legal deck and side deck; the side deck is k
   assert.ok(campaign.deckProblems(short, {[plain]: 1}).length > 0);
   assert.throws(() => campaign.withDeck(short, {[plain]: 1}));
   // Five side cards: refused. Four: kept.
-  assert.ok(campaign.deckProblems(deck, {[plain]: 5}).some((p) => /side deck/.test(p)));
+  assert.ok(campaign.deckProblems(deck, {[plain]: 5}).some((p) => /사이드 덱/.test(p)));
   campaign.withDeck(deck, {[plain]: 4});
   assert.deepEqual(createCampaign(storage).progress().side, {[plain]: 4});
   // More copies than owned: refused.

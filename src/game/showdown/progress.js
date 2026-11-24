@@ -58,15 +58,15 @@ export const trailDone = (save) => save.wins >= TRAIL.length;
 // Why this deck and side deck cannot be saved; an empty list means they can.
 export function deckProblems(save, deck, side = {}) {
   const problems = [];
-  if (total(deck) !== DECK_SIZE) problems.push(`덱은 정확히 ${DECK_SIZE}장이어야 합니다. 현재 ${total(deck)}.`);
-  if (total(side) > SIDE_SIZE) problems.push(`사이드 덱은 최대 ${SIDE_SIZE}장이어야 합니다. 현재 ${total(side)}.`);
+  if (total(deck) !== DECK_SIZE) problems.push(`덱은 정확히 ${DECK_SIZE}장이어야 합니다. 이 덱은 ${total(deck)}장입니다.`);
+  if (total(side) > SIDE_SIZE) problems.push(`사이드 덱은 최대 ${SIDE_SIZE}장입니다. 이 사이드 덱은 ${total(side)}장입니다.`);
   for (const type of new Set([...Object.keys(deck), ...Object.keys(side)])) {
     const copies = (deck[type] ?? 0) + (side[type] ?? 0);
     const card = TYPES[type];
-    if (![deck[type] ?? 0, side[type] ?? 0].every((count) => Number.isInteger(count) && count >= 0)) problems.push(`${type}: 덱에는 완전한 카드만 들어갑니다.`);
+    if (![deck[type] ?? 0, side[type] ?? 0].every((count) => Number.isInteger(count) && count >= 0)) problems.push(`${type}: 덱에는 온전한 카드 장수만 들어갑니다.`);
     if (!card || card.side !== "cowboy") problems.push(`${type} 은(는) 카우보이 카드가 아닙니다.`);
-    else if (copies > owned(save, type)) problems.push(`보유 수량 ${owned(save, type)} ${card.name}장, 요청: ${copies}.`);
-    else if (copies > cap(type)) problems.push(`${card.name} is ${RARITY[card.rarity][0]}: 최대 ${cap(type)}장까지 덱과 사이드 덱에 넣을 수 있습니다.`);
+    else if (copies > owned(save, type)) problems.push(`${card.name} 보유 수량은 ${owned(save, type)}장이며 ${copies}장은 넣을 수 없습니다.`);
+    else if (copies > cap(type)) problems.push(`${card.name}은(는) ${RARITY[card.rarity][0]} 등급입니다: 덱과 사이드 덱을 합쳐 최대 ${cap(type)}장입니다.`);
   }
   return problems;
 }
