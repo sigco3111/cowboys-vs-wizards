@@ -20,6 +20,7 @@ import {
 } from '../../scripts/build-rules-desk.mjs';
 import {
   PRESET_QUESTIONS,
+  PRESET_LABELS_KO,
   RULES_INDEX,
   mountRulesDesk,
   normalizeToken,
@@ -151,7 +152,7 @@ test('source links pin commits, label branches and never invent a repository', (
   assert.equal(pinned.pin, 'commit');
   const branch = sourceLink(clause, { repo: 'https://github.com/owner/game/', ref: 'main' });
   assert.equal(branch.pin, 'branch');
-  assert.match(branch.pinLabel, /Current source on main/);
+  assert.match(branch.pinLabel, /main의 현재 소스/);
   for (const source of [undefined, {}, { repo: 'https://evil.example/owner/game', ref: 'main' },
     { repo: 'https://github.com/owner/game', ref: '../x' }, { repo: 'javascript:alert(1)', ref: 'main' }]) {
     const link = sourceLink(clause, source);
@@ -220,21 +221,21 @@ test('mounted desk answers presets and typed questions with cited quotes', () =>
   assert.equal(label.getAttribute('for'), input.getAttribute('id'));
   const [output] = find(host, (n) => n.getAttribute('aria-live') === 'polite');
   const presetButtons = find(host, (n) => n.tagName === 'BUTTON' && n.getAttribute('type') === 'button');
-  assert.deepEqual(presetButtons.map((b) => b.textContent), PRESET_QUESTIONS);
+  assert.deepEqual(presetButtons.map((b) => b.textContent), PRESET_LABELS_KO);
 
   presetButtons[0].dispatch('click');
   const tribute = stored.clauses.find((c) => c.id === 'tribute');
-  assert.equal(input.value, PRESET_QUESTIONS[0]);
+  assert.equal(input.value, PRESET_LABELS_KO[0]);
   assert.ok(output.textContent.includes(tribute.quote.replaceAll('**', '')), output.textContent);
-  assert.ok(output.textContent.includes(`${RULEBOOK}, line ${tribute.line}`));
+  assert.ok(output.textContent.includes(`${RULEBOOK}, ${tribute.line}행`));
   const [link] = find(output, (n) => n.tagName === 'A');
   assert.ok(link.getAttribute('href').endsWith(`/blob/${sha}/${RULEBOOK}?plain=1#L${tribute.line}`));
-  assert.match(output.textContent, /Pinned to commit fedcba987654/);
+  assert.match(output.textContent, /커밋 fedcba987654에 고정/);
 
   const [form] = find(host, (n) => n.tagName === 'FORM');
   input.value = 'Can I cast without a troop?';
   assert.equal(form.dispatch('submit').defaultPrevented, true);
-  assert.match(output.textContent, /No matching rule\./);
+  assert.match(output.textContent, /맞는 규칙이 없습니다\./);
   assert.equal(find(output, (n) => n.tagName === 'BLOCKQUOTE').length, 0, 'no quote shown when abstaining');
 
   desk.destroy();
@@ -247,6 +248,6 @@ test('mounted desk without a repository labels the current source and makes no l
   desk.ask('When does a trap spring?');
   const [output] = find(host, (n) => n.getAttribute('aria-live') === 'polite');
   assert.equal(find(output, (n) => n.tagName === 'A').length, 0);
-  assert.match(output.textContent, /Current source in this checkout/);
+  assert.match(output.textContent, /이 체크아웃의 현재 소스/);
   assert.throws(() => mountRulesDesk(null), TypeError);
 });

@@ -206,12 +206,16 @@ export function locateQuote(lines, quote) {
   return hits;
 }
 
+// Korean overlay (label, keywords, answer per clause id). The quotes stay in English: they are the authority.
+const KO = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'rules-desk.ko.json'), 'utf8'));
+
 export function buildIndex(readText = readRepoText, clauses = CLAUSES) {
   const problems = [];
   const ids = new Set();
   const files = new Map();
   const out = [];
-  for (const spec of clauses) {
+  for (const base of clauses) {
+    const spec = clauses === CLAUSES && KO.clauses[base.id] ? { ...base, ...KO.clauses[base.id] } : base;
     if (ids.has(spec.id)) problems.push(`duplicate clause id ${spec.id}`);
     ids.add(spec.id);
     if (!spec.quote || !spec.answer || !spec.label || !spec.keywords?.length) {

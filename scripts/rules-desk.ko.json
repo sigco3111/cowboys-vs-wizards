@@ -1,0 +1,342 @@
+{
+ "sources": [
+  {
+   "path": "prototypes/showdown/RULEBOOK.md",
+   "title": "Showdown rulebook"
+  },
+  {
+   "path": ".kiro/specs/night-shift-balance-contract/requirements.md",
+   "title": "Night Shift balance contract"
+  }
+ ],
+ "clauses": {
+  "win-base": {
+   "label": "승리 조건",
+   "keywords": [
+    "win",
+    "lose",
+    "victory",
+    "base",
+    "orb",
+    "deck",
+    "16",
+    "size",
+    "승리",
+    "패배",
+    "기지",
+    "오브",
+    "덱",
+    "16",
+    "크기"
+   ],
+   "answer": "각 진영의 기지는 오브 5개로 시작합니다. 오브가 모두 없어진 기지는 패배합니다. 덱은 카드 16장입니다."
+  },
+  "tribute": {
+   "label": "제물과 부대 비용",
+   "keywords": [
+    "tribute",
+    "sacrifice",
+    "star",
+    "cost",
+    "free",
+    "price",
+    "pay",
+    "제물",
+    "희생",
+    "별",
+    "비용",
+    "무료",
+    "가격"
+   ],
+   "answer": "별 1~4개 부대는 무료입니다. 별 5~6개는 제물 하나(내 부대 하나를 묘지로 보냄)가 필요하고, 7개 이상은 둘이 필요합니다."
+  },
+  "opening-hand": {
+   "label": "시작 패",
+   "keywords": [
+    "shuffle",
+    "start",
+    "hand",
+    "card",
+    "4",
+    "setup",
+    "deal",
+    "시작",
+    "패",
+    "첫",
+    "드로우",
+    "뽑"
+   ],
+   "answer": "두 덱을 섞고 각자 카드 4장을 뽑습니다."
+  },
+  "first-player": {
+   "label": "선공",
+   "keywords": [
+    "first",
+    "second",
+    "go",
+    "open",
+    "begin",
+    "선공",
+    "후공",
+    "먼저",
+    "순서"
+   ],
+   "answer": "한 쪽이 먼저 시작하며, 후공은 카드를 1장 더 뽑습니다. 선공을 어떻게 정하는지는 이 규칙에 없습니다."
+  },
+  "draw-step": {
+   "label": "턴마다 뽑기",
+   "keywords": [
+    "draw",
+    "step",
+    "skip",
+    "뽑",
+    "드로우",
+    "턴"
+   ],
+   "answer": "매 턴 카드를 한 장 뽑습니다. 단 선공은 1턴에 뽑지 않습니다."
+  },
+  "hand-limit": {
+   "label": "패 한도",
+   "keywords": [
+    "hand",
+    "full",
+    "limit",
+    "6",
+    "discard",
+    "hold",
+    "maximum",
+    "패",
+    "한도",
+    "6",
+    "버려",
+    "가득"
+   ],
+   "answer": "뽑을 때 이미 6장을 들고 있으면, 뽑은 카드는 버려집니다."
+  },
+  "play-limit": {
+   "label": "카드 내기",
+   "keywords": [
+    "play",
+    "card",
+    "once",
+    "per",
+    "order",
+    "내기",
+    "순서",
+    "한도",
+    "플레이"
+   ],
+   "answer": "카드는 순서에 상관없이 낼 수 있으며, 각 종류는 한 턴에 최대 한 번입니다."
+  },
+  "other-card": {
+   "label": "주문, 장비, 장소",
+   "keywords": [
+    "spell",
+    "gear",
+    "location",
+    "other",
+    "주문",
+    "장비",
+    "장소"
+   ],
+   "answer": "매 턴 낼 수 있는 것 중 하나는 그 밖의 카드입니다: 주문, 장비 또는 장소."
+  },
+  "act": {
+   "label": "행동하면 카드 내기 끝",
+   "keywords": [
+    "act",
+    "acting",
+    "action",
+    "after",
+    "attack",
+    "play",
+    "card",
+    "행동",
+    "공격",
+    "엄폐",
+    "카드"
+   ],
+   "answer": "각 부대는 한 턴에 한 번 공격하거나 엄폐로 행동합니다. 어느 부대든 행동하면 그 턴에는 더 이상 카드를 낼 수 없습니다."
+  },
+  "turn-1": {
+   "label": "1턴에는 공격 없음",
+   "keywords": [
+    "nobody",
+    "1",
+    "turn",
+    "attack",
+    "1턴",
+    "첫",
+    "공격"
+   ],
+   "answer": "1턴에는 아무도 공격하지 않습니다."
+  },
+  "resting": {
+   "label": "쉬는 부대",
+   "keywords": [
+    "rest",
+    "arrive",
+    "free",
+    "tribute",
+    "attack",
+    "same",
+    "쉬",
+    "등장",
+    "공격",
+    "속사",
+    "제물"
+   ],
+   "answer": "무료로 낸 부대는 등장한 턴에 공격할 수 없습니다. 제물을 내고 낸 부대는 공격할 수 있습니다."
+  },
+  "guard": {
+   "label": "대상 선택과 수호",
+   "keywords": [
+    "guard",
+    "target",
+    "choose",
+    "enemy",
+    "수호",
+    "대상",
+    "공격",
+    "선택"
+   ],
+   "answer": "적 부대는 무엇이든 공격할 수 있지만, 적에게 수호 부대가 있으면 수호 부대를 골라야 합니다."
+  },
+  "base-attack": {
+   "label": "기지 공격",
+   "keywords": [
+    "base",
+    "direct",
+    "directly",
+    "attack",
+    "empty",
+    "기지",
+    "공격",
+    "오브",
+    "직접"
+   ],
+   "answer": "적에게 부대가 없을 때만 기지를 직접 공격할 수 있습니다. 기지는 내 부대의 공격력만큼 오브를 잃습니다."
+  },
+  "cover": {
+   "label": "엄폐",
+   "keywords": [
+    "cover",
+    "hide",
+    "defend",
+    "defense",
+    "엄폐",
+    "방어",
+    "지속"
+   ],
+   "answer": "부대는 공격 대신 엄폐할 수 있으며, 등장한 턴에도 가능합니다. 엄폐는 내 다음 턴까지 이어집니다."
+  },
+  "trap-spring": {
+   "label": "함정 발동 시점",
+   "keywords": [
+    "trap",
+    "spring",
+    "trigger",
+    "oldest",
+    "activate",
+    "함정",
+    "발동",
+    "뒷면"
+   ],
+   "answer": "적 부대가 공격하면, 가장 오래된 뒷면 함정이 공격이 적중하기 전에 발동합니다. 공격 한 번에 함정은 하나만 발동합니다."
+  },
+  "full-hand-check": {
+   "label": "패 한도를 확인하는 때",
+   "keywords": [
+    "hand",
+    "full",
+    "limit",
+    "check",
+    "패",
+    "한도",
+    "확인",
+    "뽑"
+   ],
+   "answer": "패 한도는 카드를 뽑을 때만 확인합니다."
+  },
+  "turn-80": {
+   "label": "턴이 다 끝났을 때",
+   "keywords": [
+    "80",
+    "end",
+    "after",
+    "run",
+    "out",
+    "timeout",
+    "long",
+    "80",
+    "턴",
+    "무승부",
+    "종료",
+    "오브"
+   ],
+   "answer": "80턴이 지나도 끝나지 않은 게임은 기지의 오브가 더 많은 쪽이 이깁니다."
+  },
+  "best-of-three": {
+   "label": "3판 2선승",
+   "keywords": [
+    "best",
+    "three",
+    "3",
+    "match",
+    "series",
+    "loser",
+    "next",
+    "first",
+    "swap",
+    "side",
+    "3판",
+    "2선승",
+    "사이드",
+    "덱",
+    "교체"
+   ],
+   "answer": "먼저 두 판을 이기는 쪽이 3판 2선승을 가져갑니다. 진 쪽이 다음 판에서 먼저 시작하며, 판 사이에 사이드 덱과 카드를 한 장씩 맞바꿀 수 있습니다."
+  },
+  "nsb-1": {
+   "label": "균형 요건 NSB-1: 진영별 승률",
+   "keywords": [
+    "balance",
+    "requirement",
+    "faction",
+    "share",
+    "band",
+    "45",
+    "55",
+    "percent",
+    "threshold",
+    "nsb",
+    "균형",
+    "승률",
+    "진영",
+    "nsb"
+   ],
+   "answer": "균형 요건 NSB-1: 각 진영의 승률은 45% 이상 55% 이하여야 합니다."
+  },
+  "nsb-2": {
+   "label": "균형 요건 NSB-2: 선공 쏠림",
+   "keywords": [
+    "balance",
+    "requirement",
+    "seat",
+    "skew",
+    "tolerance",
+    "distance",
+    "baseline",
+    "50",
+    "threshold",
+    "nsb",
+    "균형",
+    "선공",
+    "쏠림",
+    "승률",
+    "nsb"
+   ],
+   "answer": "균형 요건 NSB-2: 선공 플레이어의 승률이 50%에서 벗어난 폭은 기준선보다 최대 1퍼센트포인트까지만 커질 수 있습니다."
+  }
+ }
+}
