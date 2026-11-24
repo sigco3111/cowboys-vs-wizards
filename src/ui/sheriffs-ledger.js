@@ -26,14 +26,18 @@ export function ledgerRows(ledger = LEDGER) {
   }));
 }
 
+const TRIGGER_KO = {"on-demand": "수동 실행", manual: "수동 실행", schedule: "예약 실행"};
+const STATE_KO = {steady: "변동 없음", improved: "개선", regressed: "악화"};
+const stateKo = (state) => STATE_KO[state] ?? state;
+
 // Pure: the ruleset-wide line, or the pending note when no run is recorded.
 export function rulesetSummary(ledger = LEDGER) {
   const r = ledger.run;
   if (!r) return "보류: 이 규칙 묶음에 대한 야간 감시 실행 기록이 없습니다.";
-  return `야간 감시 실행 ${r.id} (${r.trigger}), ${r.local}: 커밋 ${short(r.revision)}, 기준 ${short(r.baseline)}, `
+  return `야간 감시 실행 ${r.id} (${TRIGGER_KO[r.trigger] ?? r.trigger}), ${r.local}: 커밋 ${short(r.revision)}, 기준 ${short(r.baseline)}, `
     + `시드 ${r.firstSeed}–${r.firstSeed + r.count - 1}, ${r.games.toLocaleString("en-US")}판, 각 패를 양쪽이 한 번씩 선공으로 진행. `
     + `선공 승리 ${r.first.toLocaleString("en-US")} (${pct(r.first, r.games)}). 카우보이 승리 ${r.cowboy.toLocaleString("en-US")} (${pct(r.cowboy, r.games)}). `
-    + `무승부 ${r.draw}. 규칙 테스트 통과: ${r.rulesTests}. 기준 대비 변화: ${r.state}.`;
+    + `무승부 ${r.draw}. 규칙 테스트 통과: ${r.rulesTests}. 기준 대비 변화: ${stateKo(r.state)}.`;
 }
 
 // Pure: one line per Night Shift review of this run (a one-card, one-number candidate). Reviews never change a card.
@@ -53,7 +57,7 @@ export function ledgerHtml(ledger = LEDGER) {
   const rows = ledgerRows(ledger);
   const observed = rows.filter((row) => ledger.cards.find((c) => c.type === row.type).latest).length;
   const r = ledger.run;
-  return `<summary>보안관 장부 <span class="sd-note">빌리 대 뼈 방벽 리플레이 · ${ledger.catalog.count} 카드 · ${r ? `마지막 점검 ${esc(r.state)}, 리비전 ${short(r.revision)}` : "아직 점검 없음"}</span></summary>
+  return `<summary>보안관 장부 <span class="sd-note">빌리 대 뼈 방벽 리플레이 · ${ledger.catalog.count} 카드 · ${r ? `마지막 점검 ${esc(stateKo(r.state))}, 리비전 ${short(r.revision)}` : "아직 점검 없음"}</span></summary>
   <section id="ledger-billy" class="sd-billy" aria-labelledby="ledger-billy-title">${billyReplayHtml()}</section>
   <h3 id="ledger-ruleset">전체 규칙 묶음 (카드별 아님)</h3>
   <p id="ledger-run" class="sd-note">${esc(rulesetSummary(ledger))}</p>

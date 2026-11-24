@@ -52,14 +52,16 @@ export function matchReviews(reviews, run) {
 const SPEC_DIR = ".kiro/specs/duel-card-pipeline/cards";
 const REQUIREMENTS = ".kiro/specs/duel-card-pipeline/requirements.md";
 // R1.1 names the initial migration's cards exactly; every later card is covered by R1 as a "further spec".
+export const R1_1_TYPES = ["cowboy-sheriff", "cowboy-billy", "cowboy-mounted-billy", "cowboy-deadeye", "wizard-skeleton", "wizard-wizard", "wizard-dragon", "wizard-singularity"];
+// English names as the (English) requirements document writes them; the ledger matches cards by type id.
 export const R1_1_CARDS = ["Sheriff", "Billy", "Mounted Billy", "Deadeye", "Skeleton", "Wizard", "Dragon", "Singularity"];
 
 // Assembled from parts so the text does not depend on the ICU version's joining words.
-const LA = new Intl.DateTimeFormat("en-US", {timeZone: "America/Los_Angeles", year: "numeric", month: "long", day: "numeric",
-  hour: "numeric", minute: "2-digit", hour12: true, timeZoneName: "short"});
+const LA = new Intl.DateTimeFormat("en-US", {timeZone: "America/Los_Angeles", year: "numeric", month: "numeric", day: "numeric",
+  hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZoneName: "short"});
 export function laTime(iso) {
   const p = Object.fromEntries(LA.formatToParts(new Date(iso)).map(({type, value}) => [type, value]));
-  return `${p.month} ${p.day}, ${p.year}, ${p.hour}:${p.minute} ${p.dayPeriod} ${p.timeZoneName}`;
+  return `${p.year}년 ${p.month}월 ${p.day}일 ${p.hour}:${p.minute} ${p.timeZoneName}`;
 }
 
 export function latestShowdownRun(reports) {
@@ -102,7 +104,7 @@ export function buildLedger({reports = [], reportPath = DEFAULT_REPORT, receipt 
   const digest = createHash("sha256").update(JSON.stringify(SHOWDOWN_SPECS)).digest("hex").slice(0, 16);
   const cards = SHOWDOWN_SPECS.map(({type, side, name, kind}) => ({
     type, side, name, kind, rarity: RARITY[TYPES[type].rarity][0], starter: DECKS[side][type] ?? 0,
-    spec: `${SPEC_DIR}/${type}.json`, requirement: R1_1_CARDS.includes(name) ? "R1.1" : "R1",
+    spec: `${SPEC_DIR}/${type}.json`, requirement: R1_1_TYPES.includes(type) ? "R1.1" : "R1",
     latest: stats[type] ?? null,
   }));
   const c = run?.candidate.counts;
