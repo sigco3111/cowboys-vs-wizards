@@ -68,7 +68,7 @@ export function mountBuilder(root, {campaign, writeCamp = (change) => change(), 
     }).join("");
     paintCardFaces?.($("builder-rows"), "[data-face]");
     const listed = problems();
-    $("builder-problems").innerHTML = `덱 ${sum(draft.deck)} of ${DECK_SIZE} · 사이드 덱 ${sum(draft.side)} of ${SIDE_SIZE}.${listed.length ? ` <span class="sd-warn">${listed.join(" ")}</span>` : ""}`;
+    $("builder-problems").innerHTML = `덱 ${sum(draft.deck)}/${DECK_SIZE} · 사이드 덱 ${sum(draft.side)}/${SIDE_SIZE}.${listed.length ? ` <span class="sd-warn">${listed.join(" ")}</span>` : ""}`;
     $("builder-save").disabled = listed.length > 0;
     $("builder-save").textContent = draft.pool ? "다음 게임 시작" : "덱 저장";
     $("builder-cancel").hidden = !draft.cancel;

@@ -22,7 +22,7 @@ test("hidden, with no teaser, until the first Wizard preview win; then one butto
   assert.equal(earnedControl(null), "");
   for (const wins of [1, 2, 3, 4]) assert.ok(earnedDuel(bootHillWon, previewAt(wins)), `after ${wins} wins`);
   assert.equal(earnedControl(earnedDuel(newSave(), previewAt(1))),
-    `<button type="button" id="camp-earned" data-earned="1">Two players, earned decks: not an even match</button>`);
+    `<button type="button" id="camp-earned" data-earned="1">2인, 얻은 덱: 동등한 대결 아님</button>`);
 });
 
 test("an empty Cowboy save supplies the starter deck; the Wizard deck is the preview's, read without a write", () => {

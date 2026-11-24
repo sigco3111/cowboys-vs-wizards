@@ -117,7 +117,7 @@ export function duelFor(save, id, deck = save.deck) {
     const cleared = save.hunts[key] ?? 0;
     if (!bounty || cleared >= HUNTS) return null;
     const hunt = bounty.hunts[cleared];
-    return {id, kind, name: `${bounty.name}, 사냥 ${cleared + 1} of ${HUNTS}`, lesson: bounty.lesson, level: hunt.level,
+    return {id, kind, name: `${bounty.name}, 사냥 ${cleared + 1}/${HUNTS}`, lesson: bounty.lesson, level: hunt.level,
       options: {decks: {cowboy: deck, wizard: bounty.deck}, baseOrbs: {cowboy: 5 + grit, wizard: hunt.base}, first: "cowboy",
         ...(bounty.entrance === "board" ? {opening: {wizard: [{type: bounty.boss, health: hunt.orbs}]}}
           : {arrivals: {wizard: [{type: bounty.boss, turn: bounty.lands, health: hunt.orbs}]}})}};

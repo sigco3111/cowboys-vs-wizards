@@ -94,7 +94,7 @@ export function cleanRequest(input) {
 }
 
 export const requestFileText = (text) => `${text}\n`;
-export const counterText = (value) => `${String(value ?? "").length} of ${REQUEST_MAX}자`;
+export const counterText = (value) => `${String(value ?? "").length}/${REQUEST_MAX}자`;
 
 // Pure: the whole shelf. One form, one button, no stored state.
 export function shelfHtml(view) {

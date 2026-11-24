@@ -116,7 +116,7 @@ export function mountCamp(root, {campaign, writeCamp = (change) => change(), pla
     $("camp-bounties").innerHTML = list.filter((duel) => duel.kind === "hunt").map((duel) => {
       const bounty = BOUNTIES.find((each) => `hunt:${each.id}` === duel.id);
       return tile(duel, duel.state === "won" ? `생포: ${TYPES[bounty.reward].name}` : duel.state === "locked" ? "트레일 이후"
-        : `${duel.cleared} of ${HUNTS}회 사냥 성공. 다섯 번 승리하면 생포합니다 ${TYPES[bounty.reward].name}.`);
+        : `${duel.cleared}/${HUNTS}회 사냥 성공. 다섯 번 승리하면 생포합니다 ${TYPES[bounty.reward].name}.`);
     }).join("");
     dressNotices?.(trailDone(progress));
     const open = trailDone(progress) && !progress.offer;

@@ -126,7 +126,7 @@ test("cover, gear, location, set, burn and fatigue cues mark their place", () =>
   // The Wizards set a card: the cue marks their Base and names no card.
   const set = only(cuesAfter(position({active: "wizard", hand: {wizard: ["wizard-hex-2"]}}), {type: "set", cardId: "wizard-hex-2"}).cues, "set");
   assert.deepEqual(set.marks, [{side: "wizard", at: "base"}]);
-  assert.equal(set.text, "The Wizards set a card face down.");
+  assert.equal(set.text, "마법사: 카드를 뒷면으로 놓음.");
   assert.doesNotMatch(JSON.stringify(set), CARD_ID);
 
   // Ending the turn: the Wizards draw into a full hand (burn), and with an empty deck lose an orb (fatigue).

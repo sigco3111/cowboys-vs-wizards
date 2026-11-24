@@ -59,7 +59,7 @@ test("a Wanted hunt repeats: each win clears one hunt, a loss clears none, the f
   assert.equal(campaign.progress().hunts[bounty.id] ?? 0, 0);
   for (let hunt = 1; hunt <= HUNTS; hunt += 1) {
     const duel = campaign.duel(id);
-    assert.equal(duel.name, `${bounty.name}, hunt ${hunt} of ${HUNTS}`);
+    assert.equal(duel.name, `${bounty.name}, 사냥 ${hunt}/${HUNTS}`);
     const out = campaign.settle(duel, true);
     assert.equal(out.earned.captured, hunt === HUNTS ? bounty.reward : null);
     if (campaign.progress().offer) campaign.choose(campaign.progress().offer[0]);
