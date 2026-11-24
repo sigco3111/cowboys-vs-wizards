@@ -13,7 +13,7 @@ test("the screen's presenter is the canonical one: a handler for every EVENTS en
 
 test("Boot Hill is Trail duel 1 for a new player: starter deck, Cowboys open, Wizard Base 3", () => {
   const duel = bootHill();
-  assert.equal(duel.name, "Boot Hill");
+  assert.equal(duel.name, "부트 힐");
   assert.deepEqual(duel.options.decks.cowboy, {"cowboy-sheriff": 8, "cowboy-billy": 5, "cowboy-deadeye": 3});
   assert.deepEqual(duel.options.baseOrbs, {cowboy: 5, wizard: 3});
   assert.equal(duel.options.first, "cowboy");

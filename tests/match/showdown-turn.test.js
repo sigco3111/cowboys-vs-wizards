@@ -51,10 +51,10 @@ test("a fresh landing is the referee's decision state, with hidden zones as coun
   const view = session.view();
   assert.equal(session.duel.kind, "turn");
   assert.deepEqual([view.turn, view.active, view.sides.cowboy.base, view.sides.wizard.base], [5, "cowboy", 5, 3]);
-  assert.equal(board(view, "cowboy"), "Ranger 4 | Dynamiter 1 | -");
-  assert.equal(board(view, "wizard"), "Dragon 4 | Jack-o'-Lantern 1 cover | -");
+  assert.equal(board(view, "cowboy"), "레인저 4 | 다이너마이터 1 | -");
+  assert.equal(board(view, "wizard"), "용 4 | 잭오랜턴 1 cover | -");
   assert.equal(view.sides.wizard.board[0].cardId, "wizard-dragon-0");
-  assert.deepEqual(view.sides.cowboy.traps.map((id) => cardOf(id).name), ["Bear Trap"]);
+  assert.deepEqual(view.sides.cowboy.traps.map((id) => cardOf(id).name), ["곰 덫"]);
   assert.deepEqual(view.sides.cowboy.hand.map((id) => cardOf(id).name), ["Gatling Crew", "Outrider", "Billy"]);
   assert.equal(view.seed, undefined);
   for (const hidden of ["hand", "traps", "deck"]) assert.equal(view.sides.wizard[hidden], undefined);
@@ -111,8 +111,8 @@ test("dragon-c5-70: lands on the seed-70 decision, with hidden zones as counts a
   assert.equal(session.duel.kind, "turn");
   assert.equal(session.duel.id, "turn:dragon-c5-70");
   assert.deepEqual([view.turn, view.active, view.sides.cowboy.base, view.sides.wizard.base], [5, "cowboy", 5, 4]);
-  assert.equal(board(view, "cowboy"), "Ranger 4 | Covered Wagon 4 | -");
-  assert.equal(board(view, "wizard"), "Dragon 4 | Jack-o'-Lantern 1 cover | -");
+  assert.equal(board(view, "cowboy"), "레인저 4 | 포장마차 4 | -");
+  assert.equal(board(view, "wizard"), "용 4 | 잭오랜턴 1 cover | -");
   assert.equal(view.sides.wizard.board[0].cardId, "wizard-dragon-0");
   assert.deepEqual(view.sides.cowboy.traps, []);
   assert.equal(view.seed, undefined);

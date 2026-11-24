@@ -28,18 +28,18 @@ test("a Bear Trap that defeats the attacker reads 'defeated before it struck' (s
   assert.equal(after.sides.wizard.board.some((troop) => troop?.cardId === event.target), false, "the attacker left the board");
   assert.equal(after.sides.wizard.discard.includes(event.target), true, "the attacker went to the graveyard");
   assert.notEqual(events[at + 1]?.type, "attack", "no attack landed after the trap");
-  assert.equal(presentEvent(event), "Trap! The Cowboys' Bear Trap caught Imp: defeated before it struck.");
+  assert.equal(presentEvent(event), "함정! 카우보이 곰 덫 → 임프: 공격 전에 쓰러짐.");
 });
 
 test("a Bear Trap that leaves the attacker standing reads 'attacked anyway' (seed 15)", () => {
   const {events, at, event} = firstTrap(15, (e) => bearTrap(e) && e.left > 0);
   assert.equal(event.stopped, false);
   assert.equal(events[at + 1]?.type, "attack");
-  assert.match(presentEvent(event), new RegExp(`it dropped to ${event.left} and attacked anyway\\.$`));
+  assert.match(presentEvent(event), new RegExp(`오브 ${event.left}개로 줄었지만 그래도 공격함\\.$`));
 });
 
 test("Hex still reads 'its attack was cancelled' (seed 14)", () => {
   const {event} = firstTrap(14, hex);
   assert.ok(event.left > 0 && event.stopped);
-  assert.match(presentEvent(event), /: its attack was cancelled\.$/);
+  assert.match(presentEvent(event), /: 공격이 취소됨\.$/);
 });
