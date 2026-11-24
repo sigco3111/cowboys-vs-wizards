@@ -23,5 +23,5 @@ export function practiceFromQuery(search) {
 export function practiceDuel(seed) {
   if (!PRACTICE_SEEDS.includes(seed)) return null;
   const duel = bootHill();
-  return {seed, duel: {...duel, id: `practice:${seed}`, kind: "turn", name: `Practice: ${duel.name}`, lesson: `${NOTE} ${duel.lesson}`}};
+  return {seed, duel: {...duel, id: `practice:${seed}`, kind: "turn", name: `연습: ${duel.name}`, lesson: `${NOTE} ${duel.lesson}`}};
 }

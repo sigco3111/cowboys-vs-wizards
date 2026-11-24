@@ -37,7 +37,7 @@ test("practice is the reference Boot Hill duel with the starter deck, whatever t
     assert.deepEqual(duel.options, reference.options);
     assert.equal(duel.level, reference.level);
     assert.ok(duel.lesson.endsWith(reference.lesson), "Boot Hill's guide text is unchanged");
-    assert.match(duel.lesson, /nothing here is saved/);
+    assert.match(duel.lesson, /아무것도 저장되지 않습니다/);
   }
   // An advanced career's Trail duel differs; practice does not read it.
   let save = newSave();

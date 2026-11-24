@@ -32,17 +32,17 @@ test("the saloon room carries the poker link and drawers for the shelf, desk and
   assert.match(outpost, /import \{mountForgeShelf\} from "\.\.\/forge-shelf\.js";/);
   assert.match(outpost, /import \{mountRulesDesk\} from "\.\.\/rules-desk\.js";/);
   assert.match(outpost, /import \{mountArenaTable\} from "\.\.\/arena-table\.js";/);
-  assert.match(outpost, /\["forge", "Forge shelf", mountForgeShelf\],\s*\["rules", "Rules desk", mountRulesDesk\],\s*\["arena", "Agent arena", mountArenaTable\],\s*\];/,
+  assert.match(outpost, /\["forge", "대장간 선반", mountForgeShelf\],\s*\["rules", "규칙 데스크", mountRulesDesk\],\s*\["arena", "에이전트 경기장", mountArenaTable\],\s*\];/,
     "the three bar drawers, in order");
   assert.match(outpost, /poker\.href = pokerHref\(document\.baseURI\)/);
   assert.match(outpost, /saloonRoom\.append\(bar\)/, "the bar sits in the saloon dialog, below the scene");
-  assert.match(outpost, /Experimental second game/);
+  assert.match(outpost, /실험적인 두 번째 게임/);
   assert.doesNotMatch(outpost, /["'`]\/poker\//, "no root-absolute poker path, which would miss the project base");
 });
 
 test("the balance ruling is the first drawer at the bar", () => {
   assert.match(outpost, /import \{mountScoutRuling\} from "\.\.\/scout-ruling\.js";/);
-  assert.match(outpost, /const BAR_DRAWERS = \[\s*\["ruling", "Balance ruling", mountScoutRuling\],\s*\["forge", "Forge shelf", mountForgeShelf\],/,
+  assert.match(outpost, /const BAR_DRAWERS = \[\s*\["ruling", "균형 판정", mountScoutRuling\],\s*\["forge", "대장간 선반", mountForgeShelf\],/,
     "the ruling drawer opens the list, ahead of the existing drawers");
 });
 

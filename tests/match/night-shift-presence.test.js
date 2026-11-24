@@ -152,11 +152,11 @@ test("labels: short, distinct per phase, observational, no raw values", () => {
   const labels = EXPECTED.map((phase) => activityLabel({actor: "singularity", phase}));
   assert.equal(new Set(labels).size, EXPECTED.length);
   for (const label of labels) {
-    assert.ok(label.startsWith("Singularity sees "), label);
+    assert.ok(label.startsWith("싱귤래리티: "), label);
     assert.ok(label.length <= 48, label);
   }
-  assert.equal(activityLabel({actor: "hunter", phase: "PostTaskExecution"}), "Hunter sees a task wrap up");
-  assert.equal(activityLabel({actor: "hunter", phase: "Stop", prompt: SECRETS.prompt}), "Hunter sees the agent pause");
+  assert.equal(activityLabel({actor: "hunter", phase: "PostTaskExecution"}), "현상금 사냥꾼: 작업이 마무리되는 것을 봄");
+  assert.equal(activityLabel({actor: "hunter", phase: "Stop", prompt: SECRETS.prompt}), "현상금 사냥꾼: 에이전트가 멈추는 것을 봄");
   assert.equal(activityLabel({actor: "nobody", phase: "Stop"}), null);
 });
 
