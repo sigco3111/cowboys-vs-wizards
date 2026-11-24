@@ -18,8 +18,8 @@ import {seatAuditOk} from "../billy-replay.js";
 import SEAT_AUDIT from "../../../docs/evidence/billy-seat-audit/result.json" with {type: "json"};
 import SEAT_PROTOCOL from "../../../docs/evidence/billy-seat-audit/protocol.json" with {type: "json"};
 
-export const RECORDED_LABEL = "Recorded Kiro shift";
-export const LIVE_LABEL = "Live Kiro shift on this computer";
+export const RECORDED_LABEL = "녹화된 Kiro 근무";
+export const LIVE_LABEL = "이 컴퓨터의 실시간 Kiro 근무";
 export const EVENTS_PATH = "/night-shift/events";
 export const HISTORY_LIMIT = 60;
 export const HISTORY_DOM = 24;
@@ -39,18 +39,18 @@ const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]", "::1"]);
 // What each hook rule refuses, in the order the Ledger lists them. None of them is a stop:
 // a stop that passes its checks is the bell.
 export const BLOCK_REASONS = Object.freeze({
-  balancer: "Refuses a tool call or file write outside the task's scope",
-  completion: "Refuses a success report made before the work was checked",
-  tasks: "Refuses to check off a task that was not verified",
+  balancer: "작업 범위를 벗어난 도구 호출이나 파일 쓰기를 거부함",
+  completion: "작업을 확인하기 전에 올린 성공 보고를 거부함",
+  tasks: "검증되지 않은 작업의 완료 처리를 거부함",
 });
-export const RULE_NAMES = Object.freeze({balancer: "Balancer guard", completion: "Completion check", tasks: "Task check"});
+export const RULE_NAMES = Object.freeze({balancer: "균형 수문장", completion: "완료 점검", tasks: "작업 점검"});
 
 // Four roles, each tied to the event kinds it acts out. Art comes from existing card paintings.
 export const ACTORS = Object.freeze([
-  {id: "sheriff", card: "cowboy-sheriff", role: "Sheriff", kinds: ["block"]},
-  {id: "wizard", card: "wizard-wizard", role: "Wizard", kinds: ["cast"]},
-  {id: "hunter", card: "cowboy-ranger", role: "Bounty Hunter", kinds: ["wanted"]},
-  {id: "singularity", card: "wizard-singularity", role: "Singularity", kinds: ["job", "bell"]},
+  {id: "sheriff", card: "cowboy-sheriff", role: "보안관", kinds: ["block"]},
+  {id: "wizard", card: "wizard-wizard", role: "마법사", kinds: ["cast"]},
+  {id: "hunter", card: "cowboy-ranger", role: "현상금 사냥꾼", kinds: ["wanted"]},
+  {id: "singularity", card: "wizard-singularity", role: "싱귤래리티", kinds: ["job", "bell"]},
 ]);
 const ACTOR_IDS = new Set(ACTORS.map((actor) => actor.id));
 
@@ -74,11 +74,11 @@ export function wantedPoster(slug) {
 // Pure: what the actor did, without the actor's name (shown under the actor's own portrait).
 export function deed(event) {
   switch (event.kind) {
-    case "job": return "Hands out a job";
-    case "block": return BLOCK_REASONS[event.rule] ?? "Refuses an unknown request";
-    case "cast": return `Proposes ${cardName(event.card)} ${event.field} ${event.before} → ${event.after} (scratch, not merged)`;
-    case "wanted": return `Posts Wanted: ${wantedPoster(event.boss).name}`;
-    case "bell": return "Rings the bell: the stop passed its checks";
+    case "job": return "일감을 내줌";
+    case "block": return BLOCK_REASONS[event.rule] ?? "알 수 없는 요청을 거부함";
+    case "cast": return `${cardName(event.card)} ${FIELD_KO(event.field)} ${event.before} → ${event.after} 제안 (임시안, 병합 안 됨)`;
+    case "wanted": return `현상 수배 게시: ${wantedPoster(event.boss).name}`;
+    case "bell": return "종을 울림: 중단이 점검을 통과함";
     default: return "";
   }
 }
@@ -86,10 +86,10 @@ export function deed(event) {
 // Pure: one plain sentence for the status line and the history.
 export function describe(event) {
   if (event.kind === "patch") {
-    return `${cardName(event.card)} ${event.field} ${event.before} → ${event.after}, merged on main in ${shortCommit(event.commit)}`;
+    return `${cardName(event.card)} ${FIELD_KO(event.field)} ${event.before} → ${event.after}, main에 병합됨 ${shortCommit(event.commit)}`;
   }
   const actor = ACTORS.find((each) => each.id === actorFor(event.kind));
-  return actor ? `${actor.role}: ${deed(event)}` : "Unknown record";
+  return actor ? `${actor.role}: ${deed(event)}` : "알 수 없는 기록";
 }
 
 // Pure: the ambient note for one activity record, or "" if the shared label has nothing.
@@ -205,9 +205,9 @@ export function patchNote(patch) {
   const date = new Date(at);
   if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 19) !== at.slice(0, 19)) return null;
   return {
-    change: `${cardName(patch.card)} ${patch.field} ${patch.before} → ${patch.after}`,
+    change: `${cardName(patch.card)} ${FIELD_KO(patch.field)} ${patch.before} → ${patch.after}`,
     commit,
-    label: `main commit ${shortCommit(commit)}`,
+    label: `main 커밋 ${shortCommit(commit)}`,
     href: `${COMMIT_BASE}${commit}`,
     at,
     when: `${at.slice(0, 10)} ${at.slice(11, 16)} UTC`,
@@ -227,13 +227,14 @@ export function recordedDates(events) {
   return first === last ? `${first} UTC` : `${first} – ${last} UTC`;
 }
 
-export const IDLE_CAPTION = "Press Play to watch the recorded shift.";
-const CHANGE_WORDS = {up: "raised", down: "lowered", same: "unchanged"};
+export const IDLE_CAPTION = "재생을 눌러 녹화된 근무를 보세요.";
+const FIELD_KO = (f) => ({attack: "공격력", health: "체력", stars: "별", cost: "비용"})[f] ?? f;
+const CHANGE_WORDS = {up: "상향", down: "하향", same: "변동 없음"};
 
 // Pure: the Wizard's proposal in words, direction included, so it never relies on colour alone.
 export function proposalText(proposal) {
-  if (!proposal) return "No proposal yet";
-  return `${cardName(proposal.card)}: ${proposal.field} ${proposal.before} → ${proposal.after}, ${CHANGE_WORDS[proposal.change] ?? "changed"}`;
+  if (!proposal) return "아직 제안 없음";
+  return `${cardName(proposal.card)}: ${FIELD_KO(proposal.field)} ${proposal.before} → ${proposal.after}, ${CHANGE_WORDS[proposal.change] ?? "변경"}`;
 }
 
 // --- The archived decision for one proposal (docs/evidence/billy-seat-audit) ---
@@ -246,7 +247,7 @@ export const BALANCE_RULE = Object.freeze({source: ".kiro/specs/night-shift-bala
   band: Object.freeze([45, 55]), seatTolerancePp: 1});
 export const DECISION_NOTES = "docs/evidence/billy-seat-audit/README.md";
 export const DECISION_RECHECK = "node scripts/billy-balance-gate.mjs --arm candidate";
-export const DECISION_SEPARATE = "Archived result for this change. It is not one of Kiro's six free-choice edits, which the reviewer rejected.";
+export const DECISION_SEPARATE = "이 변경에 대한 보관된 결과입니다. 검토자가 거부한 Kiro의 자유 선택 수정 여섯 건에는 속하지 않습니다.";
 const AUDIT_SEATS = ["cowboy", "wizard"];
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"})[c]);
 const pct3 = (n) => n.toFixed(3);
@@ -282,15 +283,15 @@ export function proposalDecision(proposal, {seat = SEAT_AUDIT, protocol = SEAT_P
   const before = armShares(seat, "baseline"), after = armShares(seat, "candidate");
   // The archive records a passing proposal. Counts that fail the written rule are never shown as one.
   if (!inBand(after.cowboyShare, band) || !inBand(after.wizardShare, band) || after.seatSkew > before.seatSkew + tolerance) return null;
-  const name = types[card].name, at = (value) => `${field} ${value}`;
-  const where = (share) => (inBand(share, band) ? "inside" : "outside");
+  const name = types[card].name, at = (value) => `${FIELD_KO(field)} ${value}`;
+  const where = (share) => (inBand(share, band) ? "범위 안" : "범위 밖");
   return {
-    change: `${name} ${field} ${from} → ${to}`,
-    status: `Passed the written balance rule and awaits design approval. ${name} has ${at(live)} in this build.`,
-    announce: "Decision on the notice board: passed the balance rule, awaiting design approval.",
+    change: `${name} ${FIELD_KO(field)} ${from} → ${to}`,
+    status: `문서화된 균형 규칙을 통과했고 디자인 승인을 기다립니다. 이 빌드에서 ${name}의 ${at(live)}입니다.`,
+    announce: "게시판 결정: 균형 규칙 통과, 디자인 승인 대기.",
     rules: [
-      `NSB-1, each faction wins ${band[0]}–${band[1]}% of games: Cowboys won ${pct3(before.cowboyShare)}% at ${at(from)} (${where(before.cowboyShare)}) and ${pct3(after.cowboyShare)}% at ${at(to)} (inside).`,
-      `NSB-2, the opener's distance from 50% may grow by at most ${tolerance} point${tolerance === 1 ? "" : "s"}: ${pct3(before.seatSkew)} at ${at(from)}, ${pct3(after.seatSkew)} at ${at(to)} (within).`,
+      `NSB-1, 각 진영의 승률 ${band[0]}–${band[1]}%: 카우보이는 ${at(from)}에서 ${pct3(before.cowboyShare)}%(${where(before.cowboyShare)}), ${at(to)}에서 ${pct3(after.cowboyShare)}%(범위 안)를 기록했습니다.`,
+      `NSB-2, 선공의 50% 이탈 폭은 최대 ${tolerance}포인트까지만 커질 수 있습니다: ${at(from)}에서 ${pct3(before.seatSkew)}, ${at(to)}에서 ${pct3(after.seatSkew)} (허용 범위 내).`,
     ],
     duels: before.games + after.games,
     sourceCommit: seat.sourceCommit,
@@ -303,11 +304,11 @@ export function proposalDecision(proposal, {seat = SEAT_AUDIT, protocol = SEAT_P
 export function decisionHtml(decision) {
   if (!decision) return "";
   const d = decision;
-  return `<h5>Review of Kiro's proposal: ${esc(d.change)}</h5>
+  return `<h5>Kiro 제안 검토: ${esc(d.change)}</h5>
     <dl>
-      <div><dt>Decision</dt><dd>${esc(d.status)}</dd></div>
-      <div><dt>Rule</dt><dd><ul>${d.rules.map((line) => `<li>${esc(line)}</li>`).join("")}</ul></dd></div>
-      <div><dt>Receipt</dt><dd>Proposed by Kiro CLI; ${d.duels.toLocaleString("en-US")} recorded Node engine duels at source <code>${esc(shortCommit(d.sourceCommit))}</code>, protocol <code>${esc(d.protocolSha256.slice(0, 7))}</code>. Recheck: <code>${esc(DECISION_RECHECK)}</code>. Notes: <code>${esc(DECISION_NOTES)}</code>.</dd></div>
+      <div><dt>결정</dt><dd>${esc(d.status)}</dd></div>
+      <div><dt>규칙</dt><dd><ul>${d.rules.map((line) => `<li>${esc(line)}</li>`).join("")}</ul></dd></div>
+      <div><dt>영수증</dt><dd>Kiro CLI 제안. 소스 <code>${esc(shortCommit(d.sourceCommit))}</code>에서 녹화된 Node 엔진 대결 ${d.duels.toLocaleString("en-US")}판, 프로토콜 <code>${esc(d.protocolSha256.slice(0, 7))}</code>. 재확인: <code>${esc(DECISION_RECHECK)}</code>. 메모: <code>${esc(DECISION_NOTES)}</code>.</dd></div>
     </dl>
     <p class="saloon-decision-note">${esc(DECISION_SEPARATE)}</p>`;
 }
@@ -328,7 +329,7 @@ export function reviewStep(events, decide = proposalDecision) {
 // Pure: the recorded room's opening line. When a recorded proposal has an archived decision, it names that step.
 export function idleCaption(events) {
   const step = reviewStep(events);
-  return step ? `${IDLE_CAPTION} Step ${step} shows Kiro's card proposal and its decision.` : IDLE_CAPTION;
+  return step ? `${IDLE_CAPTION} ${step}단계에서 Kiro의 카드 제안과 결정을 볼 수 있습니다.` : IDLE_CAPTION;
 }
 
 // Pure: the recorded room as it stands right after the review step (?saloon=review), built with the same reducer
@@ -388,16 +389,16 @@ const ROOM_HTML = `
     <div class="saloon-wall">
       <figure class="saloon-wanted">
         <div class="saloon-wanted-art"></div>
-        <figcaption><strong>Wanted</strong><span class="saloon-wanted-name">No bounty posted</span></figcaption>
+        <figcaption><strong>현상 수배</strong><span class="saloon-wanted-name">게시된 현상금 없음</span></figcaption>
       </figure>
-      <section class="saloon-board" aria-label="Notices">
+      <section class="saloon-board" aria-label="공지">
         <div class="saloon-proposal">
-          <h4>Scratch proposal, not merged</h4>
+          <h4>임시 제안, 병합 안 됨</h4>
           <div class="saloon-target" data-change="none"><div class="saloon-target-art"></div><p class="saloon-target-stat">No proposal yet</p></div>
           <div class="saloon-decision" hidden></div>
         </div>
         <div class="saloon-patches">
-          <h4>Merged on main</h4>
+          <h4>main에 병합됨</h4>
           <ul></ul>
         </div>
       </section>
@@ -411,15 +412,15 @@ const ROOM_HTML = `
   <div class="saloon-controls">
     <p class="saloon-mode"><strong class="saloon-mode-label"></strong> <span class="saloon-mode-date" hidden></span> <span class="saloon-progress"></span></p>
     <div class="saloon-buttons">
-      <button type="button" class="saloon-play">Play</button>
-      <button type="button" class="saloon-step">Step</button>
-      <button type="button" class="saloon-replay">Replay from start</button>
+      <button type="button" class="saloon-play">재생</button>
+      <button type="button" class="saloon-step">한 단계</button>
+      <button type="button" class="saloon-replay">처음부터 다시</button>
     </div>
     <p class="saloon-now" role="status" aria-live="polite"></p>
   </div>
   <details class="saloon-repair"></details>
   <details class="saloon-history">
-    <summary>Shift history</summary>
+    <summary>근무 기록</summary>
     <ol></ol>
   </details>`;
 
@@ -555,7 +556,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       link.className = "saloon-patch-commit";
       const code = document.createElement("code");
       code.textContent = shortCommit(note.commit);
-      link.append("main commit ", code);
+      link.append("main 커밋 ", code);
       const time = Object.assign(document.createElement("time"), {dateTime: note.at, textContent: note.when});
       const meta = document.createElement("span");
       meta.className = "saloon-patch-meta";
@@ -563,7 +564,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       item.append(Object.assign(document.createElement("span"), {className: "saloon-patch-change", textContent: note.change}), meta);
       return item;
     });
-    if (!items.length) items.push(Object.assign(document.createElement("li"), {textContent: "No card changes merged in this shift."}));
+    if (!items.length) items.push(Object.assign(document.createElement("li"), {textContent: "이번 근무에서 병합된 카드 변경 없음."}));
     list.replaceChildren(...items);
   }
 
@@ -571,7 +572,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
     if (!ledger) return;
     const {counts, blocks} = ledgerBlocks(feed.events);
     for (const [rule, n] of Object.entries(counts)) {
-      ledger.querySelector(`[data-rule="${rule}"] .ledger-night-shift-count`).textContent = n === 1 ? "1 time" : `${n} times`;
+      ledger.querySelector(`[data-rule="${rule}"] .ledger-night-shift-count`).textContent = n === 1 ? "1회" : `${n}회`;
     }
     const log = ledger.querySelector(".ledger-night-shift-log");
     const items = blocks.slice(-HISTORY_DOM).map((block) => {
@@ -579,9 +580,9 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       item.append(timeEl(block.at), ` ${RULE_NAMES[block.rule]}: ${BLOCK_REASONS[block.rule].toLowerCase()}`);
       return item;
     });
-    if (!items.length) items.push(Object.assign(document.createElement("li"), {textContent: "The Sheriff has not refused anything."}));
+    if (!items.length) items.push(Object.assign(document.createElement("li"), {textContent: "보안관이 거부한 것이 아직 없습니다."}));
     log.replaceChildren(...items);
-    ledger.querySelector(".ledger-night-shift-source").textContent = `From the ${mode === "live" ? LIVE_LABEL.toLowerCase() : "recorded Kiro shift"}.`;
+    ledger.querySelector(".ledger-night-shift-source").textContent = `출처: ${mode === "live" ? LIVE_LABEL : "녹화된 Kiro 근무"}.`;
   }
 
   // Only the latest entries reach the DOM, and only when the history changed.
@@ -610,8 +611,8 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       wanted.dataset.boss = shown.wanted ?? "";
       wanted.replaceChildren(...(!poster ? [] : poster.card ? [art(portrait, poster.card, "saloon-wanted-portrait")] : [blankPoster()]));
     }
-    q(".saloon-wanted-name").textContent = poster ? poster.name : "No bounty posted";
-    q(".saloon-bell-note").textContent = !shown.bells ? "" : shown.bells === 1 ? "Stop passed once" : `Stop passed ${shown.bells} times`;
+    q(".saloon-wanted-name").textContent = poster ? poster.name : "게시된 현상금 없음";
+    q(".saloon-bell-note").textContent = !shown.bells ? "" : shown.bells === 1 ? "중단 1회 통과" : `중단 ${shown.bells}회 통과`;
     const target = q(".saloon-target");
     const proposal = shown.proposal;
     target.dataset.change = proposal?.change ?? "none";
@@ -632,12 +633,12 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
     if (mode === "live") {
       progress.textContent = offline ? "· offline" : caughtUp ? "· watching" : "· connecting";
     } else {
-      progress.textContent = `· step ${count} of ${feed.events.length}`;
+      progress.textContent = `· ${feed.events.length}단계 중 ${count}단계`;
       const ended = count >= feed.events.length;
       // A focused control that is about to be disabled would drop keyboard focus to <body>;
       // hand it to Play/Replay instead.
       const focused = content.ownerDocument.activeElement;
-      play.textContent = playing ? "Pause" : ended && count > 0 ? "Replay" : "Play";
+      play.textContent = playing ? "일시정지" : ended && count > 0 ? "다시 재생" : "재생";
       play.setAttribute("aria-pressed", String(playing));
       play.disabled = !feed.events.length;
       step.disabled = ended || playing;
@@ -696,7 +697,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
     render();
     animate(event);
     for (const record of freshAmbient(before, ambient)) toStage("activity", record);
-    if (count >= feed.events.length) now.textContent = `${describe(event)}. End of the recording.`;
+    if (count >= feed.events.length) now.textContent = `${describe(event)}. 녹화가 끝났습니다.`;
     return true;
   }
   function pause() {
@@ -722,7 +723,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
     now.textContent = idle;
   }
   play.addEventListener("click", () => {
-    if (playing) { pause(); render(); now.textContent = "Paused."; return; }
+    if (playing) { pause(); render(); now.textContent = "일시정지."; return; }
     if (count >= feed.events.length) restart();
     playing = true;
     render();
@@ -754,14 +755,14 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       offline = false;
       if (!caughtUp) {
         caughtUp = true;
-        now.textContent = feed.events.length ? `Caught up on ${feed.events.length} earlier events.` : "Connected. Waiting for the first job.";
+        now.textContent = feed.events.length ? `이전 이벤트 ${feed.events.length}건을 따라잡았습니다.` : "연결됨. 첫 일감을 기다리는 중.";
       } else {
         if (merged.added.length) {
           queue.push(...merged.added);
           queue.splice(0, Math.max(0, queue.length - LIVE_QUEUE));
           if (!queueTimer) drainQueue();
         } else if (wasOffline) {
-          now.textContent = "Reconnected.";
+          now.textContent = "다시 연결됨.";
         }
         for (const actorId of new Set(merged.addedActivity.map((a) => a.actor))) stir(actorId);
         const newest = latestActivity(merged.addedActivity);
@@ -774,7 +775,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       if (ticket !== generation || error?.name === "AbortError") return;
       offline = true;
       wait = RETRY_MS;
-      now.textContent = "Lost the connection. The shift so far stays on the board while it retries.";
+      now.textContent = "연결이 끊겼습니다. 재시도하는 동안 지금까지의 근무 내용은 보드에 남아 있습니다.";
       render();
     } finally {
       if (ticket === generation) {
@@ -787,8 +788,8 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
   renderPatches();
   renderLedger();
   render();
-  now.textContent = mode === "live" ? "Connects when you enter the saloon."
-    : mode === "recorded-only" ? "The live shift only plays when the game runs on this computer. Showing the recording." : idle;
+  now.textContent = mode === "live" ? "살롱에 들어가면 연결됩니다."
+    : mode === "recorded-only" ? "실시간 근무는 이 컴퓨터에서 게임을 실행할 때만 재생됩니다. 녹화본을 보여 드립니다." : idle;
 
   return {
     mode,
@@ -825,7 +826,7 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
       restart();
       ({count, shown, ambient} = at);
       render();
-      now.textContent = count >= feed.events.length ? `${describe(at.event)}. End of the recording.` : eventCaption(at.event);
+      now.textContent = count >= feed.events.length ? `${describe(at.event)}. 녹화가 끝났습니다.` : eventCaption(at.event);
       return true;
     },
     state: () => ({mode, count, shown, feed, ambient, view: content.dataset.view, repair: repair.state()}),
@@ -835,12 +836,12 @@ export function mountNightShiftSaloon({content, recording, portrait = () => null
 // DOM: the Night Shift section added inside the existing Sheriff's Ledger.
 export function ledgerSectionHtml() {
   const rules = Object.entries(BLOCK_REASONS).map(([rule, text]) =>
-    `<div data-rule="${rule}"><dt>${RULE_NAMES[rule]}</dt><dd>${text} · <span class="ledger-night-shift-count">0 times</span></dd></div>`).join("");
+    `<div data-rule="${rule}"><dt>${RULE_NAMES[rule]}</dt><dd>${text} · <span class="ledger-night-shift-count">0회</span></dd></div>`).join("");
   return `<section class="ledger-night-shift" aria-labelledby="ledger-night-shift-title">
-    <h3 id="ledger-night-shift-title">Night Shift: what the Sheriff refused</h3>
+    <h3 id="ledger-night-shift-title">야간 근무: 보안관이 거부한 것</h3>
     <p class="sd-note ledger-night-shift-source"></p>
     <dl class="ledger-night-shift-rules">${rules}</dl>
-    <h4>Refusals in order</h4>
+    <h4>거부 기록(순서대로)</h4>
     <ol class="ledger-night-shift-log"></ol>
   </section>`;
 }

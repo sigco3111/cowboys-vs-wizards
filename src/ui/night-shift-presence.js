@@ -11,27 +11,27 @@ export const ACTIVITY_PHASES = Object.freeze([
 export const ACTIVITY_ACTORS = Object.freeze(["sheriff", "wizard", "hunter", "singularity"]);
 
 const ACTOR_NAME = Object.freeze({
-  sheriff: "Sheriff",
-  wizard: "Wizard",
-  hunter: "Hunter",
-  singularity: "Singularity",
+  sheriff: "보안관",
+  wizard: "마법사",
+  hunter: "현상금 사냥꾼",
+  singularity: "싱귤래리티",
 });
 
 const SEEN = Object.freeze({
-  SessionStart: "a lamp lit for a new session",
-  SessionEnd: "a lamp go dark",
-  UserPromptSubmit: "a new request come in",
-  Stop: "the agent pause",
-  PermissionRequest: "someone ask leave to act",
-  PreToolUse: "a tool being reached for",
-  PostToolUse: "a tool set back down",
-  PostFileCreate: "a new page appear",
-  PostFileSave: "a page get saved",
-  PostFileDelete: "a page torn out",
-  PreTaskExecution: "a task start",
-  PostTaskExecution: "a task wrap up",
-  PreCompact: "notes being tidied",
-  PostCompact: "notes tidied away",
+  SessionStart: "새 세션을 위해 등불이 켜지는 것",
+  SessionEnd: "등불이 꺼지는 것",
+  UserPromptSubmit: "새 요청이 들어오는 것",
+  Stop: "에이전트가 멈추는 것",
+  PermissionRequest: "누군가 행동 허락을 구하는 것",
+  PreToolUse: "도구에 손을 뻗는 것",
+  PostToolUse: "도구를 내려놓는 것",
+  PostFileCreate: "새 쪽지가 생기는 것",
+  PostFileSave: "쪽지가 저장되는 것",
+  PostFileDelete: "쪽지가 뜯겨 나가는 것",
+  PreTaskExecution: "작업이 시작되는 것",
+  PostTaskExecution: "작업이 마무리되는 것",
+  PreCompact: "메모를 정리하는 것",
+  PostCompact: "메모 정리가 끝나는 것",
 });
 
 // {actor, phase} from an allowlisted activity record, or null.
@@ -47,5 +47,5 @@ export function cleanActivityFields(input) {
 export function activityLabel(record) {
   const clean = cleanActivityFields(record);
   if (!clean) return null;
-  return `${ACTOR_NAME[clean.actor]} sees ${SEEN[clean.phase]}`;
+  return `${ACTOR_NAME[clean.actor]}: ${SEEN[clean.phase]}을(를) 봄`;
 }
